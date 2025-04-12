@@ -1,3 +1,7 @@
+# Grumbo Web Front End
+
+This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
