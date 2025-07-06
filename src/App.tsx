@@ -1,35 +1,87 @@
-import { useState } from 'react';
-import reactLogo from '@assets/react.svg';
-import viteLogo from '@assets/vite.svg';
-import './App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { isAuthenticated } from './utils/auth';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import CharacterSheet from './components/CharacterSheet';
+import CreateCharacter from './components/CreateCharacter';
+import AdminPanel from './components/AdminPanel';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-	const [count, setCount] = useState(0);
-
-	return (
-		<>
-			<div>
-				<a href="https://vite.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
-	);
-};
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route 
+        path="/login" 
+        element={
+          isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Login />
+        } 
+      />
+      
+      {/* Protected Routes */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/character/new" 
+        element={
+          <ProtectedRoute>
+            <CreateCharacter />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/character/:id" 
+        element={
+          <ProtectedRoute>
+            <CharacterSheet />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/character/:id/edit" 
+        element={
+          <ProtectedRoute>
+            <CharacterSheet />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Admin Routes */}
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute requireAdmin>
+            <AdminPanel />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Default Route */}
+      <Route 
+        path="/" 
+        element={
+          <Navigate to={isAuthenticated() ? "/dashboard" : "/login"} replace />
+        } 
+      />
+      
+      {/* Catch all route */}
+      <Route 
+        path="*" 
+        element={
+          <Navigate to={isAuthenticated() ? "/dashboard" : "/login"} replace />
+        } 
+      />
+    </Routes>
+  );
+}
 
 export default App;
