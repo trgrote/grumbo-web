@@ -5,6 +5,8 @@ interface RollResultProps {
 	divineSmiteDamageRolls: number[];
 }
 
+const rollArrayToString = (arr: number[]) => '[' + arr.join(', ') + ']';
+
 const RollResultView: React.FC<RollResultProps> = (props: RollResultProps) => {
 	const { attackRolls, isCritical, weaponDamageRolls, divineSmiteDamageRolls } = props;
 
@@ -17,12 +19,21 @@ const RollResultView: React.FC<RollResultProps> = (props: RollResultProps) => {
 		<strong>{maxAttackRoll}</strong> :
 		<>{maxAttackRoll}</>;
 
+	const attackHoverText = (isCritical ? "CRIT!\n" : "") +
+		rollArrayToString(attackRolls);
+
+	const totalDamageHoverText = "Weapon: " + '[' + weaponDamageRolls.join(', ') + ']' + (
+		divineSmiteDamageRolls.length > 0 ?
+			"\nDivine Smite: " + rollArrayToString(divineSmiteDamageRolls) :
+			''
+	);
+
 	return (
 		<>
-			<div>
+			<div title={attackHoverText}>
 				<label>Attack Roll:</label> {attackRollElement}
 			</div>
-			<div>
+			<div title={totalDamageHoverText}>
 				<label>Total Damage:</label> {totalDamage}
 			</div>
 		</>
