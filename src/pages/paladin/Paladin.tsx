@@ -15,10 +15,10 @@ function Paladin() {
 	const [hasImprovedDS, setHasImprovedDS] = useState(true);
 	const [spellSlotUsed, setSpellSlotUsed] = useState(0);
 
-	const [attackResult, setAttackResult] = useState<null | RollResult>(null);
+	const [attackResults, setAttackResults] = useState<RollResult[]>([]);
 
 	const onRollClick = () => {
-		const result = Roll({
+		const roll = Roll({
 			attackModifier,
 			damageDie,
 			damageModifier,
@@ -26,10 +26,7 @@ function Paladin() {
 			hasImprovedDS,
 			spellSlotUsed
 		});
-
-		console.log(result);
-
-		setAttackResult(result);
+		setAttackResults([roll, ...attackResults]);
 	};
 
 	return (
@@ -96,9 +93,11 @@ function Paladin() {
 				</label>
 			</div>
 			<button onClick={onRollClick}>Roll</button>
-			{
-				attackResult && <RollResultView {...attackResult} />
-			}
+			<div style={{ height: 120, overflowY: 'auto' }}>
+				{
+					attackResults.map(attackResult => <RollResultView {...attackResult} />)
+				}
+			</div>
 
 		</>
 	);
