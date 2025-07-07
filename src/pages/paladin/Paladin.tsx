@@ -3,9 +3,9 @@ import RollResultView from "./RollResultView";
 import { Roll, RollResult } from "./Functions";
 
 // TODO
-// - Create Result Box
+// - Save History in local storage
 // - Maybe make the 'config' part a form
-// - Create Result view to view all previous result history
+// - Update logic to allow spell slots to be selected after attack roll.
 
 function Paladin() {
 	const [attackModifier, setAttackModifier] = useState(12);
@@ -26,6 +26,7 @@ function Paladin() {
 			hasImprovedDS,
 			spellSlotUsed
 		});
+
 		setAttackResults([roll, ...attackResults]);
 	};
 
@@ -98,7 +99,7 @@ function Paladin() {
 					attackResults.map(attackResult => <RollResultView {...attackResult} />)
 				}
 			</div>
-
+			{attackResults.length > 0 && <button onClick={() => setAttackResults([])}>Clear Rolls</button>}
 		</>
 	);
 }

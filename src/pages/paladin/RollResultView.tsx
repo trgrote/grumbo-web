@@ -31,10 +31,10 @@ const RollResultView: React.FC<RollResultProps> = (props: RollResultProps) => {
 	return (
 		<div style={{ borderRadius: 8, borderWidth: 5, backgroundColor: 'Menu' }}>
 			<div title={attackHoverText}>
-				<label>Attack Roll:</label> {attackRollElement}
+				<label>To Hit:</label> {attackRollElement}
 			</div>
 			<div title={totalDamageHoverText}>
-				<label>Total Damage:</label> {totalDamage}
+				<label>Damage:</label> {totalDamage}
 			</div>
 		</div>
 	);

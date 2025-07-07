@@ -36,7 +36,8 @@ export function Roll(attackInfo: AttackInfo): RollResult {
 	const divineSmiteDamageDie = 8;
 
 	const numDivineSmiteDamageRolls = (isCritical ? 2 : 1) * (
-		(hasImprovedDS ? 1 : 0) + spellSlotUsed
+		(hasImprovedDS ? 1 : 0) +
+		(spellSlotUsed > 0 ? spellSlotUsed + 1 : 0)
 	);
 	const divineSmiteDamageRolls = Array.from(
 		{ length: numDivineSmiteDamageRolls },
