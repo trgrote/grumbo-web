@@ -6,12 +6,21 @@ import { Roll, RollResult } from "./Functions";
 // - Save History in local storage
 // - Maybe make the 'config' part a form
 // - Update logic to allow spell slots to be selected after attack roll.
+// - Add Max 5d8 for spells slots (which I think is just spell slot 4).
+// - Add toggle for against fields/undex because that will also add a 1d8 radiant
+// - Add input validation to only allow integers for modifier fields
+
+/**
+ * 
+ * When you hit with a melee weapon attack, you can expend one spell slot to deal 2d8 extra radiant damage to the target plus 1d8 for each spell level higher than 1st (max 5d8) and plus 1d8 against undead or fiends.
+ */
 
 function Paladin() {
 	const [attackModifier, setAttackModifier] = useState(12);
 	const [damageDie, setDamageDie] = useState(8);
 	const [damageModifier, setDamageModifier] = useState(9);
 	const [hasAdvantage, setHasAdvantage] = useState(false);
+	const [isTargetFiendOrUndead, setIsTargetFiendOrUndead] = useState(false);
 	const [hasImprovedDS, setHasImprovedDS] = useState(true);
 	const [spellSlotUsed, setSpellSlotUsed] = useState(0);
 
@@ -34,14 +43,14 @@ function Paladin() {
 		<>
 			<div>
 				<label>
-					Attack Modifier
+					Attack Modifier:
 					<input name="attackMod" type="number" value={attackModifier}
 						onChange={e => setAttackModifier(parseInt(e.target.value))} />
 				</label>
 			</div>
 			<div>
 				<label>
-					Damage Die
+					Damage Die:
 					<select
 						value={damageDie}
 						onChange={e => setDamageDie(parseInt(e.target.value))}>
@@ -64,14 +73,21 @@ function Paladin() {
 				<label>
 					<input name="hasAdvantage" type="checkbox" checked={hasAdvantage}
 						onChange={() => setHasAdvantage(!hasAdvantage)} />
-					Has Advantage
+					Has Advantage?
 				</label>
 			</div>
-			<div>
+			<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
+				<label>
+					<input name="isTargetFiendOrUndead" type="checkbox" checked={isTargetFiendOrUndead}
+						onChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
+					Is Target Fiend or Undead?
+				</label>
+			</div>
+			<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
 				<label>
 					<input name="hasImprovedDS" type="checkbox" checked={hasImprovedDS}
 						onChange={() => setHasImprovedDS(!hasImprovedDS)} />
-					Has Improved Divine Smite (automaticlly adds 1d8 Radiant Damage on any attack)
+					Has Improved Divine Smite?
 				</label>
 			</div>
 			<div>
@@ -84,12 +100,7 @@ function Paladin() {
 						<option value={1}>1</option>
 						<option value={2}>2</option>
 						<option value={3}>3</option>
-						<option value={4}>4</option>
-						<option value={5}>5</option>
-						<option value={6}>6</option>
-						<option value={7}>7</option>
-						<option value={8}>8</option>
-						<option value={9}>9</option>
+						<option value={4}>4+</option>
 					</select>
 				</label>
 			</div>
