@@ -1,6 +1,6 @@
 import professional from '@assets/professional.jpg';
 
-function App() {
+function Home() {
 	return (
 		<>
 			<h1>Grumbo Professional Enterprises</h1>
@@ -12,4 +12,4 @@ function App() {
 	);
 };
 
-export default App;
+export default Home;
