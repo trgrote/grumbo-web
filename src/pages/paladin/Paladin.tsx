@@ -12,6 +12,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
+import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "@/components/ui/toggle-group";
+
 // TODO
 // - Save History in local storage
 // - Maybe make the 'config' part a form
@@ -64,21 +69,16 @@ function Paladin() {
 			<div>
 				<label>
 					Damage Die:
-					<Select
-						value={damageDie.toString()}
-						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Select Damage Die" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value='4'>d4</SelectItem>
-							<SelectItem value='6'>d6</SelectItem>
-							<SelectItem value='8'>d8</SelectItem>
-							<SelectItem value='10'>d10</SelectItem>
-							<SelectItem value='12'>d12</SelectItem>
-						</SelectContent>
-					</Select>
 				</label>
+				<ToggleGroup type="single"
+					value={damageDie.toString()}
+					onValueChange={newValue => setDamageDie(parseInt(newValue))}>
+					<ToggleGroupItem value='4'>d4</ToggleGroupItem>
+					<ToggleGroupItem value='6'>d6</ToggleGroupItem>
+					<ToggleGroupItem value='8'>d8</ToggleGroupItem>
+					<ToggleGroupItem value='10'>d10</ToggleGroupItem>
+					<ToggleGroupItem value='12'>d12</ToggleGroupItem>
+				</ToggleGroup>
 			</div>
 			<div>
 				<label>
