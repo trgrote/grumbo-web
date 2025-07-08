@@ -1,5 +1,4 @@
 import professional from '@assets/professional.jpg';
-import './App.css';
 
 function App() {
 	return (
