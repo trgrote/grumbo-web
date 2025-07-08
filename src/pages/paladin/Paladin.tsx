@@ -107,7 +107,7 @@ function Paladin() {
 			<button onClick={onRollClick}>Roll</button>
 			<div style={{ height: 120, overflowY: 'auto' }}>
 				{
-					attackResults.map(attackResult => <RollResultView {...attackResult} />)
+					attackResults.map((attackResult, i) => <RollResultView key={i} {...attackResult} />)
 				}
 			</div>
 			{attackResults.length > 0 && <button onClick={() => setAttackResults([])}>Clear Rolls</button>}
