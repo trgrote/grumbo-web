@@ -1,6 +1,16 @@
 import { useState } from "react";
 import RollResultView from "./RollResultView";
 import { Roll, RollResult } from "./Functions";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 // TODO
 // - Save History in local storage
@@ -19,9 +29,11 @@ function Paladin() {
 	const [attackModifier, setAttackModifier] = useState(12);
 	const [damageDie, setDamageDie] = useState(8);
 	const [damageModifier, setDamageModifier] = useState(9);
-	const [hasAdvantage, setHasAdvantage] = useState(false);
-	const [isTargetFiendOrUndead, setIsTargetFiendOrUndead] = useState(false);
 	const [hasImprovedDS, setHasImprovedDS] = useState(true);
+
+	const [hasAdvantage, setHasAdvantage] = useState(false);
+
+	const [isTargetFiendOrUndead, setIsTargetFiendOrUndead] = useState(false);
 	const [spellSlotUsed, setSpellSlotUsed] = useState(0);
 
 	const [attackResults, setAttackResults] = useState<RollResult[]>([]);
@@ -39,78 +51,89 @@ function Paladin() {
 		setAttackResults([roll, ...attackResults]);
 	};
 
+
 	return (
 		<>
 			<div>
 				<label>
 					Attack Modifier:
-					<input name="attackMod" type="number" value={attackModifier}
+					<Input type="number" value={attackModifier}
 						onChange={e => setAttackModifier(parseInt(e.target.value))} />
 				</label>
 			</div>
 			<div>
 				<label>
 					Damage Die:
-					<select
-						value={damageDie}
-						onChange={e => setDamageDie(parseInt(e.target.value))}>
-						<option value={4}>d4</option>
-						<option value={6}>d6</option>
-						<option value={8}>d8</option>
-						<option value={10}>d10</option>
-						<option value={12}>d12</option>
-					</select>
+					<Select
+						value={damageDie.toString()}
+						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="Select Damage Die" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value='4'>d4</SelectItem>
+							<SelectItem value='6'>d6</SelectItem>
+							<SelectItem value='8'>d8</SelectItem>
+							<SelectItem value='10'>d10</SelectItem>
+							<SelectItem value='12'>d12</SelectItem>
+						</SelectContent>
+					</Select>
 				</label>
 			</div>
 			<div>
 				<label>
 					Damage Modifier
-					<input type="number" value={damageModifier}
+					<Input type="number" value={damageModifier}
 						onChange={e => setDamageModifier(parseInt(e.target.value))} />
-				</label>
-			</div>
-			<div>
-				<label>
-					<input name="hasAdvantage" type="checkbox" checked={hasAdvantage}
-						onChange={() => setHasAdvantage(!hasAdvantage)} />
-					Has Advantage?
-				</label>
-			</div>
-			<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-				<label>
-					<input name="isTargetFiendOrUndead" type="checkbox" checked={isTargetFiendOrUndead}
-						onChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
-					Is Target Fiend or Undead?
 				</label>
 			</div>
 			<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
 				<label>
-					<input name="hasImprovedDS" type="checkbox" checked={hasImprovedDS}
-						onChange={() => setHasImprovedDS(!hasImprovedDS)} />
+					<Checkbox name="hasImprovedDS" checked={hasImprovedDS}
+						onCheckedChange={() => setHasImprovedDS(!hasImprovedDS)} />
 					Has Improved Divine Smite?
 				</label>
 			</div>
 			<div>
 				<label>
-					Spell Slot Used?
-					<select name="spellSlotUsed"
-						value={spellSlotUsed}
-						onChange={e => setSpellSlotUsed(parseInt(e.target.value))}>
-						<option value={0}>None</option>
-						<option value={1}>1</option>
-						<option value={2}>2</option>
-						<option value={3}>3</option>
-						<option value={4}>4+</option>
-					</select>
+					<Checkbox name="hasAdvantage" checked={hasAdvantage}
+						onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
+					Has Advantage?
 				</label>
 			</div>
-			<button onClick={onRollClick}>Roll</button>
+			<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
+				<label>
+					<Checkbox name="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
+						onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
+					Is Target Fiend or Undead?
+				</label>
+			</div>
+			<div>
+				<label>
+					Spell Slot Used?
+					<Select
+						value={spellSlotUsed.toString()}
+						onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="Spell Slot" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value='0'>None</SelectItem>
+							<SelectItem value='1'>1</SelectItem>
+							<SelectItem value='2'>2</SelectItem>
+							<SelectItem value='3'>3</SelectItem>
+							<SelectItem value='4'>4+</SelectItem>
+						</SelectContent>
+					</Select>
+				</label>
+			</div>
+			<Button onClick={onRollClick}>Roll</Button>
 			<div style={{ height: 120, overflowY: 'auto' }}>
 				{
 					attackResults.map((attackResult, i) => <RollResultView key={i} {...attackResult} />)
 				}
 			</div>
-			{attackResults.length > 0 && <button onClick={() => setAttackResults([])}>Clear Rolls</button>}
+			{attackResults.length > 0 && <Button onClick={() => setAttackResults([])}>Clear Rolls</Button>}
 		</>
 	);
 }
