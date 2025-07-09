@@ -29,9 +29,5 @@ export interface RollDamageResult {
 	divineSmiteDamageRolls: number[];
 }
 
-export interface RollHistoryRecord {
-	toHitValues: number[];
-	isCritical: boolean;
-	weaponDamageRolls: number[];
-	divineSmiteDamageRolls: number[];
+export interface RollHistoryRecord extends AttackRollResult, RollDamageResult {
 }

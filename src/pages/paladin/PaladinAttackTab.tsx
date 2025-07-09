@@ -103,6 +103,13 @@ export default function PaladinAttackTab({ paladinInfo, addToRollHistory }: Pala
 								onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
 							Has Advantage?
 						</label>
+						<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
+							<label>
+								<Checkbox name="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
+									onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
+								Is Target Fiend or Undead?
+							</label>
+						</div>
 						<Button onClick={onRollForAttack}>Roll for Attack</Button>
 					</>
 				);
@@ -125,13 +132,6 @@ export default function PaladinAttackTab({ paladinInfo, addToRollHistory }: Pala
 			case AttackState.DamageInfo:
 				return (
 					<>
-						<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-							<label>
-								<Checkbox name="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
-									onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
-								Is Target Fiend or Undead?
-							</label>
-						</div>
 						<div>
 							<label>
 								Spell Slot Used?
@@ -150,7 +150,7 @@ export default function PaladinAttackTab({ paladinInfo, addToRollHistory }: Pala
 					</>
 				);
 			case AttackState.Result: {
-				if (!attackRollResult || !damageRollResult) {
+				if (!attackRollResult) {
 					return <></>;
 				}
 
@@ -159,7 +159,8 @@ export default function PaladinAttackTab({ paladinInfo, addToRollHistory }: Pala
 						Damage Results
 						<RollResultView
 							{...attackRollResult}
-							{...damageRollResult}
+							weaponDamageRolls={damageRollResult?.weaponDamageRolls ?? []}
+							divineSmiteDamageRolls={damageRollResult?.divineSmiteDamageRolls ?? []}
 						/>
 						<Button onClick={onAttackAgain}>Attack Again</Button>
 					</>
