@@ -3,7 +3,7 @@ import PaladinHistoryTab from "./PaladinHistoryTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PaladinInfoTab from "./PaladinInfoTab";
 import PaladinAttackTab from "./PaladinAttackTab";
-import { PaladinInfo, RollResult } from "./PaladinTypes";
+import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 
 // TODO
 // - Save History in local storage
@@ -25,7 +25,7 @@ function Paladin() {
 		hasImprovedDS: true
 	});
 
-	const [attackResults, setAttackResults] = useState<RollResult[]>([]);
+	const [attackResults, setAttackResults] = useState<RollHistoryRecord[]>([]);
 
 	return (
 		<Tabs defaultValue="paladinInfo">

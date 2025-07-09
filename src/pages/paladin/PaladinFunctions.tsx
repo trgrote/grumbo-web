@@ -1,15 +1,24 @@
-import { AttackInfo, RollResult } from "./PaladinTypes";
+import { AttackInfo, AttackRollResult, RollDamageInfo, RollDamageResult } from "./PaladinTypes";
 
-export function Roll(attackInfo: AttackInfo): RollResult {
-	const { hasAdvantage, attackModifier, damageDie, damageModifier, hasImprovedDS, spellSlotUsed } = attackInfo;
+export function RollAttack(attackInfo: AttackInfo): AttackRollResult {
+	const { hasAdvantage, attackModifier } = attackInfo;
 
 	// Perform Attack Rolls
 	const numAttackRolls = hasAdvantage ? 2 : 1;
-	const attackRolls = Array.from(
+	const toHitValues = Array.from(
 		{ length: numAttackRolls },
 		() => Math.ceil(Math.random() * 20) + attackModifier
 	);
-	const isCritical = attackRolls.some((value) => value - attackModifier === 20);
+	const isCritical = toHitValues.some((value) => value - attackModifier === 20);
+
+	return {
+		toHitValues,
+		isCritical
+	};
+}
+
+export function RollDamage(info: RollDamageInfo): RollDamageResult {
+	const { isCritical, damageDie, damageModifier, hasImprovedDS, isTargetFiendOrUndead, spellSlotUsed } = info;
 
 	// Perform Weapon Damage
 	const numWeaponDamageRolls = isCritical ? 2 : 1;
@@ -23,6 +32,7 @@ export function Roll(attackInfo: AttackInfo): RollResult {
 
 	const numDivineSmiteDamageRolls = (isCritical ? 2 : 1) * (
 		(hasImprovedDS ? 1 : 0) +
+		(isTargetFiendOrUndead ? 1 : 0) +
 		(spellSlotUsed > 0 ? spellSlotUsed + 1 : 0)
 	);
 	const divineSmiteDamageRolls = Array.from(
@@ -30,10 +40,7 @@ export function Roll(attackInfo: AttackInfo): RollResult {
 		() => Math.ceil(Math.random() * divineSmiteDamageDie)
 	);
 
-	// Perform Damage Rolls
 	return {
-		attackRolls,
-		isCritical,
 		weaponDamageRolls,
 		divineSmiteDamageRolls
 	};

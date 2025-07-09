@@ -7,15 +7,30 @@ export interface PaladinInfo {
 
 export interface AttackInfo {
 	attackModifier: number;
+	hasAdvantage: boolean;
+}
+
+export interface AttackRollResult {
+	toHitValues: number[];
+	isCritical: boolean;
+}
+
+export interface RollDamageInfo {
+	isCritical: boolean;
 	damageDie: number;
 	damageModifier: number;
-	hasAdvantage: boolean;
 	hasImprovedDS: boolean;
+	isTargetFiendOrUndead: boolean;
 	spellSlotUsed: number;
 }
 
-export interface RollResult {
-	attackRolls: number[];
+export interface RollDamageResult {
+	weaponDamageRolls: number[];
+	divineSmiteDamageRolls: number[];
+}
+
+export interface RollHistoryRecord {
+	toHitValues: number[];
 	isCritical: boolean;
 	weaponDamageRolls: number[];
 	divineSmiteDamageRolls: number[];
