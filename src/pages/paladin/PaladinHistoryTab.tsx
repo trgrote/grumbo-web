@@ -1,3 +1,4 @@
+import * as React from "react";
 import { RollResult } from "./Functions";
 import { Button } from "@/components/ui/button";
 import RollResultView from "./RollResultView";
@@ -9,6 +10,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 export interface PaladinHistoryProps {
 	attackResults: RollResult[];
@@ -23,11 +26,18 @@ export default function PaladinHistoryTab({ attackResults, onClearHistory }: Pal
 				<CardDescription>View and Clear Roll History</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<div style={{ height: 120, overflowY: 'auto' }}>
-					{
-						attackResults.map((attackResult, i) => <RollResultView key={i} {...attackResult} />)
-					}
-				</div>
+				<ScrollArea className="h-36 rounded-md border">
+					<div className="p-4">
+						{
+							attackResults.map((attackResult, i) =>
+								<React.Fragment key={i}>
+									<RollResultView {...attackResult} />
+									<Separator className="my-2" />
+								</React.Fragment>
+							)
+						}
+					</div>
+				</ScrollArea>
 			</CardContent>
 			<CardFooter>
 				<Button onClick={onClearHistory}>Clear Rolls</Button>
