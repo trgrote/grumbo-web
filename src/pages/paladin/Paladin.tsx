@@ -3,8 +3,6 @@ import PaladinHistoryTab from "./PaladinHistoryTab";
 import { Roll, RollResult } from "./Functions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-
 import {
 	ToggleGroup,
 	ToggleGroupItem,
@@ -18,14 +16,14 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PaladinInfoTab, { PaladinInfo } from "./PaladinInfoTab";
 
 // TODO
 // - Save History in local storage
 // - Maybe make the 'config' part a form
 // - Update logic to allow spell slots to be selected after attack roll.
-// - Add Max 5d8 for spells slots (which I think is just spell slot 4).
-// - Add toggle for against fields/undex because that will also add a 1d8 radiant
 // - Add input validation to only allow integers for modifier fields
+// - Space Fields better
 
 /**
  * 
@@ -33,10 +31,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
  */
 
 function Paladin() {
-	const [attackModifier, setAttackModifier] = useState(12);
-	const [damageDie, setDamageDie] = useState(8);
-	const [damageModifier, setDamageModifier] = useState(9);
-	const [hasImprovedDS, setHasImprovedDS] = useState(true);
+	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>({
+		attackModifier: 12,
+		damageDie: 8,
+		damageModifier: 9,
+		hasImprovedDS: true
+	});
 
 	const [hasAdvantage, setHasAdvantage] = useState(false);
 
@@ -47,11 +47,8 @@ function Paladin() {
 
 	const onRollClick = () => {
 		const roll = Roll({
-			attackModifier,
-			damageDie,
-			damageModifier,
+			...paladinInfo,
 			hasAdvantage,
-			hasImprovedDS,
 			spellSlotUsed
 		});
 
@@ -59,53 +56,22 @@ function Paladin() {
 	};
 
 	return (
-		<Tabs defaultValue="attack">
+		<Tabs defaultValue="paladinInfo">
 			<TabsList>
+				<TabsTrigger value="paladinInfo">Paladin Info</TabsTrigger>
 				<TabsTrigger value="attack">Attack</TabsTrigger>
 				<TabsTrigger value="history">History</TabsTrigger>
 			</TabsList>
+			<TabsContent value="paladinInfo">
+				<PaladinInfoTab paladinInfo={paladinInfo} onChange={setPaladinInfo} />
+			</TabsContent>
 			<TabsContent value="attack">
 				<Card>
 					<CardHeader>
-						<CardTitle>Paladin Info</CardTitle>
-						<CardDescription>Set Paladin Info</CardDescription>
+						<CardTitle>Attack Info</CardTitle>
+						<CardDescription>Set Attack Info</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div>
-							<label>
-								Attack Modifier:
-								<Input type="number" value={attackModifier}
-									onChange={e => setAttackModifier(parseInt(e.target.value))} />
-							</label>
-						</div>
-						<div>
-							<label>
-								Damage Die:
-							</label>
-							<ToggleGroup type="single"
-								value={damageDie.toString()}
-								onValueChange={newValue => setDamageDie(parseInt(newValue))}>
-								<ToggleGroupItem value='4'>d4</ToggleGroupItem>
-								<ToggleGroupItem value='6'>d6</ToggleGroupItem>
-								<ToggleGroupItem value='8'>d8</ToggleGroupItem>
-								<ToggleGroupItem value='10'>d10</ToggleGroupItem>
-								<ToggleGroupItem value='12'>d12</ToggleGroupItem>
-							</ToggleGroup>
-						</div>
-						<div>
-							<label>
-								Damage Modifier
-								<Input type="number" value={damageModifier}
-									onChange={e => setDamageModifier(parseInt(e.target.value))} />
-							</label>
-						</div>
-						<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
-							<label>
-								<Checkbox name="hasImprovedDS" checked={hasImprovedDS}
-									onCheckedChange={() => setHasImprovedDS(!hasImprovedDS)} />
-								Has Improved Divine Smite?
-							</label>
-						</div>
 						<div>
 							<label>
 								<Checkbox name="hasAdvantage" checked={hasAdvantage}
