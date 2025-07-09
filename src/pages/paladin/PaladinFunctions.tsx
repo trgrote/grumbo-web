@@ -1,18 +1,4 @@
-export interface AttackInfo {
-	attackModifier: number;
-	damageDie: number;
-	damageModifier: number;
-	hasAdvantage: boolean;
-	hasImprovedDS: boolean;
-	spellSlotUsed: number;
-}
-
-export interface RollResult {
-	attackRolls: number[];
-	isCritical: boolean;
-	weaponDamageRolls: number[];
-	divineSmiteDamageRolls: number[];
-}
+import { AttackInfo, RollResult } from "./PaladinTypes";
 
 export function Roll(attackInfo: AttackInfo): RollResult {
 	const { hasAdvantage, attackModifier, damageDie, damageModifier, hasImprovedDS, spellSlotUsed } = attackInfo;

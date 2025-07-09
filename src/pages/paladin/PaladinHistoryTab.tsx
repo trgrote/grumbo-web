@@ -1,5 +1,4 @@
 import * as React from "react";
-import { RollResult } from "./Functions";
 import { Button } from "@/components/ui/button";
 import RollResultView from "./RollResultView";
 import {
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { RollResult } from "./PaladinTypes";
 
 export interface PaladinHistoryProps {
 	attackResults: RollResult[];

@@ -11,13 +11,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-
-export interface PaladinInfo {
-	attackModifier: number;
-	damageDie: number;
-	damageModifier: number;
-	hasImprovedDS: boolean;
-}
+import { PaladinInfo } from "./PaladinTypes";
 
 export interface PaladinInfoTabProps {
 	paladinInfo: PaladinInfo;
