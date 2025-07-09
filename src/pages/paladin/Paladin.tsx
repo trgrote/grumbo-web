@@ -127,11 +127,11 @@ function Paladin() {
 							<ToggleGroup type="single"
 								value={spellSlotUsed.toString()}
 								onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
-								<ToggleGroupItem value='0'><div className="w-24">None</div></ToggleGroupItem>
-								<ToggleGroupItem value='1'>1</ToggleGroupItem>
-								<ToggleGroupItem value='2'>2</ToggleGroupItem>
-								<ToggleGroupItem value='3'>3</ToggleGroupItem>
-								<ToggleGroupItem value='4'>4+</ToggleGroupItem>
+								<ToggleGroupItem value='0'><div className="w-12">None</div></ToggleGroupItem>
+								<ToggleGroupItem value='1'><div className="w-12">1</div></ToggleGroupItem>
+								<ToggleGroupItem value='2'><div className="w-12">2</div></ToggleGroupItem>
+								<ToggleGroupItem value='3'><div className="w-12">3</div></ToggleGroupItem>
+								<ToggleGroupItem value='4'><div className="w-12">4+</div></ToggleGroupItem>
 							</ToggleGroup>
 						</div>
 					</CardContent>
