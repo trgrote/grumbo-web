@@ -29,7 +29,7 @@ const RollResultView: React.FC<RollResultProps> = (props: RollResultProps) => {
 	);
 
 	return (
-		<div style={{ borderRadius: 8, borderWidth: 5, backgroundColor: 'Menu' }}>
+		<div style={{ borderRadius: 8, borderWidth: 5 }}>
 			<div title={attackHoverText}>
 				<label>To Hit:</label> {attackRollElement}
 			</div>

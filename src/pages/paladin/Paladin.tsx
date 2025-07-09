@@ -1,21 +1,23 @@
 import { useState } from "react";
-import RollResultView from "./RollResultView";
+import PaladinHistoryTab from "./PaladinHistoryTab";
 import { Roll, RollResult } from "./Functions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
 import {
 	ToggleGroup,
 	ToggleGroupItem,
 } from "@/components/ui/toggle-group";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // TODO
 // - Save History in local storage
@@ -56,85 +58,92 @@ function Paladin() {
 		setAttackResults([roll, ...attackResults]);
 	};
 
-
 	return (
-		<>
-			<div>
-				<label>
-					Attack Modifier:
-					<Input type="number" value={attackModifier}
-						onChange={e => setAttackModifier(parseInt(e.target.value))} />
-				</label>
-			</div>
-			<div>
-				<label>
-					Damage Die:
-				</label>
-				<ToggleGroup type="single"
-					value={damageDie.toString()}
-					onValueChange={newValue => setDamageDie(parseInt(newValue))}>
-					<ToggleGroupItem value='4'>d4</ToggleGroupItem>
-					<ToggleGroupItem value='6'>d6</ToggleGroupItem>
-					<ToggleGroupItem value='8'>d8</ToggleGroupItem>
-					<ToggleGroupItem value='10'>d10</ToggleGroupItem>
-					<ToggleGroupItem value='12'>d12</ToggleGroupItem>
-				</ToggleGroup>
-			</div>
-			<div>
-				<label>
-					Damage Modifier
-					<Input type="number" value={damageModifier}
-						onChange={e => setDamageModifier(parseInt(e.target.value))} />
-				</label>
-			</div>
-			<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
-				<label>
-					<Checkbox name="hasImprovedDS" checked={hasImprovedDS}
-						onCheckedChange={() => setHasImprovedDS(!hasImprovedDS)} />
-					Has Improved Divine Smite?
-				</label>
-			</div>
-			<div>
-				<label>
-					<Checkbox name="hasAdvantage" checked={hasAdvantage}
-						onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
-					Has Advantage?
-				</label>
-			</div>
-			<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-				<label>
-					<Checkbox name="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
-						onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
-					Is Target Fiend or Undead?
-				</label>
-			</div>
-			<div>
-				<label>
-					Spell Slot Used?
-					<Select
-						value={spellSlotUsed.toString()}
-						onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Spell Slot" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value='0'>None</SelectItem>
-							<SelectItem value='1'>1</SelectItem>
-							<SelectItem value='2'>2</SelectItem>
-							<SelectItem value='3'>3</SelectItem>
-							<SelectItem value='4'>4+</SelectItem>
-						</SelectContent>
-					</Select>
-				</label>
-			</div>
-			<Button onClick={onRollClick}>Roll</Button>
-			<div style={{ height: 120, overflowY: 'auto' }}>
-				{
-					attackResults.map((attackResult, i) => <RollResultView key={i} {...attackResult} />)
-				}
-			</div>
-			{attackResults.length > 0 && <Button onClick={() => setAttackResults([])}>Clear Rolls</Button>}
-		</>
+		<Tabs defaultValue="attack">
+			<TabsList>
+				<TabsTrigger value="attack">Attack</TabsTrigger>
+				<TabsTrigger value="history">History</TabsTrigger>
+			</TabsList>
+			<TabsContent value="attack">
+				<Card>
+					<CardHeader>
+						<CardTitle>Paladin Info</CardTitle>
+						<CardDescription>Set Paladin Info</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div>
+							<label>
+								Attack Modifier:
+								<Input type="number" value={attackModifier}
+									onChange={e => setAttackModifier(parseInt(e.target.value))} />
+							</label>
+						</div>
+						<div>
+							<label>
+								Damage Die:
+							</label>
+							<ToggleGroup type="single"
+								value={damageDie.toString()}
+								onValueChange={newValue => setDamageDie(parseInt(newValue))}>
+								<ToggleGroupItem value='4'>d4</ToggleGroupItem>
+								<ToggleGroupItem value='6'>d6</ToggleGroupItem>
+								<ToggleGroupItem value='8'>d8</ToggleGroupItem>
+								<ToggleGroupItem value='10'>d10</ToggleGroupItem>
+								<ToggleGroupItem value='12'>d12</ToggleGroupItem>
+							</ToggleGroup>
+						</div>
+						<div>
+							<label>
+								Damage Modifier
+								<Input type="number" value={damageModifier}
+									onChange={e => setDamageModifier(parseInt(e.target.value))} />
+							</label>
+						</div>
+						<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
+							<label>
+								<Checkbox name="hasImprovedDS" checked={hasImprovedDS}
+									onCheckedChange={() => setHasImprovedDS(!hasImprovedDS)} />
+								Has Improved Divine Smite?
+							</label>
+						</div>
+						<div>
+							<label>
+								<Checkbox name="hasAdvantage" checked={hasAdvantage}
+									onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
+								Has Advantage?
+							</label>
+						</div>
+						<div title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
+							<label>
+								<Checkbox name="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
+									onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
+								Is Target Fiend or Undead?
+							</label>
+						</div>
+						<div>
+							<label>
+								Spell Slot Used?
+							</label>
+							<ToggleGroup type="single"
+								value={spellSlotUsed.toString()}
+								onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
+								<ToggleGroupItem value='0'><div className="w-24">None</div></ToggleGroupItem>
+								<ToggleGroupItem value='1'>1</ToggleGroupItem>
+								<ToggleGroupItem value='2'>2</ToggleGroupItem>
+								<ToggleGroupItem value='3'>3</ToggleGroupItem>
+								<ToggleGroupItem value='4'>4+</ToggleGroupItem>
+							</ToggleGroup>
+						</div>
+					</CardContent>
+					<CardFooter>
+						<Button onClick={onRollClick}>Roll</Button>
+					</CardFooter>
+				</Card>
+			</TabsContent>
+			<TabsContent value="history">
+				<PaladinHistoryTab attackResults={attackResults} onClearHistory={() => setAttackResults([])} />
+			</TabsContent>
+		</Tabs>
 	);
 }
 
