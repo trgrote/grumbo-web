@@ -8,17 +8,20 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { PaladinInfo } from "./PaladinTypes";
+import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
+import PaladinAttackSheet from "./PaladinAttackSheet";
 
 export interface PaladinInfoTabProps {
 	paladinInfo: PaladinInfo;
 	onChange: (paladinInfo: PaladinInfo) => void;
+	addToRollHistory: (result: RollHistoryRecord) => void;
 }
 
-export default function PaladinInfoTab({ paladinInfo, onChange }: PaladinInfoTabProps) {
+export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory }: PaladinInfoTabProps) {
 	const { attackModifier, damageDie, damageModifier, hasImprovedDS } = paladinInfo;
 
 	const setAttackModifier = (newValue: number) => {
@@ -92,6 +95,9 @@ export default function PaladinInfoTab({ paladinInfo, onChange }: PaladinInfoTab
 					</label>
 				</div>
 			</CardContent>
+			<CardFooter>
+				<PaladinAttackSheet paladinInfo={paladinInfo} addToRollHistory={addToRollHistory} />
+			</CardFooter>
 		</Card>
 	);
 }

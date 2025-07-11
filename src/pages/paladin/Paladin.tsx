@@ -2,7 +2,6 @@ import { useState } from "react";
 import PaladinHistoryTab from "./PaladinHistoryTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PaladinInfoTab from "./PaladinInfoTab";
-import PaladinAttackTab from "./PaladinAttackTab";
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 
 // TODO
@@ -31,15 +30,10 @@ function Paladin() {
 		<Tabs defaultValue="paladinInfo">
 			<TabsList>
 				<TabsTrigger value="paladinInfo">Paladin Info</TabsTrigger>
-				<TabsTrigger value="attack">Attack</TabsTrigger>
 				<TabsTrigger value="history">History</TabsTrigger>
 			</TabsList>
 			<TabsContent value="paladinInfo">
-				<PaladinInfoTab paladinInfo={paladinInfo} onChange={setPaladinInfo} />
-			</TabsContent>
-			<TabsContent value="attack">
-				<PaladinAttackTab paladinInfo={paladinInfo}
-					addToRollHistory={roll => setAttackResults([roll, ...attackResults])} />
+				<PaladinInfoTab paladinInfo={paladinInfo} onChange={setPaladinInfo} addToRollHistory={roll => setAttackResults([roll, ...attackResults])} />
 			</TabsContent>
 			<TabsContent value="history">
 				<PaladinHistoryTab attackResults={attackResults}
