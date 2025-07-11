@@ -40,6 +40,9 @@ enum AttackState {
 	Result
 }
 
+// TODO: Add a back button
+// TODO: Fix Results view to Totals and Damage Breakdown
+// TODO: Update To Hit state to indicate if hit was a crit
 export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackPaladinAttackSheetProps) {
 	const [attackState, setAttackState] = useState(AttackState.AttackInfo);
 
@@ -227,7 +230,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 	};
 
 	return (
-		<Sheet onOpenChange={(open) => { if (open) resetSheet(); }}>
+		<Sheet onOpenChange={(open) => { if (!open) resetSheet(); }}>
 			<SheetTrigger asChild>
 				<Button>Roll for Attack</Button>
 			</SheetTrigger>
