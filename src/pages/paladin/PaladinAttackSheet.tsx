@@ -13,7 +13,7 @@ import {
 	ToggleGroup,
 	ToggleGroupItem,
 } from "@/components/ui/toggle-group";
-import { useState } from "react";
+import { JSX, useState } from "react";
 import { AttackRollResult, PaladinInfo, RollDamageResult, RollHistoryRecord } from "./PaladinTypes";
 import RollResultView from "./RollResultView";
 import {
@@ -112,7 +112,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		setDamageRollResult(null);
 	};
 
-	const renderSheetContent = () => {
+	const renderSheetContent = (): JSX.Element => {
 		if (attackState === AttackState.AttackInfo) {
 			return (
 				<>
@@ -234,7 +234,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			<SheetTrigger asChild>
 				<Button>Roll for Attack</Button>
 			</SheetTrigger>
-			<SheetContent>
+			<SheetContent className="dark bg-background text-neutral-300">
 				{renderSheetContent()}
 			</SheetContent>
 		</Sheet>
