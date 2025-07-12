@@ -7,12 +7,14 @@ import { ChevronDown } from "lucide-react";
 import { RollHistoryRecord } from "./PaladinTypes";
 import { SpellSlotToString } from "./PaladinFunctions";
 
-type RollResultProps = RollHistoryRecord;
+interface RollResultProps extends RollHistoryRecord {
+	defaultOpen?: boolean;
+};
 
 const rollArrayToString = (arr: number[]) => '[' + arr.join(', ') + ']';
 
 const RollResultView = (props: RollResultProps) => {
-	const { toHitValues, weaponDamageRolls, divineSmiteDamageRolls } = props;
+	const { toHitValues, weaponDamageRolls, divineSmiteDamageRolls, defaultOpen } = props;
 
 	const maxAttackRoll = Math.max(...toHitValues);
 
@@ -21,7 +23,7 @@ const RollResultView = (props: RollResultProps) => {
 	const totalDamage = totalWeaponDamage + totalDSDamage;
 
 	return (
-		<Collapsible defaultOpen className="group/collapsible">
+		<Collapsible defaultOpen={defaultOpen ?? false} className="group/collapsible">
 			<CollapsibleTrigger asChild className="w-full">
 				<Button variant="ghost">
 					<h3>To Hit: {maxAttackRoll} Damage: {totalDamage}</h3>

@@ -226,6 +226,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					</SheetHeader>
 					<RollResultView
 						{...getCurrentHistoryResult()}
+						defaultOpen
 					/>
 					<SheetFooter>
 						<Button onClick={resetSheet}>Attack Again</Button>
