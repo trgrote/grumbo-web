@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { RollAttack, RollDamage } from "./PaladinFunctions";
+import { RollAttack, RollDamage, SpellSlotToString } from "./PaladinFunctions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -198,11 +198,13 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 						<ToggleGroup type="single"
 							value={spellSlotUsed.toString()}
 							onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
-							<ToggleGroupItem value='0'><div className="w-12">None</div></ToggleGroupItem>
-							<ToggleGroupItem value='1'><div className="w-12">1</div></ToggleGroupItem>
-							<ToggleGroupItem value='2'><div className="w-12">2</div></ToggleGroupItem>
-							<ToggleGroupItem value='3'><div className="w-12">3</div></ToggleGroupItem>
-							<ToggleGroupItem value='4'><div className="w-12">4+</div></ToggleGroupItem>
+							{
+								[0, 1, 2, 3, 4].map((spellSlot, i) =>
+									<ToggleGroupItem key={i} value={spellSlot.toString()}>
+										<div className="w-12">{SpellSlotToString(spellSlot)}</div>
+									</ToggleGroupItem>
+								)
+							}
 						</ToggleGroup>
 					</div>
 					<SheetFooter>
