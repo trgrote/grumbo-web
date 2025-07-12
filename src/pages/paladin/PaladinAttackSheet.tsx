@@ -108,9 +108,9 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			spellSlotUsed
 		});
 
-		addToRollHistory(getCurrentHistoryResult());
-
 		setDamageRollResult(damageResult);
+
+		addToRollHistory({ ...getCurrentHistoryResult(), ...damageResult });
 		setAttackState(AttackState.Result);
 	};
 
