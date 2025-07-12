@@ -11,7 +11,6 @@ import { AttackRollResult, PaladinInfo, RollDamageResult, RollHistoryRecord } fr
 import RollResultView from "./RollResultView";
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetFooter,
@@ -33,9 +32,6 @@ enum AttackState {
 	Result
 }
 
-// TODO: Add a back button
-// TODO: Fix Results view to Totals and Damage Breakdown
-// TODO: Update To Hit state to indicate if hit was a crit
 export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackPaladinAttackSheetProps) {
 	const [attackState, setAttackState] = useState(AttackState.AttackInfo);
 
@@ -83,6 +79,11 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		setAttackState(AttackState.isHit);
 	};
 
+	const onIsHitBack = () => {
+		setAttackState(AttackState.AttackInfo);
+		setAttackRollResult(null);
+	};
+
 	const onAttackHit = () => {
 		setAttackState(AttackState.DamageInfo);
 	};
@@ -94,6 +95,10 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 
 		addToRollHistory(getCurrentHistoryResult());
 		setAttackState(AttackState.Result);
+	};
+
+	const onDamageInfoBack = () => {
+		setAttackState(AttackState.isHit);
 	};
 
 	const onRollForDamage = () => {
@@ -151,9 +156,6 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					</div>
 					<SheetFooter>
 						<Button onClick={onRollForAttack} type="submit">Roll for Attack</Button>
-						<SheetClose asChild>
-							<Button variant="outline">Close</Button>
-						</SheetClose>
 					</SheetFooter>
 				</>
 			);
@@ -176,9 +178,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					<SheetFooter>
 						<Button onClick={onAttackHit}>Hit</Button>
 						<Button variant="secondary" onClick={onAttackMiss}>Missed</Button>
-						<SheetClose asChild>
-							<Button variant="outline">Close</Button>
-						</SheetClose>
+						<Button variant="outline" onClick={onIsHitBack}>Back</Button>
 					</SheetFooter>
 				</>
 			);
@@ -209,9 +209,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					</div>
 					<SheetFooter>
 						<Button onClick={onRollForDamage}>Roll For Damage</Button>
-						<SheetClose asChild>
-							<Button variant="outline">Close</Button>
-						</SheetClose>
+						<Button variant="outline" onClick={onDamageInfoBack}>Back</Button>
 					</SheetFooter>
 				</>
 			);
@@ -230,9 +228,6 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					/>
 					<SheetFooter>
 						<Button onClick={resetSheet}>Attack Again</Button>
-						<SheetClose asChild>
-							<Button variant="outline">Close</Button>
-						</SheetClose>
 					</SheetFooter>
 				</>
 			);
