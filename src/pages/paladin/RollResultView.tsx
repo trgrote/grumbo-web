@@ -38,6 +38,12 @@ const RollResultView = (props: RollResultProps) => {
 								<Label>Attack Modifier: {props.attackModifier}</Label>
 							</li>
 							<li>
+								<Label>Weapon Stats: d{props.damageDie} + {props.damageModifier}</Label>
+							</li>
+							<li>
+								<Label>Improved Divine Smite: <Checkbox disabled checked={props.hasImprovedDS} /></Label>
+							</li>
+							<li>
 								<Label>Had Advantage: <Checkbox disabled checked={props.hasAdvantage} /></Label>
 							</li>
 							<li>
@@ -47,29 +53,31 @@ const RollResultView = (props: RollResultProps) => {
 								<Label>Critical Hit: <Checkbox disabled checked={props.isCritical} /></Label>
 							</li>
 							<li>
-								<Label>Improved Divine Smite: <Checkbox disabled checked={props.hasImprovedDS} /></Label>
+								<Label>Was Hit: <Checkbox disabled checked={props.isHit} /></Label>
 							</li>
-							<li>
-								<Label>Was Target Fiend or Undead: <Checkbox disabled checked={props.isTargetFiendOrUndead} /></Label>
-							</li>
-							<li>
-								<Label>Weapon Stats: d{props.damageDie} + {props.damageModifier}</Label>
-							</li>
-							<li>
-								<Label>Weapon Rolls: {rollArrayToString(props.weaponDamageRolls)}</Label>
-							</li>
-							<li>
-								<Label>Total Weapon Damage: {totalWeaponDamage}</Label>
-							</li>
-							<li>
-								<Label>Spell Slot Used: {SpellSlotToString(props.spellSlotUsed)}</Label>
-							</li>
-							<li>
-								<Label>Divine Smite Rolls: {rollArrayToString(props.divineSmiteDamageRolls)}</Label>
-							</li>
-							<li>
-								<Label>Total Divine Smite Damage: {totalDSDamage}</Label>
-							</li>
+							{
+								props.isHit &&
+								<>
+									<li>
+										<Label>Was Target Fiend or Undead: <Checkbox disabled checked={props.isTargetFiendOrUndead} /></Label>
+									</li>
+									<li>
+										<Label>Weapon Rolls: {rollArrayToString(props.weaponDamageRolls)}</Label>
+									</li>
+									<li>
+										<Label>Total Weapon Damage: {totalWeaponDamage}</Label>
+									</li>
+									<li>
+										<Label>Spell Slot Used: {SpellSlotToString(props.spellSlotUsed)}</Label>
+									</li>
+									<li>
+										<Label>Divine Smite Rolls: {rollArrayToString(props.divineSmiteDamageRolls)}</Label>
+									</li>
+									<li>
+										<Label>Total Divine Smite Damage: {totalDSDamage}</Label>
+									</li>
+								</>
+							}
 						</ul>
 					</CardContent>
 				</Card>

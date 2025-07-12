@@ -41,6 +41,8 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 
 	const [attackRollResult, setAttackRollResult] = useState<AttackRollResult | null>(null);
 
+	const [isHit, setIsHit] = useState(false);
+
 	const [spellSlotUsed, setSpellSlotUsed] = useState(0);
 
 	const [damageRollResult, setDamageRollResult] = useState<RollDamageResult | null>(null);
@@ -49,6 +51,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		const rval: RollHistoryRecord = {
 			...paladinInfo,
 			hasAdvantage,
+			isHit,
 			isTargetFiendOrUndead,
 			spellSlotUsed,
 			toHitValues: [],
@@ -86,6 +89,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 	};
 
 	const onAttackHit = () => {
+		setIsHit(true);
 		setAttackState(AttackState.DamageInfo);
 	};
 
@@ -123,6 +127,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 	const resetSheet = () => {
 		setAttackState(AttackState.AttackInfo);
 		setHasAdvantage(false);
+		setIsHit(false);
 		setIsTargetFiendOrUndead(false);
 		setAttackRollResult(null);
 		setSpellSlotUsed(0);
