@@ -29,5 +29,5 @@ export interface RollDamageResult {
 	divineSmiteDamageRolls: number[];
 }
 
-export interface RollHistoryRecord extends AttackRollResult, RollDamageResult {
+export interface RollHistoryRecord extends PaladinInfo, AttackInfo, AttackRollResult, RollDamageInfo, RollDamageResult {
 }

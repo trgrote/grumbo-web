@@ -45,3 +45,15 @@ export function RollDamage(info: RollDamageInfo): RollDamageResult {
 		divineSmiteDamageRolls
 	};
 }
+
+export function SpellSlotToString(spellSlotUsed: number): string {
+	if (spellSlotUsed <= 0) {
+		return "None";
+	}
+
+	if (spellSlotUsed >= 4) {
+		return "4+";
+	}
+
+	return spellSlotUsed.toString();
+}

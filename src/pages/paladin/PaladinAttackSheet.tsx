@@ -1,11 +1,4 @@
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { RollAttack, RollDamage } from "./PaladinFunctions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -55,6 +48,31 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 
 	const [damageRollResult, setDamageRollResult] = useState<RollDamageResult | null>(null);
 
+	const getCurrentHistoryResult = (): RollHistoryRecord => {
+		const rval: RollHistoryRecord = {
+			...paladinInfo,
+			hasAdvantage,
+			isTargetFiendOrUndead,
+			spellSlotUsed,
+			toHitValues: [],
+			isCritical: false,
+			weaponDamageRolls: [],
+			divineSmiteDamageRolls: []
+		};
+
+		if (attackRollResult) {
+			rval.toHitValues = attackRollResult.toHitValues;
+			rval.isCritical = attackRollResult.isCritical;
+		}
+
+		if (damageRollResult) {
+			rval.weaponDamageRolls = damageRollResult.weaponDamageRolls;
+			rval.divineSmiteDamageRolls = damageRollResult.divineSmiteDamageRolls;
+		}
+
+		return rval;
+	};
+
 	const onRollForAttack = () => {
 		const attackResult = RollAttack({
 			attackModifier: paladinInfo.attackModifier,
@@ -74,11 +92,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			return;
 		}
 
-		addToRollHistory({
-			...attackRollResult,
-			weaponDamageRolls: [],
-			divineSmiteDamageRolls: []
-		});
+		addToRollHistory(getCurrentHistoryResult());
 		setAttackState(AttackState.Result);
 	};
 
@@ -94,10 +108,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			spellSlotUsed
 		});
 
-		addToRollHistory({
-			...attackRollResult,
-			...damageResult
-		});
+		addToRollHistory(getCurrentHistoryResult());
 
 		setDamageRollResult(damageResult);
 		setAttackState(AttackState.Result);
@@ -212,9 +223,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 						</SheetDescription>
 					</SheetHeader>
 					<RollResultView
-						{...attackRollResult}
-						weaponDamageRolls={damageRollResult?.weaponDamageRolls ?? []}
-						divineSmiteDamageRolls={damageRollResult?.divineSmiteDamageRolls ?? []}
+						{...getCurrentHistoryResult()}
 					/>
 					<SheetFooter>
 						<Button onClick={resetSheet}>Attack Again</Button>
