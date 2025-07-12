@@ -103,6 +103,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 	};
 
 	const onDamageInfoBack = () => {
+		setIsHit(false);
 		setAttackState(AttackState.isHit);
 	};
 
