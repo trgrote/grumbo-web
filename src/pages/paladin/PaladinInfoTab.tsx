@@ -73,11 +73,13 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 					<ToggleGroup type="single"
 						value={damageDie.toString()}
 						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
-						<ToggleGroupItem value='4'><div className="w-12">d4</div></ToggleGroupItem>
-						<ToggleGroupItem value='6'><div className="w-12">d6</div></ToggleGroupItem>
-						<ToggleGroupItem value='8'><div className="w-12">d8</div></ToggleGroupItem>
-						<ToggleGroupItem value='10'><div className="w-12">d10</div></ToggleGroupItem>
-						<ToggleGroupItem value='12'><div className="w-12">d12</div></ToggleGroupItem>
+						{
+							[4, 6, 8, 10, 12].map((dieValue, i) =>
+								<ToggleGroupItem key={i} value={dieValue.toString()}>
+									d{dieValue}
+								</ToggleGroupItem>
+							)
+						}
 					</ToggleGroup>
 				</div>
 				<div>
