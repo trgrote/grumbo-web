@@ -161,6 +161,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			);
 		} else if (attackState === AttackState.isHit && attackRollResult) {
 			const toHitvalue = Math.max(...attackRollResult.toHitValues);
+			const { isCritical } = attackRollResult;
 
 			return (
 				<>
@@ -170,9 +171,11 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 							Did Attack Hit?
 						</SheetDescription>
 					</SheetHeader>
+					<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
 					<Card>
 						<div className="text-center">
-							{toHitvalue}
+							{isCritical && <strong>{toHitvalue}</strong>}
+							{!isCritical && toHitvalue}
 						</div>
 					</Card>
 					<SheetFooter>
