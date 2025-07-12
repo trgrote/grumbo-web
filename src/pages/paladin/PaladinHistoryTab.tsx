@@ -26,7 +26,7 @@ export default function PaladinHistoryTab({ attackResults, onClearHistory }: Pal
 				<CardDescription>View and Clear Roll History</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<ScrollArea className="h-36 rounded-md border">
+				<ScrollArea className="h-120 rounded-md border">
 					<div className="p-4">
 						{
 							attackResults.map((attackResult, i) =>
