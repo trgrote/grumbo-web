@@ -204,13 +204,13 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 						<Label>
 							Spell Slot Used?
 						</Label>
-						<ToggleGroup type="single"
+						<ToggleGroup type="single" className="w-full"
 							value={spellSlotUsed.toString()}
 							onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
 							{
 								[0, 1, 2, 3, 4].map((spellSlot, i) =>
 									<ToggleGroupItem key={i} value={spellSlot.toString()}>
-										<div className="w-12">{SpellSlotToString(spellSlot)}</div>
+										{SpellSlotToString(spellSlot)}
 									</ToggleGroupItem>
 								)
 							}

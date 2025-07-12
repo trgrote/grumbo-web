@@ -1,6 +1,11 @@
 # Grumbo Web Front End
 This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
 
+# TODO
+- Save History in local storage
+- Add input validation to only allow integers for modifier fields
+- BUG: On Mobile, the spell slot toggle group is too big and overflows
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
