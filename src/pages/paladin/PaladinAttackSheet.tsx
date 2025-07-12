@@ -32,6 +32,7 @@ enum AttackState {
 	Result
 }
 
+// TODO: Add Hit or Missed flag and then don't render damage info if it was a miss
 export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackPaladinAttackSheetProps) {
 	const [attackState, setAttackState] = useState(AttackState.AttackInfo);
 
