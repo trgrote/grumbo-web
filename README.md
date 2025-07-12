@@ -4,7 +4,9 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 # TODO
 - Save History in local storage
 - Add input validation to only allow integers for modifier fields
-- BUG: On Mobile, the spell slot toggle group is too big and overflows
+
+# Deploy
+`docker compose up -d --build`
 
 # React + TypeScript + Vite
 
