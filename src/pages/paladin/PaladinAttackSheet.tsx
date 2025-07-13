@@ -32,6 +32,8 @@ enum AttackState {
 	Result
 }
 
+const spellSlots = [0, 1, 2, 3, 4];
+
 export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackPaladinAttackSheetProps) {
 	const [attackState, setAttackState] = useState(AttackState.AttackInfo);
 
@@ -219,7 +221,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 								value={spellSlotUsed.toString()}
 								onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
 								{
-									[0, 1, 2, 3, 4].map((spellSlot, i) =>
+									spellSlots.map((spellSlot, i) =>
 										<ToggleGroupItem key={i} value={spellSlot.toString()}>
 											{SpellSlotToString(spellSlot)}
 										</ToggleGroupItem>
