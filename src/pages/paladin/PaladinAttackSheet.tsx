@@ -49,6 +49,8 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 
 	const [damageRollResult, setDamageRollResult] = useState<RollDamageResult | null>(null);
 
+	const playRandomPaladinSound = usePaladinSound();
+
 	const getCurrentHistoryResult = (): RollHistoryRecord => {
 		const rval: RollHistoryRecord = {
 			...paladinInfo,
@@ -80,6 +82,10 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			attackModifier: paladinInfo.attackModifier,
 			hasAdvantage: hasAdvantage
 		});
+
+		if (attackResult.isCritical) {
+			playRandomPaladinSound();
+		}
 
 		setAttackRollResult(attackResult);
 		setAttackState(AttackState.isHit);
@@ -260,16 +266,8 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		return (<></>);
 	};
 
-	const playRandomPaladinSound = usePaladinSound();
-
 	return (
-		<Sheet onOpenChange={(open) => {
-			if (!open) {
-				resetSheet();
-			} else {
-				playRandomPaladinSound();
-			}
-		}}>
+		<Sheet onOpenChange={(open) => { if (!open) resetSheet(); }}>
 			<SheetTrigger asChild>
 				<Button>Roll for Attack</Button>
 			</SheetTrigger>
