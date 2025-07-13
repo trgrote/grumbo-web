@@ -26,7 +26,10 @@ const RollResultView = (props: RollResultProps) => {
 		<Collapsible defaultOpen={defaultOpen ?? false} className="group/collapsible">
 			<CollapsibleTrigger asChild className="w-full">
 				<Button variant="ghost">
-					<h3>To Hit: {maxAttackRoll} Damage: {totalDamage}</h3>
+					<h3>
+						To Hit: <span className="text-green-500">{maxAttackRoll}</span>&nbsp;
+						Damage: <span className="text-red-500">{totalDamage}</span>
+					</h3>
 					<ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
 				</Button>
 			</CollapsibleTrigger>
