@@ -124,6 +124,14 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		setAttackState(AttackState.Result);
 	};
 
+	const onAttackAgain = () => {
+		setAttackState(AttackState.AttackInfo);
+		setAttackRollResult(null);
+		setIsHit(false);
+		setDamageRollResult(null);
+		setSpellSlotUsed(0);
+	};
+
 	const resetSheet = () => {
 		setAttackState(AttackState.AttackInfo);
 		setHasAdvantage(false);
@@ -150,13 +158,6 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 								<Checkbox id="hasAdvantage" checked={hasAdvantage}
 									onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
 								Has Advantage?
-							</Label>
-						</div>
-						<div className="grid gap-3" title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-							<Label htmlFor="isTargetFiendOrUndead">
-								<Checkbox id="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
-									onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
-								Is Target Fiend or Undead?
 							</Label>
 						</div>
 					</div>
@@ -201,20 +202,29 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 						</SheetDescription>
 					</SheetHeader>
 					<div className="grid flex-1 auto-rows-min gap-6 px-4">
-						<Label>
-							Spell Slot Used?
-						</Label>
-						<ToggleGroup type="single" className="w-full"
-							value={spellSlotUsed.toString()}
-							onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
-							{
-								[0, 1, 2, 3, 4].map((spellSlot, i) =>
-									<ToggleGroupItem key={i} value={spellSlot.toString()}>
-										{SpellSlotToString(spellSlot)}
-									</ToggleGroupItem>
-								)
-							}
-						</ToggleGroup>
+						<div className="grid gap-3" title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
+							<Label htmlFor="isTargetFiendOrUndead">
+								<Checkbox id="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
+									onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
+								Is Target Fiend or Undead?
+							</Label>
+						</div>
+						<div className="grid gap-3">
+							<Label>
+								Spell Slot Used?
+							</Label>
+							<ToggleGroup type="single" className="w-full"
+								value={spellSlotUsed.toString()}
+								onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
+								{
+									[0, 1, 2, 3, 4].map((spellSlot, i) =>
+										<ToggleGroupItem key={i} value={spellSlot.toString()}>
+											{SpellSlotToString(spellSlot)}
+										</ToggleGroupItem>
+									)
+								}
+							</ToggleGroup>
+						</div>
 					</div>
 					<SheetFooter>
 						<Button onClick={onRollForDamage}>Roll For Damage</Button>
@@ -236,7 +246,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 						defaultOpen
 					/>
 					<SheetFooter>
-						<Button onClick={resetSheet}>Attack Again</Button>
+						<Button onClick={onAttackAgain}>Attack Again</Button>
 					</SheetFooter>
 				</>
 			);
