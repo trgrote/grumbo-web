@@ -189,13 +189,15 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 							Did Attack Hit?
 						</SheetDescription>
 					</SheetHeader>
-					<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
-					<Card>
-						<h2 className={`text-center ${hitValueTextColorClass}`}>
-							{isCritical && <strong>{toHitvalue}</strong>}
-							{!isCritical && toHitvalue}
-						</h2>
-					</Card>
+					<div className="grid flex-1 auto-rows-min gap-6 px-4">
+						<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
+						<Card>
+							<h2 className={`text-center ${hitValueTextColorClass}`}>
+								{isCritical && <strong>{toHitvalue}</strong>}
+								{!isCritical && toHitvalue}
+							</h2>
+						</Card>
+					</div>
 					<SheetFooter>
 						<Button onClick={onAttackHit}>Hit</Button>
 						<Button variant="secondary" onClick={onAttackMiss}>Missed</Button>
@@ -252,10 +254,12 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 							Attack and Damage Results
 						</SheetDescription>
 					</SheetHeader>
-					<RollResultView
-						{...getCurrentHistoryResult()}
-						defaultOpen
-					/>
+					<div className="grid flex-1 auto-rows-min gap-6 px-4">
+						<RollResultView
+							{...getCurrentHistoryResult()}
+							defaultOpen
+						/>
+					</div>
 					<SheetFooter>
 						<Button onClick={onAttackAgain}>Attack Again</Button>
 					</SheetFooter>
