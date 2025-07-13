@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 import PaladinAttackSheet from "./PaladinAttackSheet";
+import { Label } from "@/components/ui/label";
 
 export interface PaladinInfoTabProps {
 	paladinInfo: PaladinInfo;
@@ -90,11 +91,11 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 					</label>
 				</div>
 				<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
-					<label>
-						<Checkbox name="hasImprovedDS" checked={hasImprovedDS}
+					<Label htmlFor="hasImprovedDS">
+						<Checkbox id="hasImprovedDS" checked={hasImprovedDS}
 							onCheckedChange={() => setHasImprovedDS(!hasImprovedDS)} />
 						Has Improved Divine Smite?
-					</label>
+					</Label>
 				</div>
 			</CardContent>
 			<CardFooter>
