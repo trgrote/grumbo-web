@@ -2,7 +2,6 @@
 This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
 
 # TODO
-- Save History in local storage
 - Add input validation to only allow integers for modifier fields
 
 # Deploy

@@ -32,3 +32,10 @@ export interface RollDamageResult {
 export interface RollHistoryRecord extends PaladinInfo, AttackInfo, AttackRollResult, RollDamageInfo, RollDamageResult {
 	isHit: boolean;
 }
+
+// Stored Local Data
+export interface PaladinLocalStorage {
+	storageVersion?: string;    // storage version so we don't end up trying to parse incomptable old storage
+	paladinInfo: PaladinInfo;
+	attackResults: RollHistoryRecord[];
+}
