@@ -22,6 +22,8 @@ export interface PaladinInfoTabProps {
 	addToRollHistory: (result: RollHistoryRecord) => void;
 }
 
+const weaponDamageDice = [4, 6, 8, 10, 12];
+
 export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory }: PaladinInfoTabProps) {
 	const { attackModifier, damageDie, damageModifier, hasImprovedDS } = paladinInfo;
 
@@ -75,7 +77,7 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 						value={damageDie.toString()}
 						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
 						{
-							[4, 6, 8, 10, 12].map((dieValue, i) =>
+							weaponDamageDice.map((dieValue, i) =>
 								<ToggleGroupItem key={i} value={dieValue.toString()}>
 									d{dieValue}
 								</ToggleGroupItem>
