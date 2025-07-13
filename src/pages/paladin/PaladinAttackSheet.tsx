@@ -170,6 +170,8 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			const toHitvalue = Math.max(...attackRollResult.toHitValues);
 			const { isCritical } = attackRollResult;
 
+			const hitValueTextColorClass = isCritical ? 'text-blue-500' : 'text-green-500';
+
 			return (
 				<>
 					<SheetHeader>
@@ -180,7 +182,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					</SheetHeader>
 					<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
 					<Card>
-						<h2 className="text-center text-green-500">
+						<h2 className={`text-center ${hitValueTextColorClass}`}>
 							{isCritical && <strong>{toHitvalue}</strong>}
 							{!isCritical && toHitvalue}
 						</h2>
