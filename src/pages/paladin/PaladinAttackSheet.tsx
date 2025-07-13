@@ -180,10 +180,10 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 					</SheetHeader>
 					<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
 					<Card>
-						<div className="text-center">
+						<h2 className="text-center text-green-500">
 							{isCritical && <strong>{toHitvalue}</strong>}
 							{!isCritical && toHitvalue}
-						</div>
+						</h2>
 					</Card>
 					<SheetFooter>
 						<Button onClick={onAttackHit}>Hit</Button>
