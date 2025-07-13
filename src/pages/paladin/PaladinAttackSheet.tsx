@@ -19,6 +19,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
+import { usePaladinSound } from "./usePaladinSound";
 
 export interface PaladinAttackPaladinAttackSheetProps {
 	paladinInfo: PaladinInfo;
@@ -259,8 +260,16 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		return (<></>);
 	};
 
+	const playRandomPaladinSound = usePaladinSound();
+
 	return (
-		<Sheet onOpenChange={(open) => { if (!open) resetSheet(); }}>
+		<Sheet onOpenChange={(open) => {
+			if (!open) {
+				resetSheet();
+			} else {
+				playRandomPaladinSound();
+			}
+		}}>
 			<SheetTrigger asChild>
 				<Button>Roll for Attack</Button>
 			</SheetTrigger>

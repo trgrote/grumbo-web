@@ -30,7 +30,8 @@
     "react-dom": "^19.0.0",
     "react-router": "^7.5.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "use-sound": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
