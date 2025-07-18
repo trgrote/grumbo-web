@@ -19,7 +19,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { usePaladinSound } from "./usePaladinSound";
+import { usePaladinSound } from "./hooks/usePaladinSound";
 
 export interface PaladinAttackPaladinAttackSheetProps {
 	paladinInfo: PaladinInfo;
