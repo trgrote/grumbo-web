@@ -1,14 +1,9 @@
 import { Card } from "@/components/ui/card";
-import { RollAttack, RollDamage, SpellSlotToString } from "./PaladinFunctions";
+import { RollAttack, RollDamage } from "./PaladinFunctions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	ToggleGroup,
-	ToggleGroupItem,
-} from "@/components/ui/toggle-group";
 import { JSX, useState } from "react";
 import { AttackRollResult, PaladinInfo, RollDamageResult, RollHistoryRecord } from "./PaladinTypes";
-import RollResultView from "./RollResultView";
 import {
 	Sheet,
 	SheetContent,
@@ -20,6 +15,8 @@ import {
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { usePaladinSound } from "./hooks/usePaladinSound";
+import ResultState from "./AttackStates/ResultState";
+import DamageInfoState from "./AttackStates/DamageInfoState";
 
 export interface PaladinAttackPaladinAttackSheetProps {
 	paladinInfo: PaladinInfo;
@@ -32,8 +29,6 @@ enum AttackState {
 	DamageInfo,
 	Result
 }
-
-const spellSlots = [0, 1, 2, 3, 4];
 
 export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackPaladinAttackSheetProps) {
 	const [attackState, setAttackState] = useState(AttackState.AttackInfo);
@@ -207,67 +202,25 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			);
 		} else if (attackState === AttackState.DamageInfo) {
 			return (
-				<>
-					<SheetHeader>
-						<SheetTitle>Damage Info</SheetTitle>
-						<SheetDescription>
-							Provide Additional Damage Information
-						</SheetDescription>
-					</SheetHeader>
-					<div className="grid flex-1 auto-rows-min gap-6 px-4">
-						<div className="grid gap-3" title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-							<Label htmlFor="isTargetFiendOrUndead">
-								<Checkbox id="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
-									onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
-								Is Target Fiend or Undead?
-							</Label>
-						</div>
-						<div className="grid gap-3">
-							<Label>
-								Spell Slot Used?
-							</Label>
-							<ToggleGroup type="single" className="w-full"
-								value={spellSlotUsed.toString()}
-								onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
-								{
-									spellSlots.map((spellSlot, i) =>
-										<ToggleGroupItem key={i} value={spellSlot.toString()}>
-											{SpellSlotToString(spellSlot)}
-										</ToggleGroupItem>
-									)
-								}
-							</ToggleGroup>
-						</div>
-					</div>
-					<SheetFooter>
-						<Button onClick={onRollForDamage}>Roll For Damage</Button>
-						<Button variant="outline" onClick={onDamageInfoBack}>Back</Button>
-					</SheetFooter>
-				</>
+				<DamageInfoState
+					isTargetFiendOrUndead={isTargetFiendOrUndead}
+					setIsTargetFiendOrUndead={setIsTargetFiendOrUndead}
+					spellSlotUsed={spellSlotUsed}
+					setSpellSlotUsed={setSpellSlotUsed}
+					onRollForDamage={onRollForDamage}
+					onDamageInfoBack={onDamageInfoBack}
+				/>
 			);
 		} else if (attackState === AttackState.Result && attackRollResult) {
 			return (
-				<>
-					<SheetHeader>
-						<SheetTitle>Results</SheetTitle>
-						<SheetDescription>
-							Attack and Damage Results
-						</SheetDescription>
-					</SheetHeader>
-					<div className="grid flex-1 auto-rows-min gap-6 px-4">
-						<RollResultView
-							{...getCurrentHistoryResult()}
-							defaultOpen
-						/>
-					</div>
-					<SheetFooter>
-						<Button onClick={onAttackAgain}>Attack Again</Button>
-					</SheetFooter>
-				</>
+				<ResultState
+					currentHistoryResult={getCurrentHistoryResult()}
+					onAttackAgain={onAttackAgain}
+				/>
 			);
 		}
 
-		return (<></>);
+		return (<>ERROR</>);
 	};
 
 	return (
