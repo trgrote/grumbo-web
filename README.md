@@ -4,6 +4,9 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 # TODO
 - Add input validation to only allow integers for modifier fields
 
+# Test Locally
+`npm run dev`
+
 # Deploy
 `docker compose up -d --build`
 
