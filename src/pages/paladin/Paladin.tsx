@@ -33,7 +33,10 @@ function Paladin() {
 				<TabsTrigger value="history">History</TabsTrigger>
 			</TabsList>
 			<TabsContent value="paladinInfo">
-				<PaladinInfoTab paladinInfo={paladinInfo} onChange={setPaladinInfo} addToRollHistory={roll => setAttackResults([roll, ...attackResults])} />
+				<PaladinInfoTab
+					paladinInfo={paladinInfo}
+					onChange={setPaladinInfo}
+					addToRollHistory={roll => setAttackResults([roll, ...attackResults])} />
 			</TabsContent>
 			<TabsContent value="history">
 				<PaladinHistoryTab attackResults={attackResults}
