@@ -21,6 +21,11 @@ export default function MainLayout() {
 							<Link to='/paladin'>Paladin Attack</Link>
 						</NavigationMenuLink>
 					</NavigationMenuItem>
+					<NavigationMenuItem>
+						<NavigationMenuLink asChild>
+							<Link to='/gloomstalker'>Gloom-Stalker</Link>
+						</NavigationMenuLink>
+					</NavigationMenuItem>
 				</NavigationMenuList>
 			</NavigationMenu>
 

@@ -5,8 +5,6 @@ import PaladinInfoTab from "./PaladinInfoTab";
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 import { GetLocalStorage, SaveLocalStorage } from "./PaladinLocalStorage";
 
-// TODO: Save History in local storage
-// TODO: Add input validation to only allow integers for modifier fields
 function Paladin() {
 	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>(() => {
 		const localStorage = GetLocalStorage();

@@ -5,6 +5,7 @@ import Home from './pages/Home/Home.tsx';
 import { BrowserRouter, Routes, Route } from "react-router";
 import Paladin from './pages/paladin/Paladin.tsx';
 import MainLayout from './layouts/MainLayout.tsx';
+import GloomStalkerPage from './pages/gloomstalker/GloomstalkerPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
 				<Route path='/' element={<MainLayout />}>
 					<Route path='/' element={<Home />} />
 					<Route path='paladin' element={<Paladin />} />
+					<Route path='gloomstalker' element={<GloomStalkerPage />} />
 					<Route path='*' element={<div>Invalid Route</div>} />
 				</Route>
 			</Routes>
