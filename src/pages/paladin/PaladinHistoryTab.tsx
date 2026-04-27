@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import RollResultView from "./RollResultView";
 import {
 	Card,
 	CardContent,
@@ -16,9 +15,10 @@ import { RollHistoryRecord } from "./PaladinTypes";
 export interface PaladinHistoryProps {
 	attackResults: RollHistoryRecord[];
 	onClearHistory: () => void;
+	rollRecordRenderer: (record: RollHistoryRecord) => React.JSX.Element;
 }
 
-export default function PaladinHistoryTab({ attackResults, onClearHistory }: PaladinHistoryProps) {
+export default function PaladinHistoryTab({ attackResults, onClearHistory, rollRecordRenderer }: PaladinHistoryProps) {
 	return (
 		<Card>
 			<CardHeader>
@@ -31,7 +31,7 @@ export default function PaladinHistoryTab({ attackResults, onClearHistory }: Pal
 						{
 							attackResults.map((attackResult, i) =>
 								<React.Fragment key={i}>
-									<RollResultView {...attackResult} />
+									{rollRecordRenderer(attackResult)}
 									<Separator className="my-2" />
 								</React.Fragment>
 							)

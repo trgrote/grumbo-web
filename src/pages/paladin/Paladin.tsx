@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PaladinInfoTab from "./PaladinInfoTab";
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 import { GetLocalStorage, SaveLocalStorage } from "./PaladinLocalStorage";
+import RollResultView from "./RollResultView";
 
 function Paladin() {
 	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>(() => {
@@ -38,6 +39,7 @@ function Paladin() {
 			</TabsContent>
 			<TabsContent value="history">
 				<PaladinHistoryTab attackResults={attackResults}
+					rollRecordRenderer={(attackResult) => <RollResultView {...attackResult} />}
 					onClearHistory={() => setAttackResults([])} />
 			</TabsContent>
 		</Tabs>
