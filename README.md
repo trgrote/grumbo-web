@@ -2,7 +2,10 @@
 This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
 
 # TODO
-- Add input validation to only allow integers for modifier fields
+- [ ] Add input validation to only allow integers for modifier fields
+- [ ] Implement Gloom Stalker Attack Page
+	- [ ] Refactor PC Info and History Tabs to work with both Paladin and Gloomstalker
+	- [ ] Refactor Attack Sheet/Modal to work with both Paladin and Gloomstalker
 
 # Test Locally
 `npm run dev`
