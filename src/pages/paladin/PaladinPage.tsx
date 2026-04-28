@@ -6,7 +6,7 @@ import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 import { GetLocalStorage, SaveLocalStorage } from "./PaladinLocalStorage";
 import RollResultView from "./RollResultView";
 
-function Paladin() {
+function PaladinPage() {
 	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>(() => {
 		const localStorage = GetLocalStorage();
 		return localStorage.paladinInfo;
@@ -46,4 +46,4 @@ function Paladin() {
 	);
 }
 
-export default Paladin;
+export default PaladinPage;
