@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { JSX, useReducer, useState } from "react";
-import { GloomStalkerInfo } from "./GloomStalkerTypes";
-import { AttackSheetActionType, AttackStep, GloomStalkerAttackSheetStateDefault, GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
+import { JSX, useReducer } from "react";
+import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStalkerTypes";
+import { GloomStalkerAttackSheetStateDefault, GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
 import PreHitRollState from "./AttackSheetStates/PreHitRollState";
 
 export interface GloomStalkerAttackSheetProps {
@@ -27,7 +27,7 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 				{state.attackStep === AttackStep.PreHitRoll && <PreHitRollState
 					hasAdvantage={state.hasAdvantage}
 					setHasAdvantage={(value) => dispatch({ type: AttackSheetActionType.SetAdvantage, payload: value })}
-					onRollForAttack={() => dispatch({ type: AttackSheetActionType.RollForAttack })}
+					onRollForAttack={() => dispatch({ type: AttackSheetActionType.RollForAttack, payload: gloomStalkerInfo })}
 				/>}
 				{state.attackStep === AttackStep.PostHitRoll && <div>Post Hit Roll State</div>}
 				{state.attackStep === AttackStep.PreDamageRoll && <div>Pre Damage Roll State</div>}

@@ -1,11 +1,6 @@
+import { AttackSheetActionType } from './GloomStalkerTypes';
+import { AttackStep } from './GloomStalkerTypes';
 import { PostDamageRollInfo, PostHitRollInfo, PreHitRollInfo } from "./GloomStalkerTypes";
-
-export enum AttackStep {
-	PreHitRoll,
-	PostHitRoll,
-	PreDamageRoll,
-	PostDamageRoll
-}
 
 export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRollInfo, PostDamageRollInfo {
 	attackStep: AttackStep;
@@ -29,17 +24,7 @@ export interface AttackSheetAction {
 	payload?: unknown;
 }
 
-export enum AttackSheetActionType {
-	Reset,
-	SetAdvantage,
-	SetApplySharpShooterPenalty,
-	RollForAttack,
-	ConfirmHit,
-	RerollPiercingDamageDie,
-}
-
 export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackSheetState, action: AttackSheetAction): GloomStalkerAttackSheetState {
-
 	if (action.type === AttackSheetActionType.Reset) {
 		return GloomStalkerAttackSheetStateDefault();
 	}

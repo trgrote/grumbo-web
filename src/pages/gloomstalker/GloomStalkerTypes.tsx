@@ -40,3 +40,19 @@ export interface RollHistoryRecord {
 	timestamp: number;
 	gloomStalkerInfo: GloomStalkerInfo;
 }
+
+export enum AttackSheetActionType {
+	Reset,
+	SetAdvantage,
+	SetApplySharpShooterPenalty,
+	RollForAttack,
+	ConfirmHit,
+	RerollPiercingDamageDie,
+}
+
+export enum AttackStep {
+	PreHitRoll,
+	PostHitRoll,
+	PreDamageRoll,
+	PostDamageRoll,
+}
