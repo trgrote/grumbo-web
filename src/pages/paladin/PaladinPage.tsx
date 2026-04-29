@@ -26,12 +26,12 @@ function PaladinPage() {
 	}, [paladinInfo, attackResults]);
 
 	return (
-		<Tabs defaultValue="paladinInfo">
+		<Tabs defaultValue="info">
 			<TabsList>
-				<TabsTrigger value="paladinInfo">Paladin Info</TabsTrigger>
+				<TabsTrigger value="info">Paladin Info</TabsTrigger>
 				<TabsTrigger value="history">History</TabsTrigger>
 			</TabsList>
-			<TabsContent value="paladinInfo">
+			<TabsContent value="info">
 				<PaladinInfoTab
 					paladinInfo={paladinInfo}
 					onChange={setPaladinInfo}
