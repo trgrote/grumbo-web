@@ -157,7 +157,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange }: Glo
 						Has Sharp Shooter?
 					</Label>
 				</div>
-				<div title="Once per turn, you can reroll the piercing damage from an attack. On a critical hit, roll one additional damage die.">
+				<div title="Once per turn, you can reroll one of the attack's damage dice. On a critical hit, roll one additional damage die.">
 					<Label htmlFor="hasPiercer">
 						<Checkbox id="hasPiercer" checked={hasPiercer}
 							onCheckedChange={() => setHasPiercer(!hasPiercer)} />
@@ -171,7 +171,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange }: Glo
 						Has Elven Accuracy?
 					</Label>
 				</div>
-				<div title="Whenever you roll a 20 on your attack roll with this weapon, each creature of your choice within 5 feet of the target takes 5 damage of the type dealt by the dragon's breath weapon. On a hit, the weapon deals an extra 1d6 damage of the type dealt by the dragon's breath weapon.">
+				<div title="Whenever you roll a 20 on your attack roll with this weapon, each creature of your choice within 5 feet of the target takes 5 piercing damage. On a hit, the weapon deals an extra 1d6 piercing damage.">
 					<Label htmlFor="hasDragonsWrathLongbowStirring">
 						<Checkbox id="hasDragonsWrathLongbowStirring" checked={hasDragonsWrathLongbowStirring}
 							onCheckedChange={() => setHasDragonsWrathLongbowStirring(!hasDragonsWrathLongbowStirring)} />
