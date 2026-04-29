@@ -27,6 +27,8 @@ export default function PostHitRollState({ attackRolls, attackModifier, confirmI
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
+				<Label>To Hit Rolls: [{attackRolls.join(', ')}]</Label>
+				<Label>Attack Modifier: {attackModifier >= 0 ? `+${attackModifier}` : attackModifier}</Label>
 				<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
