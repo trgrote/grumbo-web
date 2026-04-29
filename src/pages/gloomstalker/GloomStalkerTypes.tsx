@@ -27,8 +27,9 @@ export interface PostHitRollInfo {
 	isHit: boolean;
 }
 
-// export interface PreDamageRollInfo {
-// }
+export interface PreDamageRollInfo {
+	isDreadAmbusherExtraAttack: boolean;   // if it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional 1d8 damage
+}
 
 export interface PostDamageRollInfo {
 	rerollPiercingDamageDieIndex: number | null;
@@ -48,6 +49,8 @@ export enum AttackSheetActionType {
 	RollForAttack,
 	ConfirmIsHit,
 	ConfirmIsMiss,
+	SetIsDreadAmbusherExtraAttack,
+	RollForDamage,
 	RerollPiercingDamageDie,
 	GoBack,
 }

@@ -5,6 +5,7 @@ import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStal
 import { GloomStalkerAttackSheetStateDefault, GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
 import PreHitRollState from "./AttackSheetStates/PreHitRollState";
 import PostHitRollState from "./AttackSheetStates/PostHitRollState";
+import PreDamageRollState from "./AttackSheetStates/PreDamageRollState";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -39,7 +40,12 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 					confirmIsMiss={() => dispatch({ type: AttackSheetActionType.ConfirmIsMiss })}
 					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
 				/>}
-				{state.attackStep === AttackStep.PreDamageRoll && <div>Pre Damage Roll State</div>}
+				{state.attackStep === AttackStep.PreDamageRoll && <PreDamageRollState
+					isDreadAmbusherExtraAttack={state.isDreadAmbusherExtraAttack}
+					setIsDreadAmbusherExtraAttack={(value) => dispatch({ type: AttackSheetActionType.SetIsDreadAmbusherExtraAttack, payload: value })}
+					rollForDamage={() => dispatch({ type: AttackSheetActionType.RollForDamage })}
+					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
+				/>}
 				{state.attackStep === AttackStep.PostDamageRoll && <div>Post Damage Roll State</div>}
 				{state.attackStep === AttackStep.Results && <div>Results State</div>}
 			</>

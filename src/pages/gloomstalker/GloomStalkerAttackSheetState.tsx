@@ -1,8 +1,8 @@
-import { AttackSheetActionType, GloomStalkerInfo } from './GloomStalkerTypes';
+import { AttackSheetActionType, GloomStalkerInfo, PreDamageRollInfo } from './GloomStalkerTypes';
 import { AttackStep } from './GloomStalkerTypes';
 import { PostDamageRollInfo, PostHitRollInfo, PreHitRollInfo } from "./GloomStalkerTypes";
 
-export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRollInfo, PostDamageRollInfo {
+export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRollInfo, PreDamageRollInfo, PostDamageRollInfo {
 	attackStep: AttackStep;
 }
 
@@ -13,6 +13,7 @@ export function GloomStalkerAttackSheetStateDefault(): GloomStalkerAttackSheetSt
 		applySharpShooterPenalty: false,
 		attackRolls: [],
 		isHit: false,
+		isDreadAmbusherExtraAttack: false,
 		rerollPiercingDamageDieIndex: null,
 		piercingDamageRolls: [],
 		applyDragonSlumberDamage: false
@@ -79,11 +80,20 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 		};
 	}
 
+	if (action.type === AttackSheetActionType.SetIsDreadAmbusherExtraAttack) {
+		return {
+			...state,
+			isDreadAmbusherExtraAttack: action.payload as boolean,
+		};
+	}
+
 	if (action.type === AttackSheetActionType.GoBack) {
 		const prevState = (() => {
 			switch (state.attackStep) {
 				case AttackStep.PostHitRoll:
 					return AttackStep.PreHitRoll;
+				case AttackStep.PreDamageRoll:
+					return AttackStep.PostHitRoll;
 				default:
 					return state.attackStep;
 			}
