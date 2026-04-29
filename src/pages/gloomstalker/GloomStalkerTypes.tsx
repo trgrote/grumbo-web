@@ -36,10 +36,6 @@ export interface PostDamageRollInfo {
 	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
 
-export interface AttackDetails extends PreHitRollInfo, PostHitRollInfo, PostDamageRollInfo {
-
-}
-
 export interface RollHistoryRecord {
 	timestamp: number;
 	gloomStalkerInfo: GloomStalkerInfo;
