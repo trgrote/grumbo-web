@@ -14,6 +14,8 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 Once per turn, when you hit a creature with an attack that deals piercing damage, you can reroll one of the attack’s damage dice, and you must use the new roll.
 	- The rule doesn't specify you must re-roll a damage die of the piercing damage. For example, if you also deal an additonal d6 damage, you could technically re-roll that value. Although, with the condition, the spirit of the rule seems like it ought to be one of the piercing damage's die.
 - Laura's version of the Dragon's Wrath Longbow _also_ does fire damage, but damage can only be one type, so which damage die counts for which type?
+- Piercer - Critical hit
+	- That extra d8 is applied _after_ the other dice are doubled (https://www.reddit.com/r/dndnext/comments/nmbiqa/piercer_feat_double_dice/).
 
 # Test Locally
 `npm run dev`
