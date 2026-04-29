@@ -1,4 +1,4 @@
-import { AttackSheetActionType } from './GloomStalkerTypes';
+import { AttackSheetActionType, GloomStalkerInfo } from './GloomStalkerTypes';
 import { AttackStep } from './GloomStalkerTypes';
 import { PostDamageRollInfo, PostHitRollInfo, PreHitRollInfo } from "./GloomStalkerTypes";
 
@@ -24,6 +24,16 @@ export interface AttackSheetAction {
 	payload?: unknown;
 }
 
+function rollHitDice(hasAdvantage: boolean, hasElvenAccuracy: boolean): number[] {
+	const numberOfDice = hasAdvantage ? (hasElvenAccuracy ? 3 : 2) : 1;
+	const rolls: number[] = [];
+	for (let i = 0; i < numberOfDice; i++) {
+		rolls.push(Math.floor(Math.random() * 20) + 1);
+	}
+
+	return rolls;
+}
+
 export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackSheetState, action: AttackSheetAction): GloomStalkerAttackSheetState {
 	if (action.type === AttackSheetActionType.Reset) {
 		return GloomStalkerAttackSheetStateDefault();
@@ -40,6 +50,16 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 		return {
 			...state,
 			applySharpShooterPenalty: action.payload as boolean
+		};
+	}
+
+	if (action.type === AttackSheetActionType.RollForAttack) {
+		const gloomStalkerInfo = action.payload as GloomStalkerInfo;
+		const attackRolls = rollHitDice(state.hasAdvantage, gloomStalkerInfo.hasElvenAccuracy);
+		return {
+			...state,
+			attackRolls: attackRolls,
+			attackStep: AttackStep.PostHitRoll,
 		};
 	}
 
