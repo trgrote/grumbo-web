@@ -5,7 +5,7 @@ const storageKey = 'gloomstalker-storage';
 const storageVersion = '1.0';
 const defaultItem = {
 	gloomStalkerInfo: {
-		attackModifier: 12,
+		attackModifier: 14,
 		damageDie: 8,
 		damageModifier: 9,
 		hasDreadAmbusher: true,
