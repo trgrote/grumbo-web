@@ -29,10 +29,10 @@ export interface PostHitRollInfo {
 
 export interface PreDamageRollInfo {
 	isDreadAmbusherExtraAttack: boolean;   // if it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional 1d8 damage
+	applyHuntersMark: boolean;  // apply Hunter's Mark damage?
 }
 
 export interface PostDamageRollInfo {
-	rerollPiercingDamageDieIndex: number | null;
 	piercingDamageRolls: number[];
 	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
@@ -50,8 +50,10 @@ export enum AttackSheetActionType {
 	ConfirmIsHit,
 	ConfirmIsMiss,
 	SetIsDreadAmbusherExtraAttack,
+	SetApplyHuntersMark,
 	RollForDamage,
 	RerollPiercingDamageDie,
+	ConfirmDamage,
 	GoBack,
 }
 

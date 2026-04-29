@@ -6,6 +6,7 @@ import { GloomStalkerAttackSheetStateDefault, GloomStalkerAttackSheetStateReduce
 import PreHitRollState from "./AttackSheetStates/PreHitRollState";
 import PostHitRollState from "./AttackSheetStates/PostHitRollState";
 import PreDamageRollState from "./AttackSheetStates/PreDamageRollState";
+import PostDamageRollState from "./AttackSheetStates/PostDamageRollState";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -43,10 +44,17 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 				{state.attackStep === AttackStep.PreDamageRoll && <PreDamageRollState
 					isDreadAmbusherExtraAttack={state.isDreadAmbusherExtraAttack}
 					setIsDreadAmbusherExtraAttack={(value) => dispatch({ type: AttackSheetActionType.SetIsDreadAmbusherExtraAttack, payload: value })}
-					rollForDamage={() => dispatch({ type: AttackSheetActionType.RollForDamage })}
+					applyHuntersMark={state.applyHuntersMark}
+					setApplyHuntersMark={(value) => dispatch({ type: AttackSheetActionType.SetApplyHuntersMark, payload: value })}
+					rollForDamage={() => dispatch({ type: AttackSheetActionType.RollForDamage, payload: gloomStalkerInfo })}
 					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
 				/>}
-				{state.attackStep === AttackStep.PostDamageRoll && <div>Post Damage Roll State</div>}
+				{state.attackStep === AttackStep.PostDamageRoll && <PostDamageRollState
+					piercingDamageRolls={state.piercingDamageRolls}
+					rerollPiercingDamageDie={() => dispatch({ type: AttackSheetActionType.RerollPiercingDamageDie })}
+					confirmDamage={() => dispatch({ type: AttackSheetActionType.ConfirmDamage })}
+					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
+				/>}
 				{state.attackStep === AttackStep.Results && <div>Results State</div>}
 			</>
 		);

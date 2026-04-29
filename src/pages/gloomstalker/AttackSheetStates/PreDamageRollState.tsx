@@ -6,11 +6,13 @@ import { Label } from "@/components/ui/label";
 interface PreDamageRollStateProps {
 	isDreadAmbusherExtraAttack: boolean;
 	setIsDreadAmbusherExtraAttack: (value: boolean) => void;
+	applyHuntersMark: boolean;
+	setApplyHuntersMark: (value: boolean) => void;
 	rollForDamage: () => void;
 	goBack: () => void;
 }
 
-export default function PreDamageRollState({ isDreadAmbusherExtraAttack, setIsDreadAmbusherExtraAttack, rollForDamage, goBack }: PreDamageRollStateProps) {
+export default function PreDamageRollState({ isDreadAmbusherExtraAttack, setIsDreadAmbusherExtraAttack, applyHuntersMark, setApplyHuntersMark, rollForDamage, goBack }: PreDamageRollStateProps) {
 	return (
 		<>
 			<SheetHeader>
@@ -25,6 +27,11 @@ export default function PreDamageRollState({ isDreadAmbusherExtraAttack, setIsDr
 						<Checkbox id="isDreadAmbusherExtraAttack" className="flex items-center space-x-2" checked={isDreadAmbusherExtraAttack}
 							onCheckedChange={() => setIsDreadAmbusherExtraAttack(!isDreadAmbusherExtraAttack)} />
 						Is First Turn of Combat and Extra Attack from Dread Ambusher (gains additional damage on first attack of turn)
+					</Label>
+					<Label htmlFor="applyHuntersMark" className="flex items-center space-x-2">
+						<Checkbox id="applyHuntersMark" className="flex items-center space-x-2" checked={applyHuntersMark}
+							onCheckedChange={() => setApplyHuntersMark(!applyHuntersMark)} />
+						Apply Hunter's Mark damage?
 					</Label>
 				</div>
 			</div>
