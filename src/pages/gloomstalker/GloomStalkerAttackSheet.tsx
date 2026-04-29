@@ -27,6 +27,8 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 				{state.attackStep === AttackStep.PreHitRoll && <PreHitRollState
 					hasAdvantage={state.hasAdvantage}
 					setHasAdvantage={(value) => dispatch({ type: AttackSheetActionType.SetAdvantage, payload: value })}
+					applySharpShooterPenalty={state.applySharpShooterPenalty}
+					setApplySharpShooterPenalty={(value) => dispatch({ type: AttackSheetActionType.SetApplySharpShooterPenalty, payload: value })}
 					onRollForAttack={() => dispatch({ type: AttackSheetActionType.RollForAttack, payload: gloomStalkerInfo })}
 				/>}
 				{state.attackStep === AttackStep.PostHitRoll && <div>Post Hit Roll State</div>}

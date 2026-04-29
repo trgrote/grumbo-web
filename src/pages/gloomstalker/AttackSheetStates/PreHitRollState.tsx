@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 interface PreHitRollStateProps {
 	hasAdvantage: boolean;
 	setHasAdvantage: (value: boolean) => void;
+	applySharpShooterPenalty: boolean;
+	setApplySharpShooterPenalty: (value: boolean) => void;
 	onRollForAttack: () => void;
 }
 
-export default function PreHitRollState({ hasAdvantage, setHasAdvantage, onRollForAttack }: PreHitRollStateProps) {
+export default function PreHitRollState({ hasAdvantage, setHasAdvantage, applySharpShooterPenalty, setApplySharpShooterPenalty, onRollForAttack }: PreHitRollStateProps) {
 	return (
 		<>
 			<SheetHeader>
@@ -24,6 +26,13 @@ export default function PreHitRollState({ hasAdvantage, setHasAdvantage, onRollF
 						<Checkbox id="hasAdvantage" checked={hasAdvantage}
 							onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
 						Has Advantage?
+					</Label>
+				</div>
+				<div className="grid gap-3">
+					<Label htmlFor="applySharpShooterPenalty">
+						<Checkbox id="applySharpShooterPenalty" checked={applySharpShooterPenalty}
+							onCheckedChange={() => setApplySharpShooterPenalty(!applySharpShooterPenalty)} />
+						Apply Sharp Shooter Penalty? (-5 to hit for +10 damage)
 					</Label>
 				</div>
 			</div>

@@ -36,6 +36,13 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 		};
 	}
 
+	if (action.type === AttackSheetActionType.SetApplySharpShooterPenalty) {
+		return {
+			...state,
+			applySharpShooterPenalty: action.payload as boolean
+		};
+	}
+
 	return {
 		...state,
 	};
