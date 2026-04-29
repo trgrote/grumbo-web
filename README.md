@@ -3,7 +3,7 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 
 # TODO
 - [ ] Add input validation to only allow integers for modifier fields
-- [ ] Implement Gloom Stalker Attack Page
+- [ ] Implement Gloom Stalker Attack Page (https://www.dndbeyond.com/characters/75379398)
 	- [ ] Refactor PC Info and History Tabs to work with both Paladin and Gloomstalker
 	- [ ] Refactor Attack Sheet/Modal to work with both Paladin and Gloomstalker
 
