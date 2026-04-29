@@ -46,8 +46,10 @@ export enum AttackSheetActionType {
 	SetAdvantage,
 	SetApplySharpShooterPenalty,
 	RollForAttack,
-	ConfirmHit,
+	ConfirmIsHit,
+	ConfirmIsMiss,
 	RerollPiercingDamageDie,
+	GoBack,
 }
 
 export enum AttackStep {
@@ -55,4 +57,5 @@ export enum AttackStep {
 	PostHitRoll,
 	PreDamageRoll,
 	PostDamageRoll,
+	Results
 }

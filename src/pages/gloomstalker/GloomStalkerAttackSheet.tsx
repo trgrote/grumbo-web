@@ -4,6 +4,7 @@ import { JSX, useReducer } from "react";
 import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStalkerTypes";
 import { GloomStalkerAttackSheetStateDefault, GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
 import PreHitRollState from "./AttackSheetStates/PreHitRollState";
+import PostHitRollState from "./AttackSheetStates/PostHitRollState";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -31,9 +32,16 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 					setApplySharpShooterPenalty={(value) => dispatch({ type: AttackSheetActionType.SetApplySharpShooterPenalty, payload: value })}
 					onRollForAttack={() => dispatch({ type: AttackSheetActionType.RollForAttack, payload: gloomStalkerInfo })}
 				/>}
-				{state.attackStep === AttackStep.PostHitRoll && <div>Post Hit Roll State</div>}
+				{state.attackStep === AttackStep.PostHitRoll && <PostHitRollState
+					attackRolls={state.attackRolls}
+					attackModifier={gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0)}
+					confirmIsHit={() => dispatch({ type: AttackSheetActionType.ConfirmIsHit })}
+					confirmIsMiss={() => dispatch({ type: AttackSheetActionType.ConfirmIsMiss })}
+					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
+				/>}
 				{state.attackStep === AttackStep.PreDamageRoll && <div>Pre Damage Roll State</div>}
 				{state.attackStep === AttackStep.PostDamageRoll && <div>Post Damage Roll State</div>}
+				{state.attackStep === AttackStep.Results && <div>Results State</div>}
 			</>
 		);
 	};

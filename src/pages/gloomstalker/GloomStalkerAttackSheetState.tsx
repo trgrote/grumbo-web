@@ -63,6 +63,38 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 		};
 	}
 
+	if (action.type === AttackSheetActionType.ConfirmIsHit) {
+		return {
+			...state,
+			isHit: true,
+			attackStep: AttackStep.PreDamageRoll,
+		};
+	}
+
+	if (action.type === AttackSheetActionType.ConfirmIsMiss) {
+		return {
+			...state,
+			isHit: false,
+			attackStep: AttackStep.Results,
+		};
+	}
+
+	if (action.type === AttackSheetActionType.GoBack) {
+		const prevState = (() => {
+			switch (state.attackStep) {
+				case AttackStep.PostHitRoll:
+					return AttackStep.PreHitRoll;
+				default:
+					return state.attackStep;
+			}
+		})();
+
+		return {
+			...state,
+			attackStep: prevState,
+		};
+	}
+
 	return {
 		...state,
 	};
