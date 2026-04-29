@@ -7,6 +7,9 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 	- [ ] Refactor PC Info and History Tabs to work with both Paladin and Gloomstalker
 	- [ ] Refactor Attack Sheet/Modal to work with both Paladin and Gloomstalker
 
+## Gloom Stalker Questions
+- For Dread Amubusher, if you don't attack your first turn of combat, does that mean you lose out on that additonal attack? I.e. It's not your first attack of combat, it's only your attack on the first round.
+
 # Test Locally
 `npm run dev`
 
