@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { GloomStalkerInfo } from "./GloomStalkerTypes";
+import GloomStalkerAttackSheet from "./GloomStalkerAttackSheet";
 
 export interface GloomStalkerInfoCardProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -180,7 +181,10 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange }: Glo
 				</div>
 			</CardContent>
 			<CardFooter>
-				{/* <PaladinAttackSheet paladinInfo={paladinInfo} addToRollHistory={addToRollHistory} /> */}
+				<GloomStalkerAttackSheet
+					gloomStalkerInfo={gloomStalkerInfo}
+				// addToRollHistory={addToRollHistory} 
+				/>
 			</CardFooter>
 		</Card>
 	);

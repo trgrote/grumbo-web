@@ -10,24 +10,37 @@ export interface GloomStalkerInfo {
 	hasDragonsWrathLongbowStirring: boolean;
 }
 
-export interface PreAttackInfo {
+export enum AttackState {
+	PreHitRoll,
+	PostHitRoll,
+	PreDamageRoll,
+	PostDamageRoll
+}
+
+export interface PreHitRollInfo {
 	hasAdvantage: boolean;
 	applySharpShooterPenalty: boolean;   // apply -5 to hit to get +10 damage?
 }
 
-export interface AttackResult {
+export interface PostHitRollInfo {
 	attackRolls: number[];    // pre-modifier attack roll values
+	isHit: boolean;
 }
 
-export interface PostDamageInfo {
+// export interface PreDamageRollInfo {
+// }
+
+export interface PostDamageRollInfo {
 	rerollPiercingDamageDieIndex: number | null;
-}
-
-export interface DamageResult {
 	piercingDamageRolls: number[];
 	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
 
+export interface AttackDetails extends PreHitRollInfo, PostHitRollInfo, PostDamageRollInfo {
+
+}
+
 export interface RollHistoryRecord {
 	timestamp: number;
+	gloomStalkerInfo: GloomStalkerInfo;
 }
