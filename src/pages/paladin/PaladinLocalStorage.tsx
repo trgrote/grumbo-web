@@ -3,8 +3,7 @@ import { PaladinLocalStorage } from "./PaladinTypes";
 
 const storageKey = 'paladin-storage';
 const storageVersion = '1.0';
-const defaultStorage = {
-	storageVersion,
+const defaultItem = {
 	paladinInfo: {
 		attackModifier: 12,
 		damageDie: 8,
@@ -15,7 +14,7 @@ const defaultStorage = {
 };
 
 export function GetLocalPaladinStorage(): PaladinLocalStorage {
-	return GetLocalStorage<PaladinLocalStorage>(storageKey, storageVersion, defaultStorage);
+	return GetLocalStorage<PaladinLocalStorage>(storageKey, storageVersion, defaultItem);
 }
 
 export function SaveLocalPaladinStorage(paladinLocalStorage: PaladinLocalStorage) {
