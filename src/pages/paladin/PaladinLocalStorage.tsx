@@ -1,5 +1,5 @@
-import { GetLocalStorage, SaveLocalStorage } from "@/utils/LocalStorage";
-import { PaladinLocalStorage } from "./PaladinTypes";
+import { GetLocalStorage, ILocalStorageItem, SaveLocalStorage } from "@/utils/LocalStorage";
+import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 
 const storageKey = 'paladin-storage';
 const storageVersion = '1.0';
@@ -12,6 +12,12 @@ const defaultItem = {
 	},
 	attackResults: []
 };
+
+// Stored Local Data
+export interface PaladinLocalStorage extends ILocalStorageItem {
+	paladinInfo: PaladinInfo;
+	attackResults: RollHistoryRecord[];
+}
 
 export function GetLocalPaladinStorage(): PaladinLocalStorage {
 	return GetLocalStorage<PaladinLocalStorage>(storageKey, storageVersion, defaultItem);
