@@ -2,9 +2,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { GloomStalkerInfo } from "./GloomStalkerTypes";
 import { GetLocalGloomStalkerStorage, SaveLocalGloomStalkerStorage } from "./GloomStalkerLocalStorage";
+import GloomStalkerInfoCard from "./GloomStalkerInfoCard";
 
 function GloomStalkerPage() {
-	const [gloomStalkerInfo/*, setGloomStalkerInfo*/] = useState<GloomStalkerInfo>(() => {
+	const [gloomStalkerInfo, setGloomStalkerInfo] = useState<GloomStalkerInfo>(() => {
 		const localStorage = GetLocalGloomStalkerStorage();
 		return localStorage.gloomStalkerInfo;
 	});
@@ -29,10 +30,11 @@ function GloomStalkerPage() {
 				<TabsTrigger value="history">History</TabsTrigger>
 			</TabsList>
 			<TabsContent value="info">
-				{/* <GloomStalkerInfoTab
+				<GloomStalkerInfoCard
 					gloomStalkerInfo={gloomStalkerInfo}
 					onChange={setGloomStalkerInfo}
-					addToRollHistory={roll => setAttackResults([roll, ...attackResults])} /> */}
+				// addToRollHistory={roll => setAttackResults([roll, ...attackResults])} 
+				/>
 			</TabsContent>
 			<TabsContent value="history">
 				{/* <GloomStalkerHistoryTab attackResults={attackResults}

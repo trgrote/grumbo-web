@@ -1,0 +1,187 @@
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "@/components/ui/toggle-group";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { GloomStalkerInfo } from "./GloomStalkerTypes";
+
+export interface GloomStalkerInfoCardProps {
+	gloomStalkerInfo: GloomStalkerInfo;
+	onChange: (gloomStalkerInfo: GloomStalkerInfo) => void;
+	// addToRollHistory: (result: RollHistoryRecord) => void;
+}
+
+const weaponDamageDice = [4, 6, 8, 10, 12];
+
+export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange }: GloomStalkerInfoCardProps) {
+	const {
+		attackModifier,
+		damageDie,
+		damageModifier,
+		hasDreadAmbusher,
+		hasStalkersFlurry,
+		hasSharpShooter,
+		hasPiercer,
+		hasElvenAccuracy,
+		hasDragonsWrathLongbowStirring,
+	} = gloomStalkerInfo;
+
+	const setAttackModifier = (newValue: number) => {
+		onChange({
+			...gloomStalkerInfo,
+			attackModifier: newValue
+		});
+	};
+
+	const setDamageDie = (newValue: number) => {
+		onChange({
+			...gloomStalkerInfo,
+			damageDie: newValue
+		});
+	};
+
+	const setDamageModifier = (newValue: number) => {
+		onChange({
+			...gloomStalkerInfo,
+			damageModifier: newValue
+		});
+	};
+
+	const setHasDreadAmbusher = (newValue: boolean) => {
+		onChange({
+			...gloomStalkerInfo,
+			hasDreadAmbusher: newValue
+		});
+	};
+
+	const setHasStalkersFlurry = (newValue: boolean) => {
+		onChange({
+			...gloomStalkerInfo,
+			hasStalkersFlurry: newValue
+		});
+	};
+
+	const setHasSharpShooter = (newValue: boolean) => {
+		onChange({
+			...gloomStalkerInfo,
+			hasSharpShooter: newValue
+		});
+	};
+
+	const setHasPiercer = (newValue: boolean) => {
+		onChange({
+			...gloomStalkerInfo,
+			hasPiercer: newValue
+		});
+	};
+
+	const setHasElvenAccuracy = (newValue: boolean) => {
+		onChange({
+			...gloomStalkerInfo,
+			hasElvenAccuracy: newValue
+		});
+	};
+
+	const setHasDragonsWrathLongbowStirring = (newValue: boolean) => {
+		onChange({
+			...gloomStalkerInfo,
+			hasDragonsWrathLongbowStirring: newValue
+		});
+	};
+
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>GloomStalker Info</CardTitle>
+				<CardDescription>Set GloomStalker Info</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<div>
+					<label>
+						Attack Modifier:
+						<Input type="number" value={attackModifier}
+							onChange={e => setAttackModifier(parseInt(e.target.value))} />
+					</label>
+				</div>
+				<div>
+					<label>
+						Damage Die:
+					</label>
+					<ToggleGroup type="single"
+						value={damageDie.toString()}
+						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
+						{
+							weaponDamageDice.map((dieValue, i) =>
+								<ToggleGroupItem key={i} value={dieValue.toString()}>
+									d{dieValue}
+								</ToggleGroupItem>
+							)
+						}
+					</ToggleGroup>
+				</div>
+				<div>
+					<label>
+						Damage Modifier
+						<Input type="number" value={damageModifier}
+							onChange={e => setDamageModifier(parseInt(e.target.value))} />
+					</label>
+				</div>
+				<div title="If you take the Attack action on your first turn of each combat, you can make one additional weapon attack as part of that action, dealing an extra 1d8 damage of the weapon's damage type on a hit.">
+					<Label htmlFor="hasDreadAmbusher">
+						<Checkbox id="hasDreadAmbusher" checked={hasDreadAmbusher}
+							onCheckedChange={() => setHasDreadAmbusher(!hasDreadAmbusher)} />
+						Has Dread Ambusher?
+					</Label>
+				</div>
+				<div title="Once on each of your turns when you miss with a weapon attack, you can make another weapon attack as part of the same action.">
+					<Label htmlFor="hasStalkersFlurry">
+						<Checkbox id="hasStalkersFlurry" checked={hasStalkersFlurry}
+							onCheckedChange={() => setHasStalkersFlurry(!hasStalkersFlurry)} />
+						Has Stalker's Flurry?
+					</Label>
+				</div>
+				<div title="Before you make an attack with a ranged weapon, you can choose to take a -5 penalty to the attack roll to add +10 to the attack's damage.">
+					<Label htmlFor="hasSharpShooter">
+						<Checkbox id="hasSharpShooter" checked={hasSharpShooter}
+							onCheckedChange={() => setHasSharpShooter(!hasSharpShooter)} />
+						Has Sharp Shooter?
+					</Label>
+				</div>
+				<div title="Once per turn, you can reroll the piercing damage from an attack. On a critical hit, roll one additional damage die.">
+					<Label htmlFor="hasPiercer">
+						<Checkbox id="hasPiercer" checked={hasPiercer}
+							onCheckedChange={() => setHasPiercer(!hasPiercer)} />
+						Has Piercer?
+					</Label>
+				</div>
+				<div title="Whenever you have advantage on an attack roll, you can reroll one of the dice once.">
+					<Label htmlFor="hasElvenAccuracy">
+						<Checkbox id="hasElvenAccuracy" checked={hasElvenAccuracy}
+							onCheckedChange={() => setHasElvenAccuracy(!hasElvenAccuracy)} />
+						Has Elven Accuracy?
+					</Label>
+				</div>
+				<div title="Whenever you roll a 20 on your attack roll with this weapon, each creature of your choice within 5 feet of the target takes 5 damage of the type dealt by the dragon's breath weapon. On a hit, the weapon deals an extra 1d6 damage of the type dealt by the dragon's breath weapon.">
+					<Label htmlFor="hasDragonsWrathLongbowStirring">
+						<Checkbox id="hasDragonsWrathLongbowStirring" checked={hasDragonsWrathLongbowStirring}
+							onCheckedChange={() => setHasDragonsWrathLongbowStirring(!hasDragonsWrathLongbowStirring)} />
+						Has Dragon's Wrath Longbow (Stirring)?
+					</Label>
+				</div>
+			</CardContent>
+			<CardFooter>
+				{/* <PaladinAttackSheet paladinInfo={paladinInfo} addToRollHistory={addToRollHistory} /> */}
+			</CardFooter>
+		</Card>
+	);
+}
