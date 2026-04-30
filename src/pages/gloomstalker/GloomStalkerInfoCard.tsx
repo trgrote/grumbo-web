@@ -29,7 +29,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		attackModifier,
 		damageDie,
 		damageModifier,
-		hasDreadAmbusher,
 		hasStalkersFlurry,
 		hasPiercer,
 		hasElvenAccuracy,
@@ -54,13 +53,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		onChange({
 			...gloomStalkerInfo,
 			damageModifier: newValue
-		});
-	};
-
-	const setHasDreadAmbusher = (newValue: boolean) => {
-		onChange({
-			...gloomStalkerInfo,
-			hasDreadAmbusher: newValue
 		});
 	};
 
@@ -128,13 +120,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						<Input type="number" value={damageModifier}
 							onChange={e => setDamageModifier(parseInt(e.target.value))} />
 					</label>
-				</div>
-				<div title="If you take the Attack action on your first turn of each combat, you can make one additional weapon attack as part of that action, dealing an extra 1d8 damage of the weapon's damage type on a hit.">
-					<Label htmlFor="hasDreadAmbusher">
-						<Checkbox id="hasDreadAmbusher" checked={hasDreadAmbusher}
-							onCheckedChange={() => setHasDreadAmbusher(!hasDreadAmbusher)} />
-						Has Dread Ambusher?
-					</Label>
 				</div>
 				<div title="Once on each of your turns when you miss with a weapon attack, you can make another weapon attack as part of the same action.">
 					<Label htmlFor="hasStalkersFlurry">
