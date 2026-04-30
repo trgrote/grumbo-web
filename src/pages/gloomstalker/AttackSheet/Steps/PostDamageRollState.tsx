@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { JSX, useState } from "react";
-import { AttackSheetActionType } from "../GloomStalkerTypes";
-import { AttackSheetAction } from "../GloomStalkerAttackSheetState";
-import { GloomStalkerAttackSheetState } from '../GloomStalkerTypes';
-import { GetBestRerollOption } from "./AttackSheetStateFunctions";
+import { AttackSheetActionType } from "../../GloomStalkerTypes";
+import { AttackSheetAction } from "../../GloomStalkerAttackSheetState";
+import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
+import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 
 interface PostDamageRollStateProps {
 	state: GloomStalkerAttackSheetState;

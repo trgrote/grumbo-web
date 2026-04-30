@@ -3,10 +3,10 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { JSX, useReducer } from "react";
 import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStalkerTypes";
 import { GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
-import PreHitRollState from "./AttackSheet/PreHitRollState";
-import PostHitRollState from "./AttackSheet/PostHitRollState";
-import PreDamageRollState from "./AttackSheet/PreDamageRollState";
-import PostDamageRollState from "./AttackSheet/PostDamageRollState";
+import PreHitRollState from "./AttackSheet/Steps/PreHitRollState";
+import PostHitRollState from "./AttackSheet/Steps/PostHitRollState";
+import PreDamageRollState from "./AttackSheet/Steps/PreDamageRollState";
+import PostDamageRollState from "./AttackSheet/Steps/PostDamageRollState";
 import { GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
 
 export interface GloomStalkerAttackSheetProps {
