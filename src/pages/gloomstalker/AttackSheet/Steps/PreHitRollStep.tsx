@@ -2,16 +2,21 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
+import { AttackSheetAction } from "../../GloomStalkerAttackSheetState";
 
 interface PreHitRollStepProps {
-	hasAdvantage: boolean;
-	setHasAdvantage: (value: boolean) => void;
-	applySharpShooterPenalty: boolean;
-	setApplySharpShooterPenalty: (value: boolean) => void;
-	onRollForAttack: () => void;
+	state: GloomStalkerAttackSheetState;
+	dispatch: React.Dispatch<AttackSheetAction>;
 }
 
-export default function PreHitRollStep({ hasAdvantage, setHasAdvantage, applySharpShooterPenalty, setApplySharpShooterPenalty, onRollForAttack }: PreHitRollStepProps) {
+export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps) {
+	const hasAdvantage = state.hasAdvantage;
+	const setHasAdvantage = (value: boolean) => dispatch({ type: AttackSheetActionType.SetAdvantage, payload: value });
+	const applySharpShooterPenalty = state.applySharpShooterPenalty;
+	const setApplySharpShooterPenalty = (value: boolean) => dispatch({ type: AttackSheetActionType.SetApplySharpShooterPenalty, payload: value });
+	const onRollForAttack = () => dispatch({ type: AttackSheetActionType.RollForAttack });
+
 	return (
 		<>
 			<SheetHeader>

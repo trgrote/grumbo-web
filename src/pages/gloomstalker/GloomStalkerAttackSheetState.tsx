@@ -1,5 +1,5 @@
 import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption } from './AttackSheet/AttackSheetStateFunctions';
-import { AttackSheetActionType, GloomStalkerAttackSheetState, GloomStalkerInfo } from './GloomStalkerTypes';
+import { AttackSheetActionType, GloomStalkerAttackSheetState } from './GloomStalkerTypes';
 import { AttackStep } from './GloomStalkerTypes';
 
 export interface AttackSheetAction {
@@ -106,8 +106,7 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 	}
 
 	if (action.type === AttackSheetActionType.RollForAttack) {
-		const gloomStalkerInfo = action.payload as GloomStalkerInfo;
-		const attackRolls = rollHitDice(state.hasAdvantage, gloomStalkerInfo.hasElvenAccuracy);
+		const attackRolls = rollHitDice(state.hasAdvantage, state.gloomStalkerInfo.hasElvenAccuracy);
 		return {
 			...state,
 			attackRolls: attackRolls,
