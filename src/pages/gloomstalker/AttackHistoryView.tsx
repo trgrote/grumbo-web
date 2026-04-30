@@ -21,10 +21,11 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 	const totalHitRoll = highestHitRoll
 		+ gloomStalkerInfo.attackModifier
 		- (historyRecord.applySharpShooterPenalty ? 5 : 0);
-	const totalDamage = [...historyRecord.piercingDamageRolls, ...historyRecord.fireDamageRolls]
-		.reduce((a, value) => a + value, 0)
+	const totalPiercingDamage = historyRecord.piercingDamageRolls.reduce((a, value) => a + value, 0)
 		+ gloomStalkerInfo.damageModifier
 		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);
+	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
+	const totalDamage = totalPiercingDamage + totalFireDamage;
 	const hitValueTextColorClass = isCritical ? 'text-blue-500' : 'text-green-500';
 
 	return (
@@ -67,13 +68,13 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 										<Label>Piercing Damage Rolls: {rollArrayToString(historyRecord.piercingDamageRolls)}</Label>
 									</li>
 									<li>
-										<Label>Total Piercing Damage: {historyRecord.piercingDamageRolls.reduce((a, value) => a + value, 0)}</Label>
+										<Label>Total Piercing Damage: {totalPiercingDamage}</Label>
 									</li>
 									<li>
 										<Label>Fire Damage Rolls: {rollArrayToString(historyRecord.fireDamageRolls)}</Label>
 									</li>
 									<li>
-										<Label>Total Fire Damage: {historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0)}</Label>
+										<Label>Total Fire Damage: {totalFireDamage}</Label>
 									</li>
 									<li>
 										<Label>Apply 5 Damage to All Ajacent Enemies? <Checkbox disabled checked={isCritical} /></Label>
