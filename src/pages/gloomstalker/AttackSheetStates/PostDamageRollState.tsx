@@ -36,10 +36,12 @@ export default function PostDamageRollState({ state, dispatch }: PostDamageRollS
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<Label>Piercing Damage Rolls: [{state.piercingDamageRolls.join(', ')}]</Label>
 				<Label>Fire Damage Rolls: [{state.fireDamageRolls.join(', ')}]</Label>
-				<Button onClick={handleReroll} disabled={rereollUsed}>
-					Reroll Lowest Damage Roll?
-					(d{bestRerollOption.die} that rolled a {bestRerollOption.currentValue})
-				</Button>
+				{!rereollUsed &&
+					<Button onClick={handleReroll} disabled={rereollUsed}>
+						Reroll Lowest Damage Roll?
+						(d{bestRerollOption.die} that rolled a {bestRerollOption.currentValue})
+					</Button>
+				}
 			</div>
 			<SheetFooter>
 				<Button onClick={confirmDamage}>Confirm Damage</Button>
