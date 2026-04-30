@@ -210,13 +210,27 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 	}
 
 	if (action.type === AttackSheetActionType.RerollPiercingDamageDie) {
+		const bestRerollOption = getBestRerollOption(state);
 
-		// TODO Implement Reroll Lowest Piercing Damage Die functionality
-		// We need to track what the original die sides were in order to properly reroll, 
-		// since some of the piercing damage dice can come from different sources (e.g. weapon damage die vs Hunter's Mark damage die)
+		if (bestRerollOption.type === 'piercing') {
+			const newPiercingDamageRolls = [...state.piercingDamageRolls];
+			newPiercingDamageRolls[bestRerollOption.index] = rollDie(bestRerollOption.die);
+			return {
+				...state,
+				piercingDamageRolls: newPiercingDamageRolls,
+			};
+		} else if (bestRerollOption.type === 'fire') {
+			const newFireDamageRolls = [...state.fireDamageRolls];
+			newFireDamageRolls[bestRerollOption.index] = rollDie(bestRerollOption.die);
+			return {
+				...state,
+				fireDamageRolls: newFireDamageRolls,
+			};
+		}
+
+		// If for some reason there are no valid reroll options, return the state unchanged
 		return {
-			...state,
-			piercingDamageRolls: state.piercingDamageRolls,
+			...state
 		};
 	}
 
