@@ -1,4 +1,3 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
 	ToggleGroup,
@@ -12,7 +11,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import GloomStalkerAttackSheet from "./GloomStalkerAttackSheet";
 
@@ -28,8 +26,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 	const {
 		attackModifier,
 		damageDie,
-		damageModifier,
-		hasDragonsWrathLongbowStirring,
+		damageModifier
 	} = gloomStalkerInfo;
 
 	const setAttackModifier = (newValue: number) => {
@@ -50,13 +47,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		onChange({
 			...gloomStalkerInfo,
 			damageModifier: newValue
-		});
-	};
-
-	const setHasDragonsWrathLongbowStirring = (newValue: boolean) => {
-		onChange({
-			...gloomStalkerInfo,
-			hasDragonsWrathLongbowStirring: newValue
 		});
 	};
 
@@ -96,13 +86,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						<Input type="number" value={damageModifier}
 							onChange={e => setDamageModifier(parseInt(e.target.value))} />
 					</label>
-				</div>
-				<div title="Whenever you roll a 20 on your attack roll with this weapon, each creature of your choice within 5 feet of the target takes 5 piercing damage. On a hit, the weapon deals an extra 1d6 piercing damage.">
-					<Label htmlFor="hasDragonsWrathLongbowStirring">
-						<Checkbox id="hasDragonsWrathLongbowStirring" checked={hasDragonsWrathLongbowStirring}
-							onCheckedChange={() => setHasDragonsWrathLongbowStirring(!hasDragonsWrathLongbowStirring)} />
-						Has Dragon's Wrath Longbow (Stirring)?
-					</Label>
 				</div>
 			</CardContent>
 			<CardFooter>

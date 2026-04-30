@@ -66,18 +66,13 @@ function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[
 }
 
 function getFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
-	const {
-		hasDragonsWrathLongbowStirring
-	} = state.gloomStalkerInfo;
 
 	const highestRoll = Math.max(...state.attackRolls);
 	const isCritical = highestRoll >= 20;
 
 	const fireDamageDicePool: number[] = [];
 
-	if (hasDragonsWrathLongbowStirring) {
-		fireDamageDicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
-	}
+	fireDamageDicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
 
 	if (isCritical) {
 		fireDamageDicePool.push(...fireDamageDicePool);   // on a critical hit, you roll all of the attack's damage dice an additional time

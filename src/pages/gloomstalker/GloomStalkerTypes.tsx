@@ -2,7 +2,6 @@ export interface GloomStalkerInfo {
 	attackModifier: number;
 	damageDie: number;
 	damageModifier: number;
-	hasDragonsWrathLongbowStirring: boolean;
 }
 
 export enum AttackState {
