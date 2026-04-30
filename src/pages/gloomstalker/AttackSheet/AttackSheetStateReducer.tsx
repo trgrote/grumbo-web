@@ -1,6 +1,6 @@
-import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption } from './AttackSheet/AttackSheetStateFunctions';
-import { AttackSheetActionType, GloomStalkerAttackSheetState } from './GloomStalkerTypes';
-import { AttackStep } from './GloomStalkerTypes';
+import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption } from './AttackSheetStateFunctions';
+import { AttackSheetActionType, GloomStalkerAttackSheetState } from '../GloomStalkerTypes';
+import { AttackStep } from '../GloomStalkerTypes';
 
 export interface AttackSheetAction {
 	type: AttackSheetActionType;
@@ -86,7 +86,7 @@ function getFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
 	return fireDamageDicePool;
 }
 
-export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackSheetState, action: AttackSheetAction): GloomStalkerAttackSheetState {
+export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, action: AttackSheetAction): GloomStalkerAttackSheetState {
 	if (action.type === AttackSheetActionType.Reset) {
 		return GloomStalkerAttackSheetStateDefault(state.gloomStalkerInfo);
 	}

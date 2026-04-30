@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { JSX, useReducer } from "react";
 import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStalkerTypes";
-import { GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetStateReducer.tsx";
+import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer.tsx";
 import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
 import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
@@ -15,7 +15,7 @@ export interface GloomStalkerAttackSheetProps {
 
 export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalkerAttackSheetProps) {
 	const [state, dispatch] = useReducer(
-		GloomStalkerAttackSheetStateReducer,
+		AttackSheetStateReducer,
 		GloomStalkerAttackSheetStateDefault(gloomStalkerInfo)
 	);
 

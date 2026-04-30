@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { AttackSheetAction } from "../../GloomStalkerAttackSheetStateReducer";
+import { AttackSheetAction } from "../AttackSheetStateReducer";
 import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 
 interface PostHitRollStepProps {
