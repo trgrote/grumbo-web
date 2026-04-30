@@ -37,12 +37,8 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 					dispatch={dispatch}
 				/>}
 				{state.attackStep === AttackStep.PreDamageRoll && <PreDamageRollStep
-					isDreadAmbusherExtraAttack={state.isDreadAmbusherExtraAttack}
-					setIsDreadAmbusherExtraAttack={(value) => dispatch({ type: AttackSheetActionType.SetIsDreadAmbusherExtraAttack, payload: value })}
-					applyHuntersMark={state.applyHuntersMark}
-					setApplyHuntersMark={(value) => dispatch({ type: AttackSheetActionType.SetApplyHuntersMark, payload: value })}
-					rollForDamage={() => dispatch({ type: AttackSheetActionType.RollForDamage, payload: gloomStalkerInfo })}
-					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
+					state={state}
+					dispatch={dispatch}
 				/>}
 				{state.attackStep === AttackStep.PostDamageRoll && <PostDamageRollStep
 					state={state}
