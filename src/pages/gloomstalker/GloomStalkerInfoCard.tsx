@@ -29,7 +29,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		attackModifier,
 		damageDie,
 		damageModifier,
-		hasElvenAccuracy,
 		hasDragonsWrathLongbowStirring,
 	} = gloomStalkerInfo;
 
@@ -51,13 +50,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		onChange({
 			...gloomStalkerInfo,
 			damageModifier: newValue
-		});
-	};
-
-	const setHasElvenAccuracy = (newValue: boolean) => {
-		onChange({
-			...gloomStalkerInfo,
-			hasElvenAccuracy: newValue
 		});
 	};
 
@@ -104,13 +96,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						<Input type="number" value={damageModifier}
 							onChange={e => setDamageModifier(parseInt(e.target.value))} />
 					</label>
-				</div>
-				<div title="Whenever you have advantage on an attack roll, you can reroll one of the dice once.">
-					<Label htmlFor="hasElvenAccuracy">
-						<Checkbox id="hasElvenAccuracy" checked={hasElvenAccuracy}
-							onCheckedChange={() => setHasElvenAccuracy(!hasElvenAccuracy)} />
-						Has Elven Accuracy?
-					</Label>
 				</div>
 				<div title="Whenever you roll a 20 on your attack roll with this weapon, each creature of your choice within 5 feet of the target takes 5 piercing damage. On a hit, the weapon deals an extra 1d6 piercing damage.">
 					<Label htmlFor="hasDragonsWrathLongbowStirring">

@@ -15,8 +15,10 @@ function rollDice(dicePool: number[]): number[] {
 	return dicePool.map(sides => rollDie(sides));
 }
 
-function rollHitDice(hasAdvantage: boolean, hasElvenAccuracy: boolean): number[] {
-	const numberOfDice = hasAdvantage ? (hasElvenAccuracy ? 3 : 2) : 1;
+function rollHitDice(hasAdvantage: boolean): number[] {
+	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest. 
+	// effectively giving you one extra die to roll when you have advantage.
+	const numberOfDice = hasAdvantage ? 3 : 1;
 	const rolls: number[] = [];
 	for (let i = 0; i < numberOfDice; i++) {
 		rolls.push(rollDie(20));
@@ -104,7 +106,7 @@ export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, act
 	}
 
 	if (action.type === AttackSheetActionType.RollForAttack) {
-		const attackRolls = rollHitDice(state.hasAdvantage, state.gloomStalkerInfo.hasElvenAccuracy);
+		const attackRolls = rollHitDice(state.hasAdvantage);
 		return {
 			...state,
 			attackRolls: attackRolls,
