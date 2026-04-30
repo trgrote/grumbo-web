@@ -2,7 +2,6 @@ export interface GloomStalkerInfo {
 	attackModifier: number;
 	damageDie: number;
 	damageModifier: number;
-	hasPiercer: boolean;
 	hasElvenAccuracy: boolean;
 	hasDragonsWrathLongbowStirring: boolean;
 }

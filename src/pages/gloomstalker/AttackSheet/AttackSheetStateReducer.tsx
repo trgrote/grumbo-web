@@ -32,8 +32,7 @@ function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[
 	} = state;
 
 	const {
-		damageDie,
-		hasPiercer
+		damageDie
 	} = state.gloomStalkerInfo;
 
 	const highestRoll = Math.max(...state.attackRolls);
@@ -56,10 +55,9 @@ function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[
 	if (isCritical) {
 		// on a critical hit, you roll all of the attack's damage dice an additional time
 		piercingDamageDicePool.push(...piercingDamageDicePool);
-	}
 
-	if (hasPiercer && isCritical) {
-		piercingDamageDicePool.push(damageDie);   // Piercer adds additonal weapon damage on crit
+		// Piercer adds additonal weapon damage on crit
+		piercingDamageDicePool.push(damageDie);
 	}
 
 	return piercingDamageDicePool;

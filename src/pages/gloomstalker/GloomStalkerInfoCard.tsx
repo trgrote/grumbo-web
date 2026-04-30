@@ -29,7 +29,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		attackModifier,
 		damageDie,
 		damageModifier,
-		hasPiercer,
 		hasElvenAccuracy,
 		hasDragonsWrathLongbowStirring,
 	} = gloomStalkerInfo;
@@ -52,13 +51,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		onChange({
 			...gloomStalkerInfo,
 			damageModifier: newValue
-		});
-	};
-
-	const setHasPiercer = (newValue: boolean) => {
-		onChange({
-			...gloomStalkerInfo,
-			hasPiercer: newValue
 		});
 	};
 
@@ -112,13 +104,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						<Input type="number" value={damageModifier}
 							onChange={e => setDamageModifier(parseInt(e.target.value))} />
 					</label>
-				</div>
-				<div title="Once per turn, you can reroll one of the attack's damage dice. On a critical hit, roll one additional damage die.">
-					<Label htmlFor="hasPiercer">
-						<Checkbox id="hasPiercer" checked={hasPiercer}
-							onCheckedChange={() => setHasPiercer(!hasPiercer)} />
-						Has Piercer?
-					</Label>
 				</div>
 				<div title="Whenever you have advantage on an attack roll, you can reroll one of the dice once.">
 					<Label htmlFor="hasElvenAccuracy">
