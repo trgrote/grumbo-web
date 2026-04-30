@@ -1,4 +1,4 @@
-import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption } from './AttackSheetStates/AttackSheetStateFunctions';
+import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption } from './AttackSheet/AttackSheetStateFunctions';
 import { AttackSheetActionType, GloomStalkerAttackSheetState, GloomStalkerInfo } from './GloomStalkerTypes';
 import { AttackStep } from './GloomStalkerTypes';
 
