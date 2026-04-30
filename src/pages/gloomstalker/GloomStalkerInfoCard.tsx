@@ -29,7 +29,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		attackModifier,
 		damageDie,
 		damageModifier,
-		hasStalkersFlurry,
 		hasPiercer,
 		hasElvenAccuracy,
 		hasDragonsWrathLongbowStirring,
@@ -53,13 +52,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		onChange({
 			...gloomStalkerInfo,
 			damageModifier: newValue
-		});
-	};
-
-	const setHasStalkersFlurry = (newValue: boolean) => {
-		onChange({
-			...gloomStalkerInfo,
-			hasStalkersFlurry: newValue
 		});
 	};
 
@@ -120,13 +112,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						<Input type="number" value={damageModifier}
 							onChange={e => setDamageModifier(parseInt(e.target.value))} />
 					</label>
-				</div>
-				<div title="Once on each of your turns when you miss with a weapon attack, you can make another weapon attack as part of the same action.">
-					<Label htmlFor="hasStalkersFlurry">
-						<Checkbox id="hasStalkersFlurry" checked={hasStalkersFlurry}
-							onCheckedChange={() => setHasStalkersFlurry(!hasStalkersFlurry)} />
-						Has Stalker's Flurry?
-					</Label>
 				</div>
 				<div title="Once per turn, you can reroll one of the attack's damage dice. On a critical hit, roll one additional damage die.">
 					<Label htmlFor="hasPiercer">
