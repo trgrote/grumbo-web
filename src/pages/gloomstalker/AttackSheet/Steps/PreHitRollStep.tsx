@@ -33,15 +33,13 @@ export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps)
 						Has Advantage?
 					</Label>
 				</div>
-				{state.gloomStalkerInfo.hasSharpShooter &&
-					<div className="grid gap-3">
-						<Label htmlFor="applySharpShooterPenalty">
-							<Checkbox id="applySharpShooterPenalty" checked={applySharpShooterPenalty}
-								onCheckedChange={() => setApplySharpShooterPenalty(!applySharpShooterPenalty)} />
-							Apply Sharp Shooter Penalty? (-5 to hit for +10 damage)
-						</Label>
-					</div>
-				}
+				<div className="grid gap-3">
+					<Label htmlFor="applySharpShooterPenalty">
+						<Checkbox id="applySharpShooterPenalty" checked={applySharpShooterPenalty}
+							onCheckedChange={() => setApplySharpShooterPenalty(!applySharpShooterPenalty)} />
+						Apply Sharp Shooter Penalty? (-5 to hit for +10 damage)
+					</Label>
+				</div>
 			</div>
 			<SheetFooter>
 				<Button onClick={onRollForAttack} type="submit">Roll for Attack</Button>

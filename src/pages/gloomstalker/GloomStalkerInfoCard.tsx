@@ -31,7 +31,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		damageModifier,
 		hasDreadAmbusher,
 		hasStalkersFlurry,
-		hasSharpShooter,
 		hasPiercer,
 		hasElvenAccuracy,
 		hasDragonsWrathLongbowStirring,
@@ -69,13 +68,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		onChange({
 			...gloomStalkerInfo,
 			hasStalkersFlurry: newValue
-		});
-	};
-
-	const setHasSharpShooter = (newValue: boolean) => {
-		onChange({
-			...gloomStalkerInfo,
-			hasSharpShooter: newValue
 		});
 	};
 
@@ -149,13 +141,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						<Checkbox id="hasStalkersFlurry" checked={hasStalkersFlurry}
 							onCheckedChange={() => setHasStalkersFlurry(!hasStalkersFlurry)} />
 						Has Stalker's Flurry?
-					</Label>
-				</div>
-				<div title="Before you make an attack with a ranged weapon, you can choose to take a -5 penalty to the attack roll to add +10 to the attack's damage.">
-					<Label htmlFor="hasSharpShooter">
-						<Checkbox id="hasSharpShooter" checked={hasSharpShooter}
-							onCheckedChange={() => setHasSharpShooter(!hasSharpShooter)} />
-						Has Sharp Shooter?
 					</Label>
 				</div>
 				<div title="Once per turn, you can reroll one of the attack's damage dice. On a critical hit, roll one additional damage die.">
