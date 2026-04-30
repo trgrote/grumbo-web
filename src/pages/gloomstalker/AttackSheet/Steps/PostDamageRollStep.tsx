@@ -3,7 +3,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Label } from "@/components/ui/label";
 import { JSX, useState } from "react";
 import { AttackSheetActionType } from "../../GloomStalkerTypes";
-import { AttackSheetAction } from "../../GloomStalkerAttackSheetState";
+import { AttackSheetAction } from "../../GloomStalkerAttackSheetStateReducer";
 import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
 import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 

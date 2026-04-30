@@ -3,7 +3,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import { AttackSheetAction } from "../../GloomStalkerAttackSheetState";
+import { AttackSheetAction } from "../../GloomStalkerAttackSheetStateReducer";
 
 interface PreHitRollStepProps {
 	state: GloomStalkerAttackSheetState;
