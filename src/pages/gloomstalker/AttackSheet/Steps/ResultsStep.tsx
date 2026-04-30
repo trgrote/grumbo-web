@@ -17,9 +17,9 @@ export default function ResultsStep({ state, dispatch }: ResultsStepProps) {
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Roll for Attack</SheetTitle>
+				<SheetTitle>Results</SheetTitle>
 				<SheetDescription>
-					Provide Attack Information, roll for attack, provide damage information, and then roll for damage.
+					Attack and Damage Results
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
