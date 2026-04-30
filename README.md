@@ -4,8 +4,8 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 # TODO
 - [ ] Add input validation to only allow integers for modifier fields
 - [ ] Implement Gloom Stalker Attack Page (https://www.dndbeyond.com/characters/75379398)
-	- [ ] Refactor PC Info and History Tabs to work with both Paladin and Gloomstalker
-	- [ ] Refactor Attack Sheet/Modal to work with both Paladin and Gloomstalker
+	- [ ] Ensure disabling of certain class feats are reflected in attack sheet
+	- [ ] Remove Dread Ambusherer as option? Maybe remove all feats as toggleable?
 
 ## Gloom Stalker Questions
 - For Dread Amubusher, if you don't attack your first turn of combat, does that mean you lose out on that additonal attack? I.e. It's not your first attack of combat, it's only your attack on the first round.
