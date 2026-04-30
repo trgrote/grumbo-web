@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { JSX, useReducer } from "react";
 import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStalkerTypes";
-import { GloomStalkerAttackSheetStateDefault, GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
+import { GloomStalkerAttackSheetStateReducer } from "./GloomStalkerAttackSheetState";
 import PreHitRollState from "./AttackSheetStates/PreHitRollState";
 import PostHitRollState from "./AttackSheetStates/PostHitRollState";
 import PreDamageRollState from "./AttackSheetStates/PreDamageRollState";
 import PostDamageRollState from "./AttackSheetStates/PostDamageRollState";
+import { GloomStalkerAttackSheetStateDefault } from "./AttackSheetStates/AttackSheetStateFunctions";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;

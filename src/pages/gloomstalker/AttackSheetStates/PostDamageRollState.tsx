@@ -3,7 +3,9 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Label } from "@/components/ui/label";
 import { JSX, useState } from "react";
 import { AttackSheetActionType } from "../GloomStalkerTypes";
-import { AttackSheetAction, getBestRerollOption, GloomStalkerAttackSheetState } from "../GloomStalkerAttackSheetState";
+import { AttackSheetAction } from "../GloomStalkerAttackSheetState";
+import { GloomStalkerAttackSheetState } from '../GloomStalkerTypes';
+import { GetBestRerollOption } from "./AttackSheetStateFunctions";
 
 interface PostDamageRollStateProps {
 	state: GloomStalkerAttackSheetState;
@@ -23,7 +25,7 @@ export default function PostDamageRollState({ state, dispatch }: PostDamageRollS
 		setRerollUsed(true);
 	};
 
-	const bestRerollOption = getBestRerollOption(state);
+	const bestRerollOption = GetBestRerollOption(state);
 
 	return (
 		<>
