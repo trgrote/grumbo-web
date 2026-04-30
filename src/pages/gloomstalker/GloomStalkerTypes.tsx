@@ -40,11 +40,6 @@ export interface PostDamageRollInfo {
 	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
 
-export interface RollHistoryRecord {
-	timestamp: number;
-	gloomStalkerInfo: GloomStalkerInfo;
-}
-
 export enum AttackSheetActionType {
 	Reset,
 	SetAdvantage,
@@ -71,4 +66,8 @@ export enum AttackStep {
 export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRollInfo, PreDamageRollInfo, PostDamageRollInfo {
 	attackStep: AttackStep;
 	gloomStalkerInfo: GloomStalkerInfo;
+}
+
+export interface HistoryRecord extends Omit<GloomStalkerAttackSheetState, "attackStep"> {
+	timestamp: number;
 }

@@ -183,6 +183,13 @@ export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, act
 		};
 	}
 
+	if (action.type === AttackSheetActionType.ConfirmDamage) {
+		return {
+			...state,
+			attackStep: AttackStep.Results,
+		};
+	}
+
 	if (action.type === AttackSheetActionType.GoBack) {
 		const prevState = (() => {
 			switch (state.attackStep) {

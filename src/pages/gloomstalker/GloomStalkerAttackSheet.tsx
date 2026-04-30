@@ -8,6 +8,7 @@ import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
 import { GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
+import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -44,7 +45,10 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 					state={state}
 					dispatch={dispatch}
 				/>}
-				{state.attackStep === AttackStep.Results && <div>Results State</div>}
+				{state.attackStep === AttackStep.Results && <ResultsStep
+					state={state}
+					dispatch={dispatch}
+				/>}
 			</>
 		);
 	};

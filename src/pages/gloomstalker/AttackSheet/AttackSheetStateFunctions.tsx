@@ -1,4 +1,4 @@
-import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep } from "../GloomStalkerTypes";
+import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord } from "../GloomStalkerTypes";
 
 export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
 	return {
@@ -43,4 +43,12 @@ export function GetBestRerollOption(state: GloomStalkerAttackSheetState): { die:
 		}
 		return best;
 	}, { die: 0, currentValue: 0, type: '', index: -1 });
+}
+
+export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState): HistoryRecord {
+	return {
+		...state,
+		gloomStalkerInfo: { ...state.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
+		timestamp: Date.now()
+	};
 }
