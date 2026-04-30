@@ -36,7 +36,7 @@ export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStep
 					<Label htmlFor="applyHuntersMark" className="flex items-center space-x-2">
 						<Checkbox id="applyHuntersMark" className="flex items-center space-x-2" checked={applyHuntersMark}
 							onCheckedChange={() => setApplyHuntersMark(!applyHuntersMark)} />
-						Apply Hunter's Mark damage?
+						Apply Hunter's Mark damage? (adds 1d6 damage on hit)
 					</Label>
 				</div>
 			</div>

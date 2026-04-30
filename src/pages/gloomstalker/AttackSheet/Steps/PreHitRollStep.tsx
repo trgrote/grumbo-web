@@ -22,7 +22,7 @@ export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps)
 			<SheetHeader>
 				<SheetTitle>Roll for Attack</SheetTitle>
 				<SheetDescription>
-					Provide Attack Information, roll for attack, provide damage information, and then roll for damage.
+					Provide pre-hit-roll information and roll for attack
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
@@ -30,7 +30,7 @@ export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps)
 					<Label htmlFor="hasAdvantage">
 						<Checkbox id="hasAdvantage" checked={hasAdvantage}
 							onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
-						Has Advantage?
+						Has Advantage? (Roll 3d20 due to Elven Accuracy)
 					</Label>
 				</div>
 				<div className="grid gap-3">
