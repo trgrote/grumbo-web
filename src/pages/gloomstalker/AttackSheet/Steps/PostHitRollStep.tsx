@@ -13,7 +13,7 @@ interface PostHitRollStepProps {
 
 export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProps) {
 	const attackRolls = state.attackRolls;
-	const attackModifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0);
+	const attackModifier = state.gloomStalkerInfo.attackModifier;
 	const confirmIsHit = () => dispatch({ type: AttackSheetActionType.ConfirmIsHit });
 	const confirmIsMiss = () => dispatch({ type: AttackSheetActionType.ConfirmIsMiss });
 	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
@@ -21,7 +21,7 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 	const highestRoll = Math.max(...attackRolls);
 	const isCritical = highestRoll >= 20;
 	const hitValueTextColorClass = isCritical ? 'text-blue-500' : 'text-green-500';
-	const totalToHitValue = highestRoll + attackModifier;
+	const totalToHitValue = highestRoll + attackModifier - (state.applySharpShooterPenalty ? 5 : 0);
 
 	return (
 		<>
@@ -34,6 +34,7 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<Label>To Hit Rolls: [{attackRolls.join(', ')}]</Label>
 				<Label>Attack Modifier: {attackModifier >= 0 ? `+${attackModifier}` : attackModifier}</Label>
+				{state.applySharpShooterPenalty && <Label>Sharp Shooter Penalty: -5</Label>}
 				<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>

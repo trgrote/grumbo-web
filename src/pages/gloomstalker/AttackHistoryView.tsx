@@ -53,6 +53,9 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 								<Label>Had Advantage: <Checkbox disabled checked={historyRecord.hasAdvantage} /></Label>
 							</li>
 							<li>
+								<Label>Applied Sharp Shooter? <Checkbox disabled checked={historyRecord.applySharpShooterPenalty} /></Label>
+							</li>
+							<li>
 								<Label>To Hit Rolls: {rollArrayToString(historyRecord.attackRolls)}</Label>
 							</li>
 							<li>
@@ -77,7 +80,7 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 										<Label>Total Fire Damage: {totalFireDamage}</Label>
 									</li>
 									<li>
-										<Label>Apply 5 Damage to All Ajacent Enemies? <Checkbox disabled checked={isCritical} /></Label>
+										<Label>Apply 5 Damage to Adjacent Enemies? <Checkbox disabled checked={isCritical} /></Label>
 									</li>
 								</>
 							}
