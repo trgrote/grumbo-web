@@ -3,16 +3,21 @@ import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { AttackSheetAction } from "../../GloomStalkerAttackSheetStateReducer";
+import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 
 interface PostHitRollStepProps {
-	attackRolls: number[];
-	attackModifier: number;
-	confirmIsHit: () => void;
-	confirmIsMiss: () => void;
-	goBack: () => void;
+	state: GloomStalkerAttackSheetState;
+	dispatch: React.Dispatch<AttackSheetAction>;
 }
 
-export default function PostHitRollStep({ attackRolls, attackModifier, confirmIsHit, confirmIsMiss, goBack }: PostHitRollStepProps) {
+export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProps) {
+	const attackRolls = state.attackRolls;
+	const attackModifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0);
+	const confirmIsHit = () => dispatch({ type: AttackSheetActionType.ConfirmIsHit });
+	const confirmIsMiss = () => dispatch({ type: AttackSheetActionType.ConfirmIsMiss });
+	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
+
 	const highestRoll = Math.max(...attackRolls);
 	const isCritical = highestRoll >= 20;
 	const hitValueTextColorClass = isCritical ? 'text-blue-500' : 'text-green-500';

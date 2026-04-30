@@ -33,11 +33,8 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 					dispatch={dispatch}
 				/>}
 				{state.attackStep === AttackStep.PostHitRoll && <PostHitRollStep
-					attackRolls={state.attackRolls}
-					attackModifier={gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0)}
-					confirmIsHit={() => dispatch({ type: AttackSheetActionType.ConfirmIsHit })}
-					confirmIsMiss={() => dispatch({ type: AttackSheetActionType.ConfirmIsMiss })}
-					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
+					state={state}
+					dispatch={dispatch}
 				/>}
 				{state.attackStep === AttackStep.PreDamageRoll && <PreDamageRollStep
 					isDreadAmbusherExtraAttack={state.isDreadAmbusherExtraAttack}
