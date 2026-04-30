@@ -33,7 +33,10 @@ export interface PreDamageRollInfo {
 }
 
 export interface PostDamageRollInfo {
+	piercingDamageDicePool: number[];
 	piercingDamageRolls: number[];
+	fireDamageDicePool: number[];
+	fireDamageRolls: number[];
 	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
 

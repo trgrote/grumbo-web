@@ -50,8 +50,11 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalk
 					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
 				/>}
 				{state.attackStep === AttackStep.PostDamageRoll && <PostDamageRollState
+					pierceingDamageDicePool={state.piercingDamageDicePool}
 					piercingDamageRolls={state.piercingDamageRolls}
-					rerollPiercingDamageDie={() => dispatch({ type: AttackSheetActionType.RerollPiercingDamageDie })}
+					fireDamageDicePool={state.fireDamageDicePool}
+					fireDamageRolls={state.fireDamageRolls}
+					rerollDamageDie={() => dispatch({ type: AttackSheetActionType.RerollPiercingDamageDie })}
 					confirmDamage={() => dispatch({ type: AttackSheetActionType.ConfirmDamage })}
 					goBack={() => dispatch({ type: AttackSheetActionType.GoBack })}
 				/>}

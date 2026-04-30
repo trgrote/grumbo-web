@@ -16,6 +16,9 @@ export function GloomStalkerAttackSheetStateDefault(): GloomStalkerAttackSheetSt
 		isDreadAmbusherExtraAttack: false,
 		applyHuntersMark: false,
 		piercingDamageRolls: [],
+		piercingDamageDicePool: [],
+		fireDamageDicePool: [],
+		fireDamageRolls: [],
 		applyDragonSlumberDamage: false
 	};
 }
@@ -29,6 +32,10 @@ function rollDie(sides: number): number {
 	return Math.floor(Math.random() * sides) + 1;
 }
 
+function rollDice(dicePool: number[]): number[] {
+	return dicePool.map(sides => rollDie(sides));
+}
+
 function rollHitDice(hasAdvantage: boolean, hasElvenAccuracy: boolean): number[] {
 	const numberOfDice = hasAdvantage ? (hasElvenAccuracy ? 3 : 2) : 1;
 	const rolls: number[] = [];
@@ -39,7 +46,7 @@ function rollHitDice(hasAdvantage: boolean, hasElvenAccuracy: boolean): number[]
 	return rolls;
 }
 
-function rollPiercingDamage(state: GloomStalkerAttackSheetState, gloomStalkerInfo: GloomStalkerInfo): number[] {
+function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState, gloomStalkerInfo: GloomStalkerInfo): number[] {
 	const {
 		isDreadAmbusherExtraAttack,
 		applyHuntersMark,
@@ -47,43 +54,57 @@ function rollPiercingDamage(state: GloomStalkerAttackSheetState, gloomStalkerInf
 
 	const {
 		damageDie,
-		hasPiercer,
+		hasPiercer
+	} = gloomStalkerInfo;
+
+	const highestRoll = Math.max(...state.attackRolls);
+	const isCritical = highestRoll >= 20;
+
+	const piercingDamageDicePool: number[] = [];
+
+	// Base Weapon Attack
+	piercingDamageDicePool.push(damageDie);
+
+	// Dread Ambusher Bonus: If it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional weapon damage
+	if (isDreadAmbusherExtraAttack) {
+		piercingDamageDicePool.push(damageDie);
+	}
+
+	if (applyHuntersMark) {
+		piercingDamageDicePool.push(6);   // Hunter's Mark adds 1d6 damage on hit
+	}
+
+	if (isCritical) {
+		// on a critical hit, you roll all of the attack's damage dice an additional time
+		piercingDamageDicePool.push(...piercingDamageDicePool);
+	}
+
+	if (hasPiercer) {
+		piercingDamageDicePool.push(damageDie);   // Piercer adds additonal weapon damage on crit
+	}
+
+	return piercingDamageDicePool;
+}
+
+function getFireDamageDicePool(state: GloomStalkerAttackSheetState, gloomStalkerInfo: GloomStalkerInfo): number[] {
+	const {
 		hasDragonsWrathLongbowStirring
 	} = gloomStalkerInfo;
 
 	const highestRoll = Math.max(...state.attackRolls);
 	const isCritical = highestRoll >= 20;
 
-	const dicePool: number[] = [];
-
-	// Base Weapon Attack
-	dicePool.push(damageDie);
-
-	// Dread Ambusher Bonus: If it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional weapon damage
-	if (isDreadAmbusherExtraAttack) {
-		dicePool.push(damageDie);
-	}
-
-	if (applyHuntersMark) {
-		dicePool.push(6);   // Hunter's Mark adds 1d6 damage on hit
-	}
+	const fireDamageDicePool: number[] = [];
 
 	if (hasDragonsWrathLongbowStirring) {
-		dicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
+		fireDamageDicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
 	}
 
 	if (isCritical) {
-		// on a critical hit, you roll all of the attack's damage dice an additional time
-		dicePool.push(...dicePool);
+		fireDamageDicePool.push(...fireDamageDicePool);   // on a critical hit, you roll all of the attack's damage dice an additional time
 	}
 
-	const piercingDamageRolls = dicePool.map(die => rollDie(die));
-
-	if (hasPiercer) {
-		piercingDamageRolls.push(rollDie(damageDie));   // Piercer adds additonal weapon damage on crit
-	}
-
-	return piercingDamageRolls;
+	return fireDamageDicePool;
 }
 
 export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackSheetState, action: AttackSheetAction): GloomStalkerAttackSheetState {
@@ -146,17 +167,25 @@ export function GloomStalkerAttackSheetStateReducer(state: GloomStalkerAttackShe
 	}
 
 	if (action.type === AttackSheetActionType.RollForDamage) {
+		const gloomStalkerInfo = action.payload as GloomStalkerInfo;
+		const piercingDamageDicePool = getPiercingDamageDicePool(state, gloomStalkerInfo);
+		const fireDamageDicePool = getFireDamageDicePool(state, gloomStalkerInfo);
+
 		return {
 			...state,
 			attackStep: AttackStep.PostDamageRoll,
-			piercingDamageRolls: rollPiercingDamage(state, action.payload as GloomStalkerInfo),
+			piercingDamageDicePool,
+			piercingDamageRolls: rollDice(piercingDamageDicePool),
+			fireDamageDicePool,
+			fireDamageRolls: rollDice(fireDamageDicePool),
 		};
 	}
 
 	if (action.type === AttackSheetActionType.RerollPiercingDamageDie) {
 
 		// TODO Implement Reroll Lowest Piercing Damage Die functionality
-		// We need to track what the original die sides were in order to properly reroll, since some of the piercing damage dice can come from different sources (e.g. weapon damage die vs Hunter's Mark damage die)
+		// We need to track what the original die sides were in order to properly reroll, 
+		// since some of the piercing damage dice can come from different sources (e.g. weapon damage die vs Hunter's Mark damage die)
 		return {
 			...state,
 			piercingDamageRolls: state.piercingDamageRolls,
