@@ -1,8 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
-import { GloomStalkerInfo } from "./GloomStalkerTypes";
+import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import { GetLocalGloomStalkerStorage, SaveLocalGloomStalkerStorage } from "./GloomStalkerLocalStorage";
 import GloomStalkerInfoCard from "./GloomStalkerInfoCard";
+import AttackHistoryView from "./AttackHistoryView";
+import GloomStalkerHistoryTab from "./GloomStalkerHistoryTab";
 
 function GloomStalkerPage() {
 	const [gloomStalkerInfo, setGloomStalkerInfo] = useState<GloomStalkerInfo>(() => {
@@ -10,18 +12,18 @@ function GloomStalkerPage() {
 		return localStorage.gloomStalkerInfo;
 	});
 
-	// const [attackResults, setAttackResults] = useState<RollHistoryRecord[]>(() => {
-	// 	const localStorage = GetLocalGloomStalkerStorage();
-	// 	return localStorage.attackResults;
-	// });
+	const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>(() => {
+		const localStorage = GetLocalGloomStalkerStorage();
+		return localStorage.historyRecords;
+	});
 
 	// On State change, save results to local storage
 	useEffect(() => {
 		SaveLocalGloomStalkerStorage({
 			gloomStalkerInfo: gloomStalkerInfo,
-			// attackResults
+			historyRecords: historyRecords
 		});
-	}, [gloomStalkerInfo/*, attackResults*/]);
+	}, [gloomStalkerInfo, historyRecords]);
 
 	return (
 		<Tabs defaultValue="info">
@@ -33,13 +35,13 @@ function GloomStalkerPage() {
 				<GloomStalkerInfoCard
 					gloomStalkerInfo={gloomStalkerInfo}
 					onChange={setGloomStalkerInfo}
-				// addToRollHistory={roll => setAttackResults([roll, ...attackResults])} 
+				// addToRollHistory={historyRecord => setHistoryRecords([historyRecord, ...historyRecords])} 
 				/>
 			</TabsContent>
 			<TabsContent value="history">
-				{/* <GloomStalkerHistoryTab attackResults={attackResults}
-					rollRecordRenderer={(attackResult) => <RollResultView {...attackResult} />}
-					onClearHistory={() => setAttackResults([])} /> */}
+				<GloomStalkerHistoryTab historyRecords={historyRecords}
+					rollRecordRenderer={(historyRecord) => <AttackHistoryView historyRecord={historyRecord} />}
+					onClearHistory={() => setHistoryRecords([])} />
 			</TabsContent>
 		</Tabs>
 	);
