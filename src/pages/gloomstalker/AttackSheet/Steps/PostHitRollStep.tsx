@@ -4,7 +4,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-interface PostHitRollStateProps {
+interface PostHitRollStepProps {
 	attackRolls: number[];
 	attackModifier: number;
 	confirmIsHit: () => void;
@@ -12,7 +12,7 @@ interface PostHitRollStateProps {
 	goBack: () => void;
 }
 
-export default function PostHitRollState({ attackRolls, attackModifier, confirmIsHit, confirmIsMiss, goBack }: PostHitRollStateProps) {
+export default function PostHitRollStep({ attackRolls, attackModifier, confirmIsHit, confirmIsMiss, goBack }: PostHitRollStepProps) {
 	const highestRoll = Math.max(...attackRolls);
 	const isCritical = highestRoll >= 20;
 	const hitValueTextColorClass = isCritical ? 'text-blue-500' : 'text-green-500';

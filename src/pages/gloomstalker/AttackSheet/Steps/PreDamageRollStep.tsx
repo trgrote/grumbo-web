@@ -3,7 +3,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-interface PreDamageRollStateProps {
+interface PreDamageRollStepProps {
 	isDreadAmbusherExtraAttack: boolean;
 	setIsDreadAmbusherExtraAttack: (value: boolean) => void;
 	applyHuntersMark: boolean;
@@ -12,7 +12,7 @@ interface PreDamageRollStateProps {
 	goBack: () => void;
 }
 
-export default function PreDamageRollState({ isDreadAmbusherExtraAttack, setIsDreadAmbusherExtraAttack, applyHuntersMark, setApplyHuntersMark, rollForDamage, goBack }: PreDamageRollStateProps) {
+export default function PreDamageRollStep({ isDreadAmbusherExtraAttack, setIsDreadAmbusherExtraAttack, applyHuntersMark, setApplyHuntersMark, rollForDamage, goBack }: PreDamageRollStepProps) {
 	return (
 		<>
 			<SheetHeader>

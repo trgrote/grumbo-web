@@ -7,12 +7,12 @@ import { AttackSheetAction } from "../../GloomStalkerAttackSheetState";
 import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
 import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 
-interface PostDamageRollStateProps {
+interface PostDamageRollStepProps {
 	state: GloomStalkerAttackSheetState;
 	dispatch: React.Dispatch<AttackSheetAction>;
 }
 
-export default function PostDamageRollState({ state, dispatch }: PostDamageRollStateProps): JSX.Element {
+export default function PostDamageRollStep({ state, dispatch }: PostDamageRollStepProps): JSX.Element {
 	// Only allow reroll once
 	const [rereollUsed, setRerollUsed] = useState(false);
 

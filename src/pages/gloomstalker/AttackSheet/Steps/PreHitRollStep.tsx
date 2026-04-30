@@ -3,7 +3,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-interface PreHitRollStateProps {
+interface PreHitRollStepProps {
 	hasAdvantage: boolean;
 	setHasAdvantage: (value: boolean) => void;
 	applySharpShooterPenalty: boolean;
@@ -11,7 +11,7 @@ interface PreHitRollStateProps {
 	onRollForAttack: () => void;
 }
 
-export default function PreHitRollState({ hasAdvantage, setHasAdvantage, applySharpShooterPenalty, setApplySharpShooterPenalty, onRollForAttack }: PreHitRollStateProps) {
+export default function PreHitRollStep({ hasAdvantage, setHasAdvantage, applySharpShooterPenalty, setApplySharpShooterPenalty, onRollForAttack }: PreHitRollStepProps) {
 	return (
 		<>
 			<SheetHeader>
