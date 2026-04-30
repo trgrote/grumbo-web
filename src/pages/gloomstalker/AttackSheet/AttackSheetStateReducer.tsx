@@ -58,7 +58,7 @@ function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[
 		piercingDamageDicePool.push(...piercingDamageDicePool);
 	}
 
-	if (hasPiercer) {
+	if (hasPiercer && isCritical) {
 		piercingDamageDicePool.push(damageDie);   // Piercer adds additonal weapon damage on crit
 	}
 
