@@ -15,7 +15,7 @@ export interface GloomStalkerAttackSheetProps {
 export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalkerAttackSheetProps) {
 	const [state, dispatch] = useReducer(
 		GloomStalkerAttackSheetStateReducer,
-		GloomStalkerAttackSheetStateDefault()
+		GloomStalkerAttackSheetStateDefault(gloomStalkerInfo)
 	);
 
 	const resetSheet = (): void => {
