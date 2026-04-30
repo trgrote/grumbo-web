@@ -35,7 +35,7 @@ function GloomStalkerPage() {
 				<GloomStalkerInfoCard
 					gloomStalkerInfo={gloomStalkerInfo}
 					onChange={setGloomStalkerInfo}
-				// addToRollHistory={historyRecord => setHistoryRecords([historyRecord, ...historyRecords])} 
+					addToHistory={historyRecord => setHistoryRecords([historyRecord, ...historyRecords])}
 				/>
 			</TabsContent>
 			<TabsContent value="history">

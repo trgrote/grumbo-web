@@ -1,24 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { JSX, useReducer } from "react";
-import { AttackSheetActionType, AttackStep, GloomStalkerInfo } from "./GloomStalkerTypes";
+import { JSX, useEffect, useReducer } from "react";
+import { AttackSheetActionType, AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer.tsx";
 import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
 import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
-import { GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
+import { CreateHistoryRecordFromState, GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
 import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
+	addToHistory: (historyRecord: HistoryRecord) => void;
 }
 
-export default function GloomStalkerAttackSheet({ gloomStalkerInfo }: GloomStalkerAttackSheetProps) {
+export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory }: GloomStalkerAttackSheetProps) {
 	const [state, dispatch] = useReducer(
 		AttackSheetStateReducer,
-		GloomStalkerAttackSheetStateDefault(gloomStalkerInfo)
+		gloomStalkerInfo,
+		GloomStalkerAttackSheetStateDefault
 	);
+
+	// I have to disable the exhaustive-deps rule here because 
+	// I only want to trigger this effect when the attack step changes to results, 
+	// not on every state change.
+	useEffect(() => {
+		if (state.attackStep === AttackStep.Results) {
+			console.log("Attack Step Changed to Results");
+			const historyRecord = CreateHistoryRecordFromState(state);
+			addToHistory(historyRecord);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state.attackStep]);
 
 	const resetSheet = (): void => {
 		dispatch({

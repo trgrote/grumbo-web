@@ -13,18 +13,18 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { GloomStalkerInfo } from "./GloomStalkerTypes";
+import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import GloomStalkerAttackSheet from "./GloomStalkerAttackSheet";
 
 export interface GloomStalkerInfoCardProps {
 	gloomStalkerInfo: GloomStalkerInfo;
 	onChange: (gloomStalkerInfo: GloomStalkerInfo) => void;
-	// addToRollHistory: (result: RollHistoryRecord) => void;
+	addToHistory: (historyRecord: HistoryRecord) => void;
 }
 
 const weaponDamageDice = [4, 6, 8, 10, 12];
 
-export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange }: GloomStalkerInfoCardProps) {
+export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addToHistory }: GloomStalkerInfoCardProps) {
 	const {
 		attackModifier,
 		damageDie,
@@ -183,7 +183,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange }: Glo
 			<CardFooter>
 				<GloomStalkerAttackSheet
 					gloomStalkerInfo={gloomStalkerInfo}
-				// addToRollHistory={addToRollHistory} 
+					addToHistory={addToHistory}
 				/>
 			</CardFooter>
 		</Card>
