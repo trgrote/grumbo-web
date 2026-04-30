@@ -27,7 +27,6 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 	// not on every state change.
 	useEffect(() => {
 		if (state.attackStep === AttackStep.Results) {
-			console.log("Attack Step Changed to Results");
 			const historyRecord = CreateHistoryRecordFromState(state);
 			addToHistory(historyRecord);
 		}
@@ -36,9 +35,12 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 
 	const resetSheet = (): void => {
 		dispatch({
-			type: AttackSheetActionType.Reset
+			type: AttackSheetActionType.Reset,
+			payload: gloomStalkerInfo
 		});
 	};
+
+	useEffect(resetSheet, [gloomStalkerInfo]);
 
 	const renderSheetContent = (): JSX.Element => {
 		return (
