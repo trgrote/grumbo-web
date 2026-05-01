@@ -26,6 +26,14 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 	};
 
 	const bestRerollOption = GetBestRerollOption(state);
+	const alreadyBestRolls = bestRerollOption.currentValue === bestRerollOption.die;
+	let rerollButtonText = `Reroll Lowest Damage Roll? (d${bestRerollOption.die} that rolled a ${bestRerollOption.currentValue})`;
+
+	if (rereollUsed) {
+		rerollButtonText = "Reroll Used";
+	} else if (alreadyBestRolls) {
+		rerollButtonText = "Already best rolls!";
+	}
 
 	return (
 		<>
@@ -38,12 +46,9 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<Label>Piercing Damage Rolls: [{state.piercingDamageRolls.join(', ')}]</Label>
 				<Label>Fire Damage Rolls: [{state.fireDamageRolls.join(', ')}]</Label>
-				{!rereollUsed &&
-					<Button onClick={handleReroll} disabled={rereollUsed}>
-						Reroll Lowest Damage Roll?
-						(d{bestRerollOption.die} that rolled a {bestRerollOption.currentValue})
-					</Button>
-				}
+				<Button onClick={handleReroll} disabled={rereollUsed || alreadyBestRolls}>
+					{rerollButtonText}
+				</Button>
 			</div>
 			<SheetFooter>
 				<Button onClick={confirmDamage}>Confirm Damage</Button>
