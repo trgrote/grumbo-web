@@ -19,7 +19,10 @@ Once per turn, when you hit a creature with an attack that deals piercing damage
 `npm run dev`
 
 # Deploy
-`docker compose up -d --build`
+- site location: http://www.grumbo.me:3000/
+- In `/var/www/grumbo-web`: 
+	- `git pull` 
+	- `docker compose up -d --build`
 
 # React + TypeScript + Vite
 
