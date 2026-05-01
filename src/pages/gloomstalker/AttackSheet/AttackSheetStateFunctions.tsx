@@ -18,11 +18,9 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 	};
 }
 
-// Determine which die has the greatest difference between the sides of the die and the rolled value. 
-// For example, if there are two damage rolls of 4, but one is from a d8 and the other is from a d6, 
-// then the d8 would be the best die to reroll because it has the potential to increase the damage by 4, 
-// while the d6 can only increase the damage by 2. 
-// If there are multiple dice with the same difference, prioritize rerolling the highest sided die.
+// Select the best die to reroll. 
+// The best die to reroll is the one that has the lowest value. 
+// Tiebreaker goes to the highest die (e.g. it's better to reroll a 1 on a d12 than a 1 on a d6)
 export function GetBestRerollOption(state: GloomStalkerAttackSheetState): { die: number; currentValue: number; type: string; index: number; } {
 	const allRolls = [
 		...state.piercingDamageRolls.map((roll, i) => ({ roll, dieSize: state.piercingDamageDicePool[i], type: 'piercing', index: i })),
@@ -30,10 +28,7 @@ export function GetBestRerollOption(state: GloomStalkerAttackSheetState): { die:
 	];
 
 	return allRolls.reduce((best, current) => {
-		const currentDifference = current.dieSize - current.roll;
-		const bestDifference = best.die - best.currentValue;
-
-		if (currentDifference > bestDifference || (currentDifference === bestDifference && current.dieSize > best.die)) {
+		if (current.roll < best.currentValue || (current.roll === best.currentValue && current.dieSize > best.die)) {
 			return {
 				die: current.dieSize,
 				currentValue: current.roll,
@@ -42,7 +37,7 @@ export function GetBestRerollOption(state: GloomStalkerAttackSheetState): { die:
 			};
 		}
 		return best;
-	}, { die: 0, currentValue: 0, type: '', index: -1 });
+	}, { die: 0, currentValue: Infinity, type: '', index: -1 });
 }
 
 export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState): HistoryRecord {
