@@ -25,9 +25,13 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 		setRerollUsed(true);
 	};
 
+	const formatDieRolls = (rolls: number[], dicePool: number[]): string => {
+		return rolls.map((roll, index) => `d${dicePool[index]}->${roll}`).join(', ');
+	};
+
 	const bestRerollOption = GetBestRerollOption(state);
-	const alreadyBestRolls = bestRerollOption.currentValue === bestRerollOption.die;
-	let rerollButtonText = `Reroll Lowest Damage Roll? (d${bestRerollOption.die} that rolled a ${bestRerollOption.currentValue})`;
+	const alreadyBestRolls = bestRerollOption.roll === bestRerollOption.dieSize;
+	let rerollButtonText = `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`;
 
 	if (rereollUsed) {
 		rerollButtonText = "Reroll Used";
@@ -44,8 +48,8 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<Label>Piercing Damage Rolls: [{state.piercingDamageRolls.join(', ')}]</Label>
-				<Label>Fire Damage Rolls: [{state.fireDamageRolls.join(', ')}]</Label>
+				<Label>Piercing Damage Rolls: [{formatDieRolls(state.piercingDamageRolls, state.piercingDamageDicePool)}]</Label>
+				<Label>Fire Damage Rolls: [{formatDieRolls(state.fireDamageRolls, state.fireDamageDicePool)}]</Label>
 				<Button onClick={handleReroll} disabled={rereollUsed || alreadyBestRolls}>
 					{rerollButtonText}
 				</Button>

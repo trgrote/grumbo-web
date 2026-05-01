@@ -158,14 +158,14 @@ export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, act
 
 		if (bestRerollOption.type === 'piercing') {
 			const newPiercingDamageRolls = [...state.piercingDamageRolls];
-			newPiercingDamageRolls[bestRerollOption.index] = rollDie(bestRerollOption.die);
+			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = rollDie(bestRerollOption.dieSize);
 			return {
 				...state,
 				piercingDamageRolls: newPiercingDamageRolls,
 			};
 		} else if (bestRerollOption.type === 'fire') {
 			const newFireDamageRolls = [...state.fireDamageRolls];
-			newFireDamageRolls[bestRerollOption.index] = rollDie(bestRerollOption.die);
+			newFireDamageRolls[bestRerollOption.dicePoolIndex] = rollDie(bestRerollOption.dieSize);
 			return {
 				...state,
 				fireDamageRolls: newFireDamageRolls,
