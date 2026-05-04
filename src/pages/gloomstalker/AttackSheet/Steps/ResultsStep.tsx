@@ -11,7 +11,7 @@ interface ResultsStepProps {
 }
 
 export default function ResultsStep({ state, dispatch }: ResultsStepProps) {
-	const rollAgain = () => dispatch({ type: AttackSheetActionType.Reset });
+	const rollAgain = () => dispatch({ type: AttackSheetActionType.AttackAgain });
 	const history = CreateHistoryRecordFromState(state);
 
 	return (

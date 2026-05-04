@@ -47,6 +47,7 @@ export enum AttackSheetActionType {
 	RerollPiercingDamageDie,
 	ConfirmDamage,
 	GoBack,
+	AttackAgain,
 }
 
 export enum AttackStep {
