@@ -44,6 +44,19 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 				<Card>
 					<CardContent>
 						<ul>
+							{historyRecord.isHit &&
+								<>
+									<li>
+										<Label>Total Piercing Damage: {totalPiercingDamage}</Label>
+									</li>
+									<li>
+										<Label>Total Fire Damage: {totalFireDamage}</Label>
+									</li>
+									<li>
+										<Label>Apply 5 Damage to Adjacent Enemies? <Checkbox disabled checked={isCritical} /></Label>
+									</li>
+								</>
+							}
 							<li>
 								<Label>Attack Modifier: +{gloomStalkerInfo.attackModifier}</Label>
 							</li>
@@ -75,25 +88,16 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 										<Label>Piercing Damage Rolls: {rollArrayToString(historyRecord.piercingDamageRolls)}</Label>
 									</li>
 									<li>
-										<Label>Total Piercing Damage: {totalPiercingDamage}</Label>
-									</li>
-									<li>
 										<Label>Fire Damage Dice: {diceArrayToString(historyRecord.fireDamageDicePool)}</Label>
 									</li>
 									<li>
 										<Label>Fire Damage Rolls: {rollArrayToString(historyRecord.fireDamageRolls)}</Label>
 									</li>
 									<li>
-										<Label>Total Fire Damage: {totalFireDamage}</Label>
-									</li>
-									<li>
 										<Label>Dread Ambusher Extra Attack? <Checkbox disabled checked={historyRecord.isDreadAmbusherExtraAttack} /></Label>
 									</li>
 									<li>
 										<Label>Hunter's Mark? <Checkbox disabled checked={historyRecord.applyHuntersMark} /></Label>
-									</li>
-									<li>
-										<Label>Apply 5 Damage to Adjacent Enemies? <Checkbox disabled checked={isCritical} /></Label>
 									</li>
 								</>
 							}
