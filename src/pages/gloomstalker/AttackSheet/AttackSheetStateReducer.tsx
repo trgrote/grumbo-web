@@ -4,7 +4,7 @@ import { AttackStep } from '../GloomStalkerTypes';
 
 export interface AttackSheetAction {
 	type: AttackSheetActionType;
-	payload?: unknown;
+	payload?: boolean | GloomStalkerInfo;
 }
 
 function rollDie(sides: number): number {
