@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import { AttackSheetAction } from "../AttackSheetStateReducer";
-import AttackHistoryView from "../../AttackHistoryView";
 import { CreateHistoryRecordFromState } from "../AttackSheetStateFunctions";
+import AttackHistoryDetails from "../../AttackHistoryDetails";
 
 interface ResultsStepProps {
 	state: GloomStalkerAttackSheetState;
@@ -23,9 +23,8 @@ export default function ResultsStep({ state, dispatch }: ResultsStepProps) {
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<AttackHistoryView
+				<AttackHistoryDetails
 					historyRecord={history}
-					defaultOpen
 				/>
 			</div>
 			<SheetFooter>
