@@ -2,8 +2,9 @@
 This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
 
 # TODO
-- [ ] Add input validation to only allow integers for modifier fields
-- [ ] Implement Gloom Stalker Attack Page (https://www.dndbeyond.com/characters/75379398)
+- Add input validation to only allow integers for modifier fields
+- Implement Gloom Stalker Attack Page (https://www.dndbeyond.com/characters/75379398)
+- Add Crit miss check to automatically miss (disable Hit button) and display critical miss in special manner.
 
 ## Gloom Stalker Questions
 - For Dread Amubusher, if you don't attack your first turn of combat, does that mean you lose out on that additonal attack? I.e. It's not your first attack of combat, it's only your attack on the first round.

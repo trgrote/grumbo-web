@@ -66,7 +66,6 @@ function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[
 }
 
 function getFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
-
 	const highestRoll = Math.max(...state.attackRolls);
 	const isCritical = highestRoll >= 20;
 

@@ -1,4 +1,4 @@
-import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord } from "../GloomStalkerTypes";
+import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, HitRollStatus } from "../GloomStalkerTypes";
 
 export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
 	return {
@@ -55,4 +55,28 @@ export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState
 		gloomStalkerInfo: { ...state.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
 		timestamp: Date.now()
 	};
+}
+
+export function GetHitRollStatus(hitRolls: number[]): HitRollStatus {
+	const highestRoll = Math.max(...hitRolls);
+	if (highestRoll === 20) {
+		return HitRollStatus.CriticalHit;
+	}
+	if (highestRoll === 1) {
+		return HitRollStatus.CriticalMiss;
+	}
+	return HitRollStatus.NormalHit;
+}
+
+export function GetHitRollStatusColorClass(hitRollStatus: HitRollStatus): string {
+	switch (hitRollStatus) {
+		case HitRollStatus.CriticalHit:
+			return 'text-blue-500';
+		case HitRollStatus.CriticalMiss:
+			return 'text-red-500';
+		case HitRollStatus.NormalHit:
+			return 'text-green-500';
+		default:
+			return '';
+	}
 }

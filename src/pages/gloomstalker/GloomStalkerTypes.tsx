@@ -66,3 +66,9 @@ export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRol
 export interface HistoryRecord extends Omit<GloomStalkerAttackSheetState, "attackStep"> {
 	timestamp: number;
 }
+
+export enum HitRollStatus {
+	CriticalHit,
+	CriticalMiss,
+	NormalHit
+}
