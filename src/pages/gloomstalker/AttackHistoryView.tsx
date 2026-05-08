@@ -48,6 +48,9 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 							{historyRecord.isHit &&
 								<>
 									<li>
+										<Label>Total Damage: {totalDamage}</Label>
+									</li>
+									<li>
 										<Label>Total Piercing Damage: {totalPiercingDamage}</Label>
 									</li>
 									<li>
