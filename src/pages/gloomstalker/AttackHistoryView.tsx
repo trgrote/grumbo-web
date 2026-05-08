@@ -1,10 +1,11 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { HistoryRecord } from "./GloomStalkerTypes";
+import { HistoryRecord, HitRollStatus } from "./GloomStalkerTypes";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { GetHitRollStatus, GetHitRollStatusColorClass } from "./AttackSheet/AttackSheetStateFunctions";
 
 interface AttackHistoryViewProps {
 	defaultOpen?: boolean;
@@ -18,7 +19,7 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 	const { gloomStalkerInfo } = historyRecord;
 
 	const highestHitRoll = Math.max(...historyRecord.attackRolls);
-	const isCritical = highestHitRoll >= 20;
+	const hitStatus = GetHitRollStatus(historyRecord.attackRolls);
 	const totalHitRoll = highestHitRoll
 		+ gloomStalkerInfo.attackModifier
 		- (historyRecord.applySharpShooterPenalty ? 5 : 0);
@@ -27,7 +28,7 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);
 	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
 	const totalDamage = totalPiercingDamage + totalFireDamage;
-	const hitValueTextColorClass = isCritical ? 'text-blue-500' : 'text-green-500';
+	const hitValueTextColorClass = GetHitRollStatusColorClass(hitStatus);
 
 	return (
 		<Collapsible defaultOpen={defaultOpen ?? false} className="group/collapsible">
@@ -53,7 +54,7 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 										<Label>Total Fire Damage: {totalFireDamage}</Label>
 									</li>
 									<li>
-										<Label>Apply 5 Damage to Adjacent Enemies? <Checkbox disabled checked={isCritical} /></Label>
+										<Label>Apply 5 Damage to Adjacent Enemies? <Checkbox disabled checked={hitStatus === HitRollStatus.CriticalHit} /></Label>
 									</li>
 								</>
 							}
@@ -73,7 +74,7 @@ export default function AttackHistoryView({ defaultOpen, historyRecord }: Attack
 								<Label>To Hit Rolls: {rollArrayToString(historyRecord.attackRolls)}</Label>
 							</li>
 							<li>
-								<Label>Critical Hit? <Checkbox disabled checked={isCritical} /></Label>
+								<Label>Critical Hit? <Checkbox disabled checked={hitStatus === HitRollStatus.CriticalHit} /></Label>
 							</li>
 							<li>
 								<Label>Was Hit? <Checkbox disabled checked={historyRecord.isHit} /></Label>
