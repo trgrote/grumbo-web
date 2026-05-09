@@ -17,25 +17,47 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
 	const totalDamage = totalPiercingDamage + totalFireDamage;
 
+	const damageSummary = (
+		<>
+			<li>
+				<Label>Total Damage: {totalDamage}</Label>
+			</li>
+			<li>
+				<Label>Total Piercing Damage: {totalPiercingDamage}</Label>
+			</li>
+			<li>
+				<Label>Total Fire Damage: {totalFireDamage}</Label>
+			</li>
+			{hitStatus === HitRollStatus.CriticalHit && (
+				<li>
+					<Label>Apply 5 Damage to Adjacent Enemies</Label>
+				</li>
+			)}
+		</>
+	);
+
+	const damageRolls = (
+		<>
+			<li>
+				<Label>Piercing Damage Dice: {diceArrayToString(historyRecord.piercingDamageDicePool)}</Label>
+			</li>
+			<li>
+				<Label>Piercing Damage Rolls: {rollArrayToString(historyRecord.piercingDamageRolls)}</Label>
+			</li>
+			<li>
+				<Label>Fire Damage Dice: {diceArrayToString(historyRecord.fireDamageDicePool)}</Label>
+			</li>
+			<li>
+				<Label>Fire Damage Rolls: {rollArrayToString(historyRecord.fireDamageRolls)}</Label>
+			</li>
+		</>
+	);
+
 	return (
 		<Card>
 			<CardContent>
 				<ul>
-					{historyRecord.isHit &&
-						<>
-							<li>
-								<Label>Total Damage: {totalDamage}</Label>
-							</li>
-							<li>
-								<Label>Total Piercing Damage: {totalPiercingDamage}</Label>
-							</li>
-							<li>
-								<Label>Total Fire Damage: {totalFireDamage}</Label>
-							</li>
-							<li>
-								<Label>Apply 5 Damage to Adjacent Enemies? <Checkbox disabled checked={hitStatus === HitRollStatus.CriticalHit} /></Label>
-							</li>
-						</>}
+					{historyRecord.isHit && damageSummary}
 					<li>
 						<Label>Attack Modifier: +{gloomStalkerInfo.attackModifier}</Label>
 					</li>
@@ -57,20 +79,9 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 					<li>
 						<Label>Was Hit? <Checkbox disabled checked={historyRecord.isHit} /></Label>
 					</li>
+					{historyRecord.isHit && damageRolls}
 					{historyRecord.isHit &&
 						<>
-							<li>
-								<Label>Piercing Damage Dice: {diceArrayToString(historyRecord.piercingDamageDicePool)}</Label>
-							</li>
-							<li>
-								<Label>Piercing Damage Rolls: {rollArrayToString(historyRecord.piercingDamageRolls)}</Label>
-							</li>
-							<li>
-								<Label>Fire Damage Dice: {diceArrayToString(historyRecord.fireDamageDicePool)}</Label>
-							</li>
-							<li>
-								<Label>Fire Damage Rolls: {rollArrayToString(historyRecord.fireDamageRolls)}</Label>
-							</li>
 							<li>
 								<Label>Dread Ambusher Extra Attack? <Checkbox disabled checked={historyRecord.isDreadAmbusherExtraAttack} /></Label>
 							</li>
