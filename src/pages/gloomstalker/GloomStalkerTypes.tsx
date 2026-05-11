@@ -63,7 +63,7 @@ export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRol
 	gloomStalkerInfo: GloomStalkerInfo;
 }
 
-export interface HistoryRecord extends Omit<GloomStalkerAttackSheetState, "attackStep"> {
+export interface HistoryRecord extends GloomStalkerAttackSheetState {
 	timestamp: number;
 }
 

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { AttackSheetAction } from "../AttackSheetStateReducer";
 import { AttackSheetActionType, GloomStalkerAttackSheetState, HitRollStatus } from "../../GloomStalkerTypes";
@@ -36,7 +35,9 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 				<Label>To Hit Rolls: [{attackRolls.join(', ')}]</Label>
 				<Label>Attack Modifier: {attackModifier >= 0 ? `+${attackModifier}` : attackModifier}</Label>
 				{state.applySharpShooterPenalty && <Label>Sharp Shooter Penalty: -5</Label>}
-				<Label>Critical Hit: <Checkbox disabled checked={hitStatus === HitRollStatus.CriticalHit} /></Label>
+				{hitStatus === HitRollStatus.CriticalHit && (
+					<Label>Critical Hit</Label>
+				)}
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
 						{hitStatus === HitRollStatus.CriticalHit && <strong>{totalToHitValue}</strong>}

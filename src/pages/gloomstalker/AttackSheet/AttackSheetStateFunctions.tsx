@@ -80,3 +80,19 @@ export function GetHitRollStatusColorClass(hitRollStatus: HitRollStatus): string
 			return '';
 	}
 }
+
+export function GetHighestHitRoll(state: GloomStalkerAttackSheetState): number {
+	// TODO If we add disadvantage, we need to select the lowest instead of the highest
+	return Math.max(...state.attackRolls);
+}
+
+export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number {
+	const highestRoll = GetHighestHitRoll(state);
+	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0);
+	return highestRoll + modifier;
+}
+
+export function IsCriticalHitOrMiss(state: GloomStalkerAttackSheetState): boolean {
+	const highestRoll = GetHighestHitRoll(state);
+	return highestRoll === 20 || highestRoll === 1;
+}
