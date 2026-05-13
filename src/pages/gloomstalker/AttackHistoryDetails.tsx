@@ -52,6 +52,9 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 
 	const toHitSummary = (
 		<>
+			<li>
+				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {gloomStalkerInfo.attackModifier}{historyRecord.applySharpShooterPenalty ? ' - 5' : ''})</Label>
+			</li>
 			{historyRecord.hasAdvantage && (
 				<li>
 					<Label>Advantage (Rolled 3d20 due to Elven Accuracy)</Label>
@@ -71,9 +74,6 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 					<Label>Sharp Shooter Penalty: -5</Label>
 				</li>
 			)}
-			<li>
-				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {gloomStalkerInfo.attackModifier}{historyRecord.applySharpShooterPenalty ? ' - 5' : ''})</Label>
-			</li>
 		</>
 	);
 
@@ -84,12 +84,17 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			</li>
 			{hitStatus === HitRollStatus.CriticalHit && (
 				<li>
-					<Label>Piercer added d8 on Critical Hit</Label>
+					<Label>Piercer added 1d8 Piercing on Critical Hit</Label>
 				</li>
 			)}
 			{historyRecord.applyHuntersMark && (
 				<li>
-					<Label>Hunter's Mark added 1d6 Piercing Damage</Label>
+					<Label>Hunter's Mark added 1d6 Piercing</Label>
+				</li>
+			)}
+			{historyRecord.isDreadAmbusherExtraAttack && (
+				<li>
+					<Label>Dread Ambusher added 1d8 Piercing</Label>
 				</li>
 			)}
 			<li>
@@ -123,14 +128,6 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 
 	if (historyRecord.isHit) {
 		detailArray.push(damageRolls);
-	}
-
-	if (historyRecord.isDreadAmbusherExtraAttack) {
-		detailArray.push(
-			<li>
-				<Label>Dread Ambusher Extra Attack</Label>
-			</li>
-		);
 	}
 
 	return (
