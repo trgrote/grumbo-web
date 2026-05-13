@@ -136,8 +136,7 @@ export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): 
 		damageDie
 	} = state.gloomStalkerInfo;
 
-	const highestRoll = Math.max(...state.attackRolls);
-	const isCritical = highestRoll >= 20;
+	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;
 
 	const piercingDamageDicePool: number[] = [];
 
@@ -153,7 +152,7 @@ export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): 
 		piercingDamageDicePool.push(6);   // Hunter's Mark adds 1d6 damage on hit
 	}
 
-	if (isCritical) {
+	if (isCriticalHit) {
 		// on a critical hit, you roll all of the attack's damage dice an additional time
 		piercingDamageDicePool.push(...piercingDamageDicePool);
 
@@ -165,14 +164,13 @@ export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): 
 }
 
 export function GetFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
-	const highestRoll = Math.max(...state.attackRolls);
-	const isCritical = highestRoll >= 20;
+	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;;
 
 	const fireDamageDicePool: number[] = [];
 
 	fireDamageDicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
 
-	if (isCritical) {
+	if (isCriticalHit) {
 		fireDamageDicePool.push(...fireDamageDicePool);   // on a critical hit, you roll all of the attack's damage dice an additional time
 	}
 
