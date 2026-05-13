@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { GetHighestHitRoll, GetCritStatus, IsCriticalHitOrMiss } from "./AttackSheet/AttackSheetStateFunctions";
+import { GetHighestHitRoll, GetCritStatus, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
 import { JSX } from "react";
 
@@ -17,8 +17,6 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);
 	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
 	const totalDamage = totalPiercingDamage + totalFireDamage;
-
-	const isCriticalHitOrMiss = IsCriticalHitOrMiss(historyRecord);
 
 	const damageSummary = (
 		<>
@@ -42,7 +40,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const hitSummary = (
 		<>
 			<li>
-				<Label>{isCriticalHitOrMiss ? 'Critical ' : ''}{historyRecord.isHit ? "Hit" : "Miss"}</Label>
+				<Label>{GetHitStatusText(historyRecord)}</Label>
 			</li>
 		</>
 	);

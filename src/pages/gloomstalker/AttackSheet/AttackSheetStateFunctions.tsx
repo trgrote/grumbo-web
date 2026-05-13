@@ -101,11 +101,6 @@ export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number 
 	return highestRoll + modifier;
 }
 
-export function IsCriticalHitOrMiss(state: GloomStalkerAttackSheetState): boolean {
-	const highestRoll = GetHighestHitRoll(state);
-	return highestRoll === 20 || highestRoll === 1;
-}
-
 export function RollDie(sides: number): number {
 	return Math.floor(Math.random() * sides) + 1;
 }
