@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { GetHighestHitRoll, GetHitRollStatus, IsCriticalHitOrMiss } from "./AttackSheet/AttackSheetStateFunctions";
+import { GetHighestHitRoll, GetHitCritStatus, IsCriticalHitOrMiss } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, HitRollStatus } from "./GloomStalkerTypes";
 import { JSX } from "react";
 
@@ -11,7 +11,7 @@ const joinWithElement = (arr: JSX.Element[], element: JSX.Element) => arr.flatMa
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { gloomStalkerInfo } = historyRecord;
 
-	const hitStatus = GetHitRollStatus(historyRecord.attackRolls);
+	const hitStatus = GetHitCritStatus(historyRecord);
 	const totalPiercingDamage = historyRecord.piercingDamageRolls.reduce((a, value) => a + value, 0)
 		+ gloomStalkerInfo.damageModifier
 		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);

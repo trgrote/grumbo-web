@@ -57,33 +57,42 @@ export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState
 	};
 }
 
-export function GetHitRollStatus(hitRolls: number[]): HitRollStatus {
-	const highestRoll = Math.max(...hitRolls);
+export function GetHighestHitRoll(state: GloomStalkerAttackSheetState): number {
+	// TODO If we add disadvantage, we need to select the lowest instead of the highest
+	return Math.max(...state.attackRolls);
+}
+
+export function GetHitCritStatus(state: GloomStalkerAttackSheetState): HitRollStatus {
+	const highestRoll = GetHighestHitRoll(state);
+
 	if (highestRoll === 20) {
 		return HitRollStatus.CriticalHit;
 	}
 	if (highestRoll === 1) {
 		return HitRollStatus.CriticalMiss;
 	}
-	return HitRollStatus.NormalHit;
+	return HitRollStatus.Normal;
 }
 
-export function GetHitRollStatusColorClass(hitRollStatus: HitRollStatus): string {
-	switch (hitRollStatus) {
-		case HitRollStatus.CriticalHit:
-			return 'text-blue-500';
-		case HitRollStatus.CriticalMiss:
-			return 'text-red-500';
-		case HitRollStatus.NormalHit:
-			return 'text-green-500';
-		default:
-			return '';
+export function GetHitStatusText(state: GloomStalkerAttackSheetState): string {
+	const highestRoll = GetHighestHitRoll(state);
+
+	const isCriticalHitOrMiss = highestRoll === 20 || highestRoll === 1;
+	return (isCriticalHitOrMiss ? 'Critical ' : '') + (state.isHit ? "Hit" : "Miss");
+}
+
+export function GetHitStatusColorClass(state: GloomStalkerAttackSheetState): string {
+	const highestRoll = GetHighestHitRoll(state);
+
+	if (highestRoll === 20) {
+		return 'text-blue-500';
 	}
-}
 
-export function GetHighestHitRoll(state: GloomStalkerAttackSheetState): number {
-	// TODO If we add disadvantage, we need to select the lowest instead of the highest
-	return Math.max(...state.attackRolls);
+	if (state.isHit) {
+		return 'text-green-500';
+	}
+
+	return 'text-red-500';
 }
 
 export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number {

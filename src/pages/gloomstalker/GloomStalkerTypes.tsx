@@ -70,5 +70,5 @@ export interface HistoryRecord extends GloomStalkerAttackSheetState {
 export enum HitRollStatus {
 	CriticalHit,
 	CriticalMiss,
-	NormalHit
+	Normal
 }
