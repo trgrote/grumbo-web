@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { GetHighestHitRoll, GetHitCritStatus, IsCriticalHitOrMiss } from "./AttackSheet/AttackSheetStateFunctions";
-import { HistoryRecord, HitRollStatus } from "./GloomStalkerTypes";
+import { GetHighestHitRoll, GetCritStatus, IsCriticalHitOrMiss } from "./AttackSheet/AttackSheetStateFunctions";
+import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
 import { JSX } from "react";
 
 const rollArrayToString = (arr: number[]) => '[' + arr.join(', ') + ']';
@@ -11,7 +11,7 @@ const joinWithElement = (arr: JSX.Element[], element: JSX.Element) => arr.flatMa
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { gloomStalkerInfo } = historyRecord;
 
-	const hitStatus = GetHitCritStatus(historyRecord);
+	const hitStatus = GetCritStatus(historyRecord);
 	const totalPiercingDamage = historyRecord.piercingDamageRolls.reduce((a, value) => a + value, 0)
 		+ gloomStalkerInfo.damageModifier
 		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);
@@ -31,7 +31,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			<li>
 				<Label>Total Fire Damage: {totalFireDamage}</Label>
 			</li>
-			{hitStatus === HitRollStatus.CriticalHit && (
+			{hitStatus === CritStatus.CriticalHit && (
 				<li>
 					<Label>Apply 5 Damage to Adjacent Enemies</Label>
 				</li>
@@ -82,7 +82,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			<li>
 				<Label>Weapon Damage: d{gloomStalkerInfo.damageDie} + {gloomStalkerInfo.damageModifier} (Piercing)</Label>
 			</li>
-			{hitStatus === HitRollStatus.CriticalHit && (
+			{hitStatus === CritStatus.CriticalHit && (
 				<li>
 					<Label>Piercer added 1d8 Piercing on Critical Hit</Label>
 				</li>

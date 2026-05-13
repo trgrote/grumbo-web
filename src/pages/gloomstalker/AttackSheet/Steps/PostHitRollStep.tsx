@@ -3,8 +3,8 @@ import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { AttackSheetAction } from "../AttackSheetStateReducer";
-import { AttackSheetActionType, GloomStalkerAttackSheetState, HitRollStatus } from "../../GloomStalkerTypes";
-import { GetHitCritStatus, GetHitStatusColorClass } from "../AttackSheetStateFunctions";
+import { AttackSheetActionType, GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
+import { GetCritStatus, GetHitStatusColorClass } from "../AttackSheetStateFunctions";
 
 interface PostHitRollStepProps {
 	state: GloomStalkerAttackSheetState;
@@ -19,7 +19,7 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
 
 	const highestRoll = Math.max(...attackRolls);
-	const hitStatus = GetHitCritStatus(state);
+	const hitStatus = GetCritStatus(state);
 	const hitValueTextColorClass = GetHitStatusColorClass(state);
 	const totalToHitValue = highestRoll + attackModifier - (state.applySharpShooterPenalty ? 5 : 0);
 
@@ -35,18 +35,18 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 				<Label>To Hit Rolls: [{attackRolls.join(', ')}]</Label>
 				<Label>Attack Modifier: {attackModifier >= 0 ? `+${attackModifier}` : attackModifier}</Label>
 				{state.applySharpShooterPenalty && <Label>Sharp Shooter Penalty: -5</Label>}
-				{hitStatus === HitRollStatus.CriticalHit && (
+				{hitStatus === CritStatus.CriticalHit && (
 					<Label>Critical Hit</Label>
 				)}
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
-						{hitStatus === HitRollStatus.CriticalHit && <strong>{totalToHitValue}</strong>}
-						{hitStatus !== HitRollStatus.CriticalHit && totalToHitValue}
+						{hitStatus === CritStatus.CriticalHit && <strong>{totalToHitValue}</strong>}
+						{hitStatus !== CritStatus.CriticalHit && totalToHitValue}
 					</h2>
 				</Card>
 			</div>
 			<SheetFooter>
-				<Button onClick={confirmIsHit} disabled={hitStatus === HitRollStatus.CriticalMiss}>Hit</Button>
+				<Button onClick={confirmIsHit} disabled={hitStatus === CritStatus.CriticalMiss}>Hit</Button>
 				<Button variant="secondary" onClick={confirmIsMiss}>Missed</Button>
 				<Button variant="outline" onClick={goBack}>Back</Button>
 			</SheetFooter>

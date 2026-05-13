@@ -1,4 +1,4 @@
-import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, HitRollStatus } from "../GloomStalkerTypes";
+import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus } from "../GloomStalkerTypes";
 
 export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
 	return {
@@ -62,16 +62,16 @@ export function GetHighestHitRoll(state: GloomStalkerAttackSheetState): number {
 	return Math.max(...state.attackRolls);
 }
 
-export function GetHitCritStatus(state: GloomStalkerAttackSheetState): HitRollStatus {
+export function GetCritStatus(state: GloomStalkerAttackSheetState): CritStatus {
 	const highestRoll = GetHighestHitRoll(state);
 
 	if (highestRoll === 20) {
-		return HitRollStatus.CriticalHit;
+		return CritStatus.CriticalHit;
 	}
 	if (highestRoll === 1) {
-		return HitRollStatus.CriticalMiss;
+		return CritStatus.CriticalMiss;
 	}
-	return HitRollStatus.Normal;
+	return CritStatus.Normal;
 }
 
 export function GetHitStatusText(state: GloomStalkerAttackSheetState): string {
