@@ -4,7 +4,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Label } from "@/components/ui/label";
 import { AttackSheetAction } from "../AttackSheetStateReducer";
 import { AttackSheetActionType, GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
-import { GetCritStatus, GetHitStatusColorClass } from "../AttackSheetStateFunctions";
+import { GetCritStatus, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
 
 interface PostHitRollStepProps {
 	state: GloomStalkerAttackSheetState;
@@ -20,7 +20,7 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 
 	const highestRoll = Math.max(...attackRolls);
 	const hitStatus = GetCritStatus(state);
-	const hitValueTextColorClass = GetHitStatusColorClass(state);
+	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(state);
 	const totalToHitValue = highestRoll + attackModifier - (state.applySharpShooterPenalty ? 5 : 0);
 
 	return (

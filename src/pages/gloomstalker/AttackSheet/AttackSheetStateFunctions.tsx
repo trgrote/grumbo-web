@@ -95,6 +95,20 @@ export function GetHitStatusColorClass(state: GloomStalkerAttackSheetState): str
 	return 'text-red-500';
 }
 
+export function GetHitPreConfirmStatusColorClass(state: GloomStalkerAttackSheetState): string {
+	const highestRoll = GetHighestHitRoll(state);
+
+	if (highestRoll === 20) {
+		return 'text-blue-500';
+	}
+
+	if (highestRoll === 1) {
+		return 'text-red-500';
+	}
+
+	return 'text-green-500';
+}
+
 export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number {
 	const highestRoll = GetHighestHitRoll(state);
 	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0);
