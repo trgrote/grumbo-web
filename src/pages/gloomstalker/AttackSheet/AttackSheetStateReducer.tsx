@@ -1,83 +1,10 @@
-import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption } from './AttackSheetStateFunctions';
+import { GloomStalkerAttackSheetStateDefault, GetBestRerollOption, RollHitDice, RollDice, GetFireDamageDicePool, GetPiercingDamageDicePool, RollDie } from './AttackSheetStateFunctions';
 import { AttackSheetActionType, GloomStalkerAttackSheetState, GloomStalkerInfo } from '../GloomStalkerTypes';
 import { AttackStep } from '../GloomStalkerTypes';
 
 export interface AttackSheetAction {
 	type: AttackSheetActionType;
 	payload?: boolean | GloomStalkerInfo;
-}
-
-function rollDie(sides: number): number {
-	return Math.floor(Math.random() * sides) + 1;
-}
-
-function rollDice(dicePool: number[]): number[] {
-	return dicePool.map(sides => rollDie(sides));
-}
-
-function rollHitDice(hasAdvantage: boolean): number[] {
-	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest. 
-	// effectively giving you one extra die to roll when you have advantage.
-	const numberOfDice = hasAdvantage ? 3 : 1;
-	const rolls: number[] = [];
-	for (let i = 0; i < numberOfDice; i++) {
-		rolls.push(rollDie(20));
-	}
-
-	return rolls;
-}
-
-function getPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
-	const {
-		isDreadAmbusherExtraAttack,
-		applyHuntersMark,
-	} = state;
-
-	const {
-		damageDie
-	} = state.gloomStalkerInfo;
-
-	const highestRoll = Math.max(...state.attackRolls);
-	const isCritical = highestRoll >= 20;
-
-	const piercingDamageDicePool: number[] = [];
-
-	// Base Weapon Attack
-	piercingDamageDicePool.push(damageDie);
-
-	// Dread Ambusher Bonus: If it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional weapon damage
-	if (isDreadAmbusherExtraAttack) {
-		piercingDamageDicePool.push(damageDie);
-	}
-
-	if (applyHuntersMark) {
-		piercingDamageDicePool.push(6);   // Hunter's Mark adds 1d6 damage on hit
-	}
-
-	if (isCritical) {
-		// on a critical hit, you roll all of the attack's damage dice an additional time
-		piercingDamageDicePool.push(...piercingDamageDicePool);
-
-		// Piercer adds additonal weapon damage on crit
-		piercingDamageDicePool.push(damageDie);
-	}
-
-	return piercingDamageDicePool;
-}
-
-function getFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
-	const highestRoll = Math.max(...state.attackRolls);
-	const isCritical = highestRoll >= 20;
-
-	const fireDamageDicePool: number[] = [];
-
-	fireDamageDicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
-
-	if (isCritical) {
-		fireDamageDicePool.push(...fireDamageDicePool);   // on a critical hit, you roll all of the attack's damage dice an additional time
-	}
-
-	return fireDamageDicePool;
 }
 
 export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, action: AttackSheetAction): GloomStalkerAttackSheetState {
@@ -100,7 +27,7 @@ export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, act
 	}
 
 	if (action.type === AttackSheetActionType.RollForAttack) {
-		const attackRolls = rollHitDice(state.hasAdvantage);
+		const attackRolls = RollHitDice(state.hasAdvantage);
 		return {
 			...state,
 			attackRolls: attackRolls,
@@ -139,16 +66,16 @@ export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, act
 	}
 
 	if (action.type === AttackSheetActionType.RollForDamage) {
-		const piercingDamageDicePool = getPiercingDamageDicePool(state);
-		const fireDamageDicePool = getFireDamageDicePool(state);
+		const piercingDamageDicePool = GetPiercingDamageDicePool(state);
+		const fireDamageDicePool = GetFireDamageDicePool(state);
 
 		return {
 			...state,
 			attackStep: AttackStep.PostDamageRoll,
 			piercingDamageDicePool,
-			piercingDamageRolls: rollDice(piercingDamageDicePool),
+			piercingDamageRolls: RollDice(piercingDamageDicePool),
 			fireDamageDicePool,
-			fireDamageRolls: rollDice(fireDamageDicePool),
+			fireDamageRolls: RollDice(fireDamageDicePool),
 		};
 	}
 
@@ -157,14 +84,14 @@ export function AttackSheetStateReducer(state: GloomStalkerAttackSheetState, act
 
 		if (bestRerollOption.type === 'piercing') {
 			const newPiercingDamageRolls = [...state.piercingDamageRolls];
-			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = rollDie(bestRerollOption.dieSize);
+			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize);
 			return {
 				...state,
 				piercingDamageRolls: newPiercingDamageRolls,
 			};
 		} else if (bestRerollOption.type === 'fire') {
 			const newFireDamageRolls = [...state.fireDamageRolls];
-			newFireDamageRolls[bestRerollOption.dicePoolIndex] = rollDie(bestRerollOption.dieSize);
+			newFireDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize);
 			return {
 				...state,
 				fireDamageRolls: newFireDamageRolls,

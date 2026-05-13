@@ -105,3 +105,76 @@ export function IsCriticalHitOrMiss(state: GloomStalkerAttackSheetState): boolea
 	const highestRoll = GetHighestHitRoll(state);
 	return highestRoll === 20 || highestRoll === 1;
 }
+
+export function RollDie(sides: number): number {
+	return Math.floor(Math.random() * sides) + 1;
+}
+
+export function RollDice(dicePool: number[]): number[] {
+	return dicePool.map(sides => RollDie(sides));
+}
+
+export function RollHitDice(hasAdvantage: boolean): number[] {
+	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest. 
+	// effectively giving you one extra die to roll when you have advantage.
+	const numberOfDice = hasAdvantage ? 3 : 1;
+	const rolls: number[] = [];
+	for (let i = 0; i < numberOfDice; i++) {
+		rolls.push(RollDie(20));
+	}
+
+	return rolls;
+}
+
+export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
+	const {
+		isDreadAmbusherExtraAttack,
+		applyHuntersMark,
+	} = state;
+
+	const {
+		damageDie
+	} = state.gloomStalkerInfo;
+
+	const highestRoll = Math.max(...state.attackRolls);
+	const isCritical = highestRoll >= 20;
+
+	const piercingDamageDicePool: number[] = [];
+
+	// Base Weapon Attack
+	piercingDamageDicePool.push(damageDie);
+
+	// Dread Ambusher Bonus: If it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional weapon damage
+	if (isDreadAmbusherExtraAttack) {
+		piercingDamageDicePool.push(damageDie);
+	}
+
+	if (applyHuntersMark) {
+		piercingDamageDicePool.push(6);   // Hunter's Mark adds 1d6 damage on hit
+	}
+
+	if (isCritical) {
+		// on a critical hit, you roll all of the attack's damage dice an additional time
+		piercingDamageDicePool.push(...piercingDamageDicePool);
+
+		// Piercer adds additonal weapon damage on crit
+		piercingDamageDicePool.push(damageDie);
+	}
+
+	return piercingDamageDicePool;
+}
+
+export function GetFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
+	const highestRoll = Math.max(...state.attackRolls);
+	const isCritical = highestRoll >= 20;
+
+	const fireDamageDicePool: number[] = [];
+
+	fireDamageDicePool.push(6);   // Dragon's Wrath Longbow Stirrings adds 1d6 damage on hit
+
+	if (isCritical) {
+		fireDamageDicePool.push(...fireDamageDicePool);   // on a critical hit, you roll all of the attack's damage dice an additional time
+	}
+
+	return fireDamageDicePool;
+}
