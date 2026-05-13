@@ -4,7 +4,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Label } from "@/components/ui/label";
 import { AttackSheetAction } from "../AttackSheetStateReducer";
 import { AttackSheetActionType, GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
-import { GetCritStatus, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
+import { GetCritStatus, GetHighestHitValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
 
 interface PostHitRollStepProps {
 	state: GloomStalkerAttackSheetState;
@@ -18,10 +18,9 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 	const confirmIsMiss = () => dispatch({ type: AttackSheetActionType.ConfirmIsMiss });
 	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
 
-	const highestRoll = Math.max(...attackRolls);
 	const hitStatus = GetCritStatus(state);
 	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(state);
-	const totalToHitValue = highestRoll + attackModifier - (state.applySharpShooterPenalty ? 5 : 0);
+	const highestHitValue = GetHighestHitValue(state);
 
 	return (
 		<>
@@ -40,8 +39,8 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 				)}
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
-						{hitStatus === CritStatus.CriticalHit && <strong>{totalToHitValue}</strong>}
-						{hitStatus !== CritStatus.CriticalHit && totalToHitValue}
+						{hitStatus === CritStatus.CriticalHit && <strong>{highestHitValue}</strong>}
+						{hitStatus !== CritStatus.CriticalHit && highestHitValue}
 					</h2>
 				</Card>
 			</div>
