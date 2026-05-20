@@ -34,22 +34,6 @@ export interface PostDamageRollInfo {
 	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
 
-export enum AttackSheetActionType {
-	Reset,
-	SetAdvantage,
-	SetApplySharpShooterPenalty,
-	RollForAttack,
-	ConfirmIsHit,
-	ConfirmIsMiss,
-	SetIsDreadAmbusherExtraAttack,
-	SetApplyHuntersMark,
-	RollForDamage,
-	RerollPiercingDamageDie,
-	ConfirmDamage,
-	GoBack,
-	AttackAgain,
-}
-
 export enum AttackStep {
 	PreHitRoll,
 	PostHitRoll,

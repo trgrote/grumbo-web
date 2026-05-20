@@ -1,17 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
-import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import { AttackSheetAction } from "../AttackSheetStateReducer";
+import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import { CreateHistoryRecordFromState } from "../AttackSheetStateFunctions";
 import AttackHistoryDetails from "../../AttackHistoryDetails";
+import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
+import AttackAgainCommand from "../Commands/AttackAgainCommand";
 
 interface ResultsStepProps {
 	state: GloomStalkerAttackSheetState;
-	dispatch: React.Dispatch<AttackSheetAction>;
+	dispatch: React.Dispatch<IGSAttackSheetCommand>;
 }
 
 export default function ResultsStep({ state, dispatch }: ResultsStepProps) {
-	const rollAgain = () => dispatch({ type: AttackSheetActionType.AttackAgain });
+	const rollAgain = () => dispatch(new AttackAgainCommand());
 	const history = CreateHistoryRecordFromState(state);
 
 	return (

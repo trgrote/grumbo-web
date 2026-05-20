@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { JSX, useEffect, useReducer } from "react";
-import { AttackSheetActionType, AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
+import { AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer.tsx";
 import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
 import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
@@ -9,6 +9,7 @@ import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
 import { CreateHistoryRecordFromState, GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
 import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
+import ResetCommand from "./AttackSheet/Commands/ResetCommand.tsx";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -34,10 +35,7 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 	}, [state.attackStep]);
 
 	const resetSheet = (): void => {
-		dispatch({
-			type: AttackSheetActionType.Reset,
-			payload: gloomStalkerInfo
-		});
+		dispatch(new ResetCommand(gloomStalkerInfo));
 	};
 
 	useEffect(resetSheet, [gloomStalkerInfo]);

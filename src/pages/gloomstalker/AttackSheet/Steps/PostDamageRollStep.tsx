@@ -2,23 +2,25 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { JSX, useState } from "react";
-import { AttackSheetActionType } from "../../GloomStalkerTypes";
-import { AttackSheetAction } from "../AttackSheetStateReducer";
 import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
 import { GetBestRerollOption } from "../AttackSheetStateFunctions";
+import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
+import GoBackCommand from "../Commands/GoBackCommand";
+import ConfirmDamageCommand from "../Commands/ConfirmDamageCommand";
+import RerollPiercingDamageDieCommand from "../Commands/RerollPiercingDamageDieCommand";
 
 interface PostDamageRollStepProps {
 	state: GloomStalkerAttackSheetState;
-	dispatch: React.Dispatch<AttackSheetAction>;
+	dispatch: React.Dispatch<IGSAttackSheetCommand>;
 }
 
 export default function PostDamageRollStep({ state, dispatch }: PostDamageRollStepProps): JSX.Element {
 	// Only allow reroll once
 	const [rereollUsed, setRerollUsed] = useState(false);
 
-	const rerollDamageDie = () => dispatch({ type: AttackSheetActionType.RerollPiercingDamageDie });
-	const confirmDamage = () => dispatch({ type: AttackSheetActionType.ConfirmDamage });
-	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
+	const rerollDamageDie = () => dispatch(new RerollPiercingDamageDieCommand());
+	const confirmDamage = () => dispatch(new ConfirmDamageCommand());
+	const goBack = () => dispatch(new GoBackCommand());
 
 	const handleReroll = (): void => {
 		rerollDamageDie();
