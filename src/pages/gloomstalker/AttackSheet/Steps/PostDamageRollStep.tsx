@@ -4,10 +4,12 @@ import { Label } from "@/components/ui/label";
 import { JSX, useState } from "react";
 import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
 import { GetBestRerollOption } from "../AttackSheetStateFunctions";
-import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
-import GoBackCommand from "../Commands/GoBackCommand";
-import ConfirmDamageCommand from "../Commands/ConfirmDamageCommand";
-import RerollPiercingDamageDieCommand from "../Commands/RerollPiercingDamageDieCommand";
+import {
+	IGSAttackSheetCommand,
+	GoBackCommand,
+	ConfirmDamageCommand,
+	RerollPiercingDamageDieCommand
+} from "../Commands/AttackSheetCommands";
 
 interface PostDamageRollStepProps {
 	state: GloomStalkerAttackSheetState;

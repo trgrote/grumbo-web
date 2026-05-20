@@ -3,11 +3,13 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
-import GoBackCommand from "../Commands/GoBackCommand";
-import RollForDamageCommand from "../Commands/RollForDamageCommand";
-import SetApplyHuntersMarkCommand from "../Commands/SetApplyHuntersMarkCommand";
-import SetIsDreadAmbusherExtraAttackCommand from "../Commands/SetIsDreadAmbusherExtraAttackCommand";
+import {
+	IGSAttackSheetCommand,
+	GoBackCommand,
+	RollForDamageCommand,
+	SetApplyHuntersMarkCommand,
+	SetIsDreadAmbusherExtraAttackCommand
+} from "../Commands/AttackSheetCommands";
 
 interface PreDamageRollStepProps {
 	state: GloomStalkerAttackSheetState;

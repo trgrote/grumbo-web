@@ -3,8 +3,10 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import { CreateHistoryRecordFromState } from "../AttackSheetStateFunctions";
 import AttackHistoryDetails from "../../AttackHistoryDetails";
-import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
-import AttackAgainCommand from "../Commands/AttackAgainCommand";
+import {
+	IGSAttackSheetCommand,
+	AttackAgainCommand
+} from "../Commands/AttackSheetCommands";
 
 interface ResultsStepProps {
 	state: GloomStalkerAttackSheetState;

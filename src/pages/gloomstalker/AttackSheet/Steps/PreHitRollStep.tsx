@@ -3,10 +3,12 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
-import SetAdvantageCommand from "../Commands/SetAdvantageCommand";
-import RollForAttackCommand from "../Commands/RollForAttackCommand";
-import SetApplySharpShooterPenaltyCommand from "../Commands/SetApplySharpShooterPenaltyCommand";
+import {
+	IGSAttackSheetCommand,
+	SetAdvantageCommand,
+	RollForAttackCommand,
+	SetApplySharpShooterPenaltyCommand
+} from "../Commands/AttackSheetCommands";
 
 interface PreHitRollStepProps {
 	state: GloomStalkerAttackSheetState;

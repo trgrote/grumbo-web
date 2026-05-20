@@ -4,10 +4,12 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Label } from "@/components/ui/label";
 import { GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
 import { GetCritStatus, GetHighestHitValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
-import IGSAttackSheetCommand from "../Commands/IGSAttackSheetCommand";
-import GoBackCommand from "../Commands/GoBackCommand";
-import ConfirmIsMissCommand from "../Commands/ConfirmIsMissCommand";
-import ConfirmIsHitCommand from "../Commands/ConfirmIsHitCommand";
+import {
+	IGSAttackSheetCommand,
+	GoBackCommand,
+	ConfirmIsMissCommand,
+	ConfirmIsHitCommand
+} from "../Commands/AttackSheetCommands";
 
 interface PostHitRollStepProps {
 	state: GloomStalkerAttackSheetState;

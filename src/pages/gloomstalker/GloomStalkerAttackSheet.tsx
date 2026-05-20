@@ -9,7 +9,7 @@ import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
 import { CreateHistoryRecordFromState, GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
 import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
-import ResetCommand from "./AttackSheet/Commands/ResetCommand.tsx";
+import { ResetCommand } from "./AttackSheet/Commands/AttackSheetCommands";
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
