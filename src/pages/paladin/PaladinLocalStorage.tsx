@@ -1,36 +1,28 @@
-import { PaladinLocalStorage } from "./PaladinTypes";
+import { GetLocalStorage, ILocalStorageItem, SaveLocalStorage } from "@/utils/LocalStorage";
+import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 
 const storageKey = 'paladin-storage';
 const storageVersion = '1.0';
+const defaultItem = {
+	paladinInfo: {
+		attackModifier: 12,
+		damageDie: 8,
+		damageModifier: 9,
+		hasImprovedDS: true
+	},
+	attackResults: []
+};
 
-// Get Local Storage or Default
-export function GetLocalStorage(): PaladinLocalStorage {
-	const savedStorageStr = localStorage.getItem(storageKey);
-
-	// if we found a value
-	if (savedStorageStr) {
-		const savedStorage = JSON.parse(savedStorageStr);
-
-		// and if the storage matches the schema version we expect
-		if (savedStorage.storageVersion === storageVersion) {
-			return savedStorage;
-		}
-	}
-
-	// return default
-	return {
-		storageVersion,
-		paladinInfo: {
-			attackModifier: 12,
-			damageDie: 8,
-			damageModifier: 9,
-			hasImprovedDS: true
-		},
-		attackResults: []
-	};
+// Stored Local Data
+export interface PaladinLocalStorage extends ILocalStorageItem {
+	paladinInfo: PaladinInfo;
+	attackResults: RollHistoryRecord[];
 }
 
-export function SaveLocalStorage(paladinLocalStorage: PaladinLocalStorage) {
-	paladinLocalStorage.storageVersion = storageVersion;
-	localStorage.setItem(storageKey, JSON.stringify(paladinLocalStorage));
+export function GetLocalPaladinStorage(): PaladinLocalStorage {
+	return GetLocalStorage<PaladinLocalStorage>(storageKey, storageVersion, defaultItem);
+}
+
+export function SaveLocalPaladinStorage(paladinLocalStorage: PaladinLocalStorage) {
+	SaveLocalStorage<PaladinLocalStorage>(storageKey, storageVersion, paladinLocalStorage);
 }

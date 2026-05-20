@@ -1,0 +1,32 @@
+import { GetLocalStorage, ILocalStorageItem, SaveLocalStorage } from "@/utils/LocalStorage";
+import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
+
+const storageKey = 'gloomstalker-storage';
+const storageVersion = '0.1';
+const defaultItem = {
+	gloomStalkerInfo: {
+		attackModifier: 14,
+		damageDie: 8,
+		damageModifier: 9,
+		hasDreadAmbusher: true,
+		hasStalkersFlurry: true,
+		hasSharpShooter: true,
+		hasPiercer: true,
+		hasElvenAccuracy: true,
+		hasDragonsWrathLongbowStirring: true,
+	},
+	historyRecords: []
+};
+
+export interface GloomStalkerLocalStorage extends ILocalStorageItem {
+	gloomStalkerInfo: GloomStalkerInfo;
+	historyRecords: HistoryRecord[];
+}
+
+export function GetLocalGloomStalkerStorage(): GloomStalkerLocalStorage {
+	return GetLocalStorage<GloomStalkerLocalStorage>(storageKey, storageVersion, defaultItem);
+}
+
+export function SaveLocalGloomStalkerStorage(gloomStalkerLocalStorage: GloomStalkerLocalStorage) {
+	SaveLocalStorage<GloomStalkerLocalStorage>(storageKey, storageVersion, gloomStalkerLocalStorage);
+}

@@ -2,16 +2,28 @@
 This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
 
 # TODO
-- [ ] Add input validation to only allow integers for modifier fields
-- [ ] Implement Gloom Stalker Attack Page
-	- [ ] Refactor PC Info and History Tabs to work with both Paladin and Gloomstalker
-	- [ ] Refactor Attack Sheet/Modal to work with both Paladin and Gloomstalker
+- Add input validation to only allow integers for modifier fields
+- Implement Gloom Stalker Attack Page (https://www.dndbeyond.com/characters/75379398)
+- Add Crit miss check to automatically miss (disable Hit button) and display critical miss in special manner.
+
+## Gloom Stalker Questions
+- For Dread Amubusher, if you don't attack your first turn of combat, does that mean you lose out on that additonal attack? I.e. It's not your first attack of combat, it's only your attack on the first round.
+- I think, if you are attacking with a bow and have advantage, you basically get super advantage where you can roll with 3 dice. Elven Accuracy: "Whenever you have advantage on an attack roll ..., you can reroll one of the dice once." Assuming you always re-roll the highest die, that's effectivlty rolling 3 dice and taking the highest.
+- Piercer: Reroll Damage (Special)
+Once per turn, when you hit a creature with an attack that deals piercing damage, you can reroll one of the attack’s damage dice, and you must use the new roll.
+	- The rule doesn't specify you must re-roll a damage die of the piercing damage. For example, if you also deal an additonal d6 damage, you could technically re-roll that value. Although, with the condition, the spirit of the rule seems like it ought to be one of the piercing damage's die.
+- Laura's version of the Dragon's Wrath Longbow _also_ does fire damage, but damage can only be one type, so which damage die counts for which type?
+- Piercer - Critical hit
+	- That extra d8 is applied _after_ the other dice are doubled (https://www.reddit.com/r/dndnext/comments/nmbiqa/piercer_feat_double_dice/).
 
 # Test Locally
 `npm run dev`
 
 # Deploy
-`docker compose up -d --build`
+- site location: http://www.grumbo.me:3000/
+- In `/var/www/grumbo-web`: 
+	- `git pull` 
+	- `docker compose up -d --build`
 
 # React + TypeScript + Vite
 

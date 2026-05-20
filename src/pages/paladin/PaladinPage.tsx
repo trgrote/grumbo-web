@@ -3,35 +3,35 @@ import PaladinHistoryTab from "./PaladinHistoryTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PaladinInfoTab from "./PaladinInfoTab";
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
-import { GetLocalStorage, SaveLocalStorage } from "./PaladinLocalStorage";
+import { GetLocalPaladinStorage, SaveLocalPaladinStorage } from "./PaladinLocalStorage";
 import RollResultView from "./RollResultView";
 
-function Paladin() {
+function PaladinPage() {
 	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>(() => {
-		const localStorage = GetLocalStorage();
+		const localStorage = GetLocalPaladinStorage();
 		return localStorage.paladinInfo;
 	});
 
 	const [attackResults, setAttackResults] = useState<RollHistoryRecord[]>(() => {
-		const localStorage = GetLocalStorage();
+		const localStorage = GetLocalPaladinStorage();
 		return localStorage.attackResults;
 	});
 
 	// On State change, save results to local storage
 	useEffect(() => {
-		SaveLocalStorage({
+		SaveLocalPaladinStorage({
 			paladinInfo,
 			attackResults
 		});
 	}, [paladinInfo, attackResults]);
 
 	return (
-		<Tabs defaultValue="paladinInfo">
+		<Tabs defaultValue="info">
 			<TabsList>
-				<TabsTrigger value="paladinInfo">Paladin Info</TabsTrigger>
+				<TabsTrigger value="info">Paladin Info</TabsTrigger>
 				<TabsTrigger value="history">History</TabsTrigger>
 			</TabsList>
-			<TabsContent value="paladinInfo">
+			<TabsContent value="info">
 				<PaladinInfoTab
 					paladinInfo={paladinInfo}
 					onChange={setPaladinInfo}
@@ -46,4 +46,4 @@ function Paladin() {
 	);
 }
 
-export default Paladin;
+export default PaladinPage;
