@@ -2,21 +2,27 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { AttackSheetActionType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import { AttackSheetAction } from "../AttackSheetStateReducer";
+import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
+import {
+	IGSAttackSheetCommand,
+	GoBackCommand,
+	RollForDamageCommand,
+	SetApplyHuntersMarkCommand,
+	SetIsDreadAmbusherExtraAttackCommand
+} from "../Commands/AttackSheetCommands";
 
 interface PreDamageRollStepProps {
 	state: GloomStalkerAttackSheetState;
-	dispatch: React.Dispatch<AttackSheetAction>;
+	dispatch: React.Dispatch<IGSAttackSheetCommand>;
 }
 
 export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStepProps) {
 	const isDreadAmbusherExtraAttack = state.isDreadAmbusherExtraAttack;
-	const setIsDreadAmbusherExtraAttack = (value: boolean) => dispatch({ type: AttackSheetActionType.SetIsDreadAmbusherExtraAttack, payload: value });
+	const setIsDreadAmbusherExtraAttack = (value: boolean) => dispatch(new SetIsDreadAmbusherExtraAttackCommand(value));
 	const applyHuntersMark = state.applyHuntersMark;
-	const setApplyHuntersMark = (value: boolean) => dispatch({ type: AttackSheetActionType.SetApplyHuntersMark, payload: value });
-	const rollForDamage = () => dispatch({ type: AttackSheetActionType.RollForDamage });
-	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
+	const setApplyHuntersMark = (value: boolean) => dispatch(new SetApplyHuntersMarkCommand(value));
+	const rollForDamage = () => dispatch(new RollForDamageCommand());
+	const goBack = () => dispatch(new GoBackCommand());
 
 	return (
 		<>

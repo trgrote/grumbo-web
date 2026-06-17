@@ -2,21 +2,26 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { AttackSheetAction } from "../AttackSheetStateReducer";
-import { AttackSheetActionType, GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
+import { GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
 import { GetCritStatus, GetHighestHitValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
+import {
+	IGSAttackSheetCommand,
+	GoBackCommand,
+	ConfirmIsMissCommand,
+	ConfirmIsHitCommand
+} from "../Commands/AttackSheetCommands";
 
 interface PostHitRollStepProps {
 	state: GloomStalkerAttackSheetState;
-	dispatch: React.Dispatch<AttackSheetAction>;
+	dispatch: React.Dispatch<IGSAttackSheetCommand>;
 }
 
 export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProps) {
 	const attackRolls = state.attackRolls;
 	const attackModifier = state.gloomStalkerInfo.attackModifier;
-	const confirmIsHit = () => dispatch({ type: AttackSheetActionType.ConfirmIsHit });
-	const confirmIsMiss = () => dispatch({ type: AttackSheetActionType.ConfirmIsMiss });
-	const goBack = () => dispatch({ type: AttackSheetActionType.GoBack });
+	const confirmIsHit = () => dispatch(new ConfirmIsHitCommand());
+	const confirmIsMiss = () => dispatch(new ConfirmIsMissCommand());
+	const goBack = () => dispatch(new GoBackCommand());
 
 	const hitStatus = GetCritStatus(state);
 	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(state);
