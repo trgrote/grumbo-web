@@ -45,6 +45,7 @@ export enum AttackStep {
 export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRollInfo, PreDamageRollInfo, PostDamageRollInfo {
 	attackStep: AttackStep;
 	gloomStalkerInfo: GloomStalkerInfo;
+	hasUsedReroll: boolean;
 }
 
 export interface HistoryRecord extends GloomStalkerAttackSheetState {

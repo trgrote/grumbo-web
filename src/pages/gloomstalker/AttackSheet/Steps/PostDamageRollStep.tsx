@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { JSX, useState } from "react";
+import { JSX } from "react";
 import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
 import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 import {
@@ -17,16 +17,12 @@ interface PostDamageRollStepProps {
 }
 
 export default function PostDamageRollStep({ state, dispatch }: PostDamageRollStepProps): JSX.Element {
-	// Only allow reroll once
-	const [rereollUsed, setRerollUsed] = useState(false);
-
 	const rerollDamageDie = () => dispatch(new RerollPiercingDamageDieCommand());
 	const confirmDamage = () => dispatch(new ConfirmDamageCommand());
 	const goBack = () => dispatch(new GoBackCommand());
 
 	const handleReroll = (): void => {
 		rerollDamageDie();
-		setRerollUsed(true);
 	};
 
 	const formatDieRolls = (rolls: number[], dicePool: number[]): string => {
@@ -37,7 +33,7 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 	const alreadyBestRolls = bestRerollOption.roll === bestRerollOption.dieSize;
 	let rerollButtonText = `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`;
 
-	if (rereollUsed) {
+	if (state.hasUsedReroll) {
 		rerollButtonText = "Reroll Used";
 	} else if (alreadyBestRolls) {
 		rerollButtonText = "Already best rolls!";
@@ -54,7 +50,7 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<Label>Piercing Damage Rolls: [{formatDieRolls(state.piercingDamageRolls, state.piercingDamageDicePool)}]</Label>
 				<Label>Fire Damage Rolls: [{formatDieRolls(state.fireDamageRolls, state.fireDamageDicePool)}]</Label>
-				<Button onClick={handleReroll} disabled={rereollUsed || alreadyBestRolls}>
+				<Button onClick={handleReroll} disabled={state.hasUsedReroll || alreadyBestRolls}>
 					{rerollButtonText}
 				</Button>
 			</div>

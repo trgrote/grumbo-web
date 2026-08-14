@@ -14,6 +14,7 @@ export default class RollForDamageCommand implements IGSAttackSheetCommand {
 			piercingDamageRolls: RollDice(piercingDamageDicePool),
 			fireDamageDicePool,
 			fireDamageRolls: RollDice(fireDamageDicePool),
+			hasUsedReroll: false,
 		};
 	}
 }
