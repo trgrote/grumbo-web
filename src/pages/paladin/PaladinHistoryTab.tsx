@@ -29,8 +29,8 @@ export default function PaladinHistoryTab({ attackResults, onClearHistory, rollR
 				<ScrollArea className="h-120 rounded-md border">
 					<div className="p-4">
 						{
-							attackResults.map((attackResult, i) =>
-								<React.Fragment key={i}>
+							attackResults.map((attackResult) =>
+								<React.Fragment key={attackResult.timestamp}>
 									{rollRecordRenderer(attackResult)}
 									<Separator className="my-2" />
 								</React.Fragment>

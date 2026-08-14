@@ -31,4 +31,5 @@ export interface RollDamageResult {
 
 export interface RollHistoryRecord extends PaladinInfo, AttackInfo, AttackRollResult, RollDamageInfo, RollDamageResult {
 	isHit: boolean;
+	timestamp: number;
 }
