@@ -3,22 +3,30 @@ import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
 
 export default class GoBackCommand implements IGSAttackSheetCommand {
 	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
-		const prevStep = (() => {
-			switch (prevState.attackStep) {
-				case AttackStep.PostHitRoll:
-					return AttackStep.PreHitRoll;
-				case AttackStep.PreDamageRoll:
-					return AttackStep.PostHitRoll;
-				case AttackStep.PostDamageRoll:
-					return AttackStep.PreDamageRoll;
-				default:
-					return prevState.attackStep;
-			}
-		})();
-
-		return {
-			...prevState,
-			attackStep: prevStep,
-		};
+		switch (prevState.attackStep) {
+			case AttackStep.PostHitRoll:
+				return {
+					...prevState,
+					attackStep: AttackStep.PreHitRoll,
+					attackRolls: [],
+					isHit: false,
+				};
+			case AttackStep.PreDamageRoll:
+				return {
+					...prevState,
+					attackStep: AttackStep.PostHitRoll,
+				};
+			case AttackStep.PostDamageRoll:
+				return {
+					...prevState,
+					attackStep: AttackStep.PreDamageRoll,
+					piercingDamageRolls: [],
+					fireDamageRolls: [],
+					piercingDamageDicePool: [],
+					fireDamageDicePool: [],
+				};
+			default:
+				return prevState;
+		}
 	}
 }
