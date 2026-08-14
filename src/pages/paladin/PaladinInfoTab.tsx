@@ -28,6 +28,7 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 	const { attackModifier, damageDie, damageModifier, hasImprovedDS } = paladinInfo;
 
 	const setAttackModifier = (newValue: number) => {
+		if (Number.isNaN(newValue)) return;
 		onChange({
 			...paladinInfo,
 			attackModifier: newValue
@@ -35,6 +36,7 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 	};
 
 	const setDamageDie = (newValue: number) => {
+		if (Number.isNaN(newValue)) return;
 		onChange({
 			...paladinInfo,
 			damageDie: newValue
@@ -42,6 +44,7 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 	};
 
 	const setDamageModifier = (newValue: number) => {
+		if (Number.isNaN(newValue)) return;
 		onChange({
 			...paladinInfo,
 			damageModifier: newValue
