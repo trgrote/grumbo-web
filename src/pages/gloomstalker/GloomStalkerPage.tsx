@@ -7,15 +7,11 @@ import AttackHistoryView from "./AttackHistoryView";
 import GloomStalkerHistoryTab from "./GloomStalkerHistoryTab";
 
 function GloomStalkerPage() {
-	const [gloomStalkerInfo, setGloomStalkerInfo] = useState<GloomStalkerInfo>(() => {
-		const localStorage = GetLocalGloomStalkerStorage();
-		return localStorage.gloomStalkerInfo;
-	});
+	const [localStorageData] = useState(() => GetLocalGloomStalkerStorage());
 
-	const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>(() => {
-		const localStorage = GetLocalGloomStalkerStorage();
-		return localStorage.historyRecords;
-	});
+	const [gloomStalkerInfo, setGloomStalkerInfo] = useState<GloomStalkerInfo>(localStorageData.gloomStalkerInfo);
+
+	const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>(localStorageData.historyRecords);
 
 	// On State change, save results to local storage
 	useEffect(() => {
