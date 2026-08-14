@@ -8,12 +8,6 @@ const defaultItem = {
 		attackModifier: 14,
 		damageDie: 8,
 		damageModifier: 9,
-		hasDreadAmbusher: true,
-		hasStalkersFlurry: true,
-		hasSharpShooter: true,
-		hasPiercer: true,
-		hasElvenAccuracy: true,
-		hasDragonsWrathLongbowStirring: true,
 	},
 	historyRecords: []
 };
