@@ -7,15 +7,11 @@ import { GetLocalPaladinStorage, SaveLocalPaladinStorage } from "./PaladinLocalS
 import RollResultView from "./RollResultView";
 
 function PaladinPage() {
-	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>(() => {
-		const localStorage = GetLocalPaladinStorage();
-		return localStorage.paladinInfo;
-	});
+	const [localStorageData] = useState(() => GetLocalPaladinStorage());
 
-	const [attackResults, setAttackResults] = useState<RollHistoryRecord[]>(() => {
-		const localStorage = GetLocalPaladinStorage();
-		return localStorage.attackResults;
-	});
+	const [paladinInfo, setPaladinInfo] = useState<PaladinInfo>(localStorageData.paladinInfo);
+
+	const [attackResults, setAttackResults] = useState<RollHistoryRecord[]>(localStorageData.attackResults);
 
 	// On State change, save results to local storage
 	useEffect(() => {
