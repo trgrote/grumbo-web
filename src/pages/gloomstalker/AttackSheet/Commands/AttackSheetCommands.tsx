@@ -7,7 +7,7 @@ export { default as ConfirmIsMissCommand } from "./ConfirmIsMissCommand";
 export { default as GoBackCommand } from "./GoBackCommand";
 export { default as NullCommand } from "./NullCommand";
 export { default as ResetCommand } from "./ResetCommand";
-export { default as RerollPiercingDamageDieCommand } from "./RerollPiercingDamageDieCommand";
+export { default as RerollWorstDamageDieCommand } from "./RerollWorstDamageDieCommand";
 export { default as RollForAttackCommand } from "./RollForAttackCommand";
 export { default as RollForDamageCommand } from "./RollForDamageCommand";
 export { default as SetAdvantageCommand } from "./SetAdvantageCommand";
