@@ -1,12 +1,12 @@
 # https://thedkpatel.medium.com/dockerizing-react-application-built-with-vite-a-simple-guide-4c41eb09defa
 
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json package-lock.json .
 
-RUN npm install
+RUN npm ci
 
 RUN npm i -g serve
 
