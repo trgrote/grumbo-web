@@ -29,8 +29,8 @@ export default function GloomStalkerHistoryTab({ historyRecords, onClearHistory,
 				<ScrollArea className="h-120 rounded-md border">
 					<div className="p-4">
 						{
-							historyRecords.map((historyRecord, i) =>
-								<React.Fragment key={i}>
+							historyRecords.map((historyRecord) =>
+								<React.Fragment key={historyRecord.timestamp}>
 									{rollRecordRenderer(historyRecord)}
 									<Separator className="my-2" />
 								</React.Fragment>
