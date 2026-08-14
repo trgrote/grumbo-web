@@ -34,8 +34,10 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 	};
 
 	const bestRerollOption = GetBestRerollOption(state);
-	const alreadyBestRolls = bestRerollOption.roll === bestRerollOption.dieSize;
-	let rerollButtonText = `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`;
+	const alreadyBestRolls = bestRerollOption === null;
+	let rerollButtonText = bestRerollOption
+		? `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`
+		: "Already best rolls!";
 
 	if (rereollUsed) {
 		rerollButtonText = "Reroll Used";
