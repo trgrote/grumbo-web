@@ -8,7 +8,7 @@ import {
 	IGSAttackSheetCommand,
 	GoBackCommand,
 	ConfirmDamageCommand,
-	RerollPiercingDamageDieCommand
+	RerollWorstDamageDieCommand
 } from "../Commands/AttackSheetCommands";
 
 interface PostDamageRollStepProps {
@@ -17,7 +17,7 @@ interface PostDamageRollStepProps {
 }
 
 export default function PostDamageRollStep({ state, dispatch }: PostDamageRollStepProps): JSX.Element {
-	const rerollDamageDie = () => dispatch(new RerollPiercingDamageDieCommand());
+	const rerollDamageDie = () => dispatch(new RerollWorstDamageDieCommand());
 	const confirmDamage = () => dispatch(new ConfirmDamageCommand());
 	const goBack = () => dispatch(new GoBackCommand());
 

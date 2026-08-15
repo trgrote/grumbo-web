@@ -14,7 +14,6 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 		piercingDamageDicePool: [],
 		fireDamageDicePool: [],
 		fireDamageRolls: [],
-		applyDragonSlumberDamage: false,
 		hasUsedReroll: false
 	};
 }
@@ -174,7 +173,7 @@ export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): 
 }
 
 export function GetFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
-	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;;
+	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;
 
 	const fireDamageDicePool: number[] = [];
 

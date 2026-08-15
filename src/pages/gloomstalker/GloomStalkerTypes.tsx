@@ -31,7 +31,6 @@ export interface PostDamageRollInfo {
 	piercingDamageRolls: number[];
 	fireDamageDicePool: number[];
 	fireDamageRolls: number[];
-	applyDragonSlumberDamage: boolean;  // apply 5 damage to nearby creatures? Only triggered on crit
 }
 
 export enum AttackStep {

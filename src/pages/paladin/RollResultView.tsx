@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { RollHistoryRecord } from "./PaladinTypes";
 import { SpellSlotToString } from "./PaladinFunctions";
@@ -18,7 +18,7 @@ const RollResultView = (props: RollResultProps) => {
 
 	const maxAttackRoll = Math.max(...toHitValues);
 
-	const totalWeaponDamage = weaponDamageRolls.reduce((a, value) => a + value, 0);
+	const totalWeaponDamage = weaponDamageRolls.reduce((a, value) => a + value, 0) + props.damageModifier;
 	const totalDSDamage = divineSmiteDamageRolls.reduce((a, value) => a + value, 0);
 	const totalDamage = totalWeaponDamage + totalDSDamage;
 

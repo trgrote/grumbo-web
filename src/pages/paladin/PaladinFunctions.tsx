@@ -18,13 +18,13 @@ export function RollAttack(attackInfo: AttackInfo): AttackRollResult {
 }
 
 export function RollDamage(info: RollDamageInfo): RollDamageResult {
-	const { isCritical, damageDie, damageModifier, hasImprovedDS, isTargetFiendOrUndead, spellSlotUsed } = info;
+	const { isCritical, damageDie, hasImprovedDS, isTargetFiendOrUndead, spellSlotUsed } = info;
 
 	// Perform Weapon Damage
 	const numWeaponDamageRolls = isCritical ? 2 : 1;
 	const weaponDamageRolls = Array.from(
 		{ length: numWeaponDamageRolls },
-		() => Math.ceil(Math.random() * damageDie) + damageModifier
+		() => Math.ceil(Math.random() * damageDie)
 	);
 
 	// Perform Divine Smite Damage Rolls
