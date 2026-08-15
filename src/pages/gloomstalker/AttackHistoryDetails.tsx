@@ -2,11 +2,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { GetHighestHitRoll, GetCritStatus, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
-import { JSX } from "react";
+import { cloneElement, Fragment, JSX } from "react";
 
 const rollArrayToString = (arr: number[]) => '[' + arr.join(', ') + ']';
 const diceArrayToString = (arr: number[]) => '[' + arr.map(die => `d${die}`).join(', ') + ']';
-const joinWithElement = (arr: JSX.Element[], element: JSX.Element) => arr.flatMap((item, index) => index < arr.length - 1 ? [item, element] : [item]);
+const joinWithElement = (arr: JSX.Element[], element: JSX.Element) =>
+	arr.flatMap((item, index) =>
+		index < arr.length - 1 ? [item, cloneElement(element, { key: `separator-${index}` })] : [item]
+	);
 
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { gloomStalkerInfo } = historyRecord;
@@ -19,7 +22,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const totalDamage = totalPiercingDamage + totalFireDamage;
 
 	const damageSummary = (
-		<>
+		<Fragment key="damageSummary">
 			<li>
 				<Label>Total Damage: {totalDamage}</Label>
 			</li>
@@ -34,22 +37,22 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 					<Label>Apply 5 Damage to Adjacent Enemies</Label>
 				</li>
 			)}
-		</>
+		</Fragment>
 	);
 
 	const hitSummary = (
-		<>
+		<Fragment key="hitSummary">
 			<li>
 				<Label>{GetHitStatusText(historyRecord)}</Label>
 			</li>
-		</>
+		</Fragment>
 	);
 
 	const highestHitRoll = GetHighestHitRoll(historyRecord);
 	const totalHitValue = highestHitRoll + gloomStalkerInfo.attackModifier + (historyRecord.applySharpShooterPenalty ? -5 : 0);
 
 	const toHitSummary = (
-		<>
+		<Fragment key="toHitSummary">
 			<li>
 				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {gloomStalkerInfo.attackModifier}{historyRecord.applySharpShooterPenalty ? ' - 5' : ''})</Label>
 			</li>
@@ -72,11 +75,11 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 					<Label>Sharp Shooter Penalty: -5</Label>
 				</li>
 			)}
-		</>
+		</Fragment>
 	);
 
 	const damageRolls = (
-		<>
+		<Fragment key="damageRolls">
 			<li>
 				<Label>Weapon Damage: d{gloomStalkerInfo.damageDie} + {gloomStalkerInfo.damageModifier} (Piercing)</Label>
 			</li>
@@ -112,7 +115,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 					<Label>Sharp Shooter Bonus: +10 Piercing</Label>
 				</li>
 			)}
-		</>
+		</Fragment>
 	);
 
 	// Build the detail array in the order we want to display the details, and conditionally include details based on the history record properties
