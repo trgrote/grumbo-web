@@ -1,5 +1,6 @@
 import { GloomStalkerAttackSheetState, AttackStep } from "../../GloomStalkerTypes";
-import { GetFireDamageDicePool, GetPiercingDamageDicePool, RollDice } from "../AttackSheetStateFunctions";
+import { GetFireDamageDicePool, GetPiercingDamageDicePool } from "../AttackSheetStateFunctions";
+import { RollDice } from "@/utils/Dice";
 import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
 
 export default class RollForDamageCommand implements IGSAttackSheetCommand {

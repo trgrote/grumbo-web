@@ -2,14 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { GetHighestHitRoll, GetCritStatus, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
-import { cloneElement, Fragment, JSX } from "react";
+import { Fragment } from "react";
+import { JoinWithElement, RollArrayToString } from "@/utils/Formatting";
 
-const rollArrayToString = (arr: number[]) => '[' + arr.join(', ') + ']';
 const diceArrayToString = (arr: number[]) => '[' + arr.map(die => `d${die}`).join(', ') + ']';
-const joinWithElement = (arr: JSX.Element[], element: JSX.Element) =>
-	arr.flatMap((item, index) =>
-		index < arr.length - 1 ? [item, cloneElement(element, { key: `separator-${index}` })] : [item]
-	);
 
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { gloomStalkerInfo } = historyRecord;
@@ -62,7 +58,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 				</li>
 			)}
 			<li>
-				<Label>Hit Rolls: {rollArrayToString(historyRecord.attackRolls)}</Label>
+				<Label>Hit Rolls: {RollArrayToString(historyRecord.attackRolls)}</Label>
 			</li>
 			<li>
 				<Label>Highest Hit Roll: {highestHitRoll}</Label>
@@ -102,13 +98,13 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 				<Label>Piercing Damage Dice: {diceArrayToString(historyRecord.piercingDamageDicePool)}</Label>
 			</li>
 			<li>
-				<Label>Piercing Damage Rolls: {rollArrayToString(historyRecord.piercingDamageRolls)}</Label>
+				<Label>Piercing Damage Rolls: {RollArrayToString(historyRecord.piercingDamageRolls)}</Label>
 			</li>
 			<li>
 				<Label>Fire Damage Dice: {diceArrayToString(historyRecord.fireDamageDicePool)}</Label>
 			</li>
 			<li>
-				<Label>Fire Damage Rolls: {rollArrayToString(historyRecord.fireDamageRolls)}</Label>
+				<Label>Fire Damage Rolls: {RollArrayToString(historyRecord.fireDamageRolls)}</Label>
 			</li>
 			{historyRecord.applySharpShooterPenalty && (
 				<li>
@@ -135,7 +131,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 		<Card>
 			<CardContent>
 				<ul>
-					{joinWithElement(detailArray, <li>&nbsp;</li>)}
+					{JoinWithElement(detailArray, <li>&nbsp;</li>)}
 				</ul>
 			</CardContent>
 		</Card>

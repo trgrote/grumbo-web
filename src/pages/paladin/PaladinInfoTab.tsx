@@ -7,7 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
+import { HistoryRecord, PaladinInfo } from "./PaladinTypes";
 import PaladinAttackSheet from "./PaladinAttackSheet";
 import { Label } from "@/components/ui/label";
 import WeaponStatsForm from "@/components/WeaponStatsForm";
@@ -15,7 +15,7 @@ import WeaponStatsForm from "@/components/WeaponStatsForm";
 export interface PaladinInfoTabProps {
 	paladinInfo: PaladinInfo;
 	onChange: (paladinInfo: PaladinInfo) => void;
-	addToRollHistory: (result: RollHistoryRecord) => void;
+	addToRollHistory: (result: HistoryRecord) => void;
 }
 
 export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory }: PaladinInfoTabProps) {

@@ -1,5 +1,6 @@
 import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import { GetBestRerollOption, RollDie } from "../AttackSheetStateFunctions";
+import { GetBestRerollOption } from "../AttackSheetStateFunctions";
+import { RollDie } from "@/utils/Dice";
 import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
 
 export default class RerollWorstDamageDieCommand implements IGSAttackSheetCommand {

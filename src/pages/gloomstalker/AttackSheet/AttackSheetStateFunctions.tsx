@@ -1,4 +1,5 @@
 import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus } from "../GloomStalkerTypes";
+import { RollDie } from "@/utils/Dice";
 
 export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
 	return {
@@ -117,14 +118,6 @@ export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number 
 	const highestRoll = GetHighestHitRoll(state);
 	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0);
 	return highestRoll + modifier;
-}
-
-export function RollDie(sides: number, rng: () => number = Math.random): number {
-	return Math.floor(rng() * sides) + 1;
-}
-
-export function RollDice(dicePool: number[], rng: () => number = Math.random): number[] {
-	return dicePool.map(sides => RollDie(sides, rng));
 }
 
 export function RollHitDice(hasAdvantage: boolean, rng: () => number = Math.random): number[] {

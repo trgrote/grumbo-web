@@ -12,8 +12,8 @@ The web front end for "The Grumbros" — a fun/personal site hosting D&D charact
 - `npm run build` — type-check (`tsc -b`) then production build via Vite
 - `npm run lint` — run ESLint over the repo
 - `npm run preview` — preview the production build locally
-
-There is no test suite configured in this repo.
+- `npm run test` — run the Vitest suite once
+- `npm run test:coverage` — run the suite with coverage
 
 ### Deploy
 
@@ -39,19 +39,26 @@ The Dockerfile builds the app and serves `dist/` with `serve` on port 3000.
 Each character page follows the same shape: a top-level `*Page.tsx` renders a `Tabs` with an "Info" tab and a "History" tab, backed by two pieces of state (`*Info` and a list of history records) that are loaded from and persisted to `localStorage` on every change.
 
 - **Local storage** (`src/utils/LocalStorage.tsx`): generic `GetLocalStorage`/`SaveLocalStorage` helpers keyed by a `storageKey` + `storageVersion`. If the version stored in `localStorage` doesn't match the current `storageVersion`, the default item is used instead (a cheap migration strategy — bump the version string when changing the shape of persisted data, e.g. `GloomStalkerLocalStorage.tsx`'s `storageVersion`).
+- **Shared dice/formatting utils** (`src/utils/Dice.tsx`, `src/utils/Formatting.tsx`): `RollDie`/`RollDice` (RNG-injectable, default to `Math.random`) and `RollArrayToString`/`JoinWithElement` are used by both character pages' command/state-function modules — put character-agnostic helpers here rather than duplicating them per page.
 
-### Gloom-Stalker attack sheet — Command pattern (`src/pages/gloomstalker/AttackSheet/`)
+### Attack sheets — Command pattern (`src/pages/gloomstalker/AttackSheet/`, `src/pages/paladin/AttackSheet/`)
 
-This is the most involved part of the codebase. The attack flow (roll to hit → confirm hit/miss → roll damage → apply modifiers/rerolls → results) is modeled as an explicit state machine driven by a command pattern, not ad hoc `useState` calls:
+This is the most involved part of the codebase, and both character pages now follow the same shape. The attack flow (roll to hit → confirm hit/miss → roll damage → results) is modeled as an explicit state machine driven by a command pattern, not ad hoc `useState` calls:
 
-- `GloomStalkerTypes.tsx` defines `GloomStalkerAttackSheetState` (the full state object, composed from `PreHitRollInfo` / `PostHitRollInfo` / `PreDamageRollInfo` / `PostDamageRollInfo`) and the `AttackStep` enum that tracks which step of the flow is active (`PreHitRoll`, `PostHitRoll`, `PreDamageRoll`, `PostDamageRoll`, `Results`).
-- `GloomStalkerAttackSheet.tsx` holds a `useReducer(AttackSheetStateReducer, ...)` and renders one `Steps/*Step.tsx` component per `AttackStep` value, passing down `state` and `dispatch`.
-- `AttackSheetStateReducer.tsx` is a trivial reducer: `command.apply(state)` — all actual logic lives in the command classes.
-- `Commands/` contains one class per action (e.g. `RollForAttackCommand`, `ConfirmIsHitCommand`, `RerollPiercingDamageDieCommand`, `SetAdvantageCommand`), each implementing `IGSAttackSheetCommand.apply(prevState) => newState`. `dispatch(new SomeCommand(...))` is how Step components trigger transitions. `Commands/AttackSheetCommands.tsx` is the barrel file re-exporting all commands — add new commands there too.
-- `AttackSheetStateFunctions.tsx` holds shared pure helpers used by commands (e.g. dice rolling, building a `HistoryRecord` from final state).
-- When the sheet's `AttackStep` reaches `Results`, an effect in `GloomStalkerAttackSheet.tsx` converts the state into a `HistoryRecord` and calls `addToHistory`, which is what actually persists it (via the page's `useEffect` → `SaveLocalGloomStalkerStorage`).
+- `GloomStalkerTypes.tsx` / `PaladinTypes.tsx` define the full sheet state (composed from `PreHitRollInfo` / `PostHitRollInfo` / `PreDamageRollInfo` / `PostDamageRollInfo`-style interfaces) and an `AttackStep` enum tracking which step of the flow is active.
+- `*AttackSheet.tsx` holds a `useReducer(AttackSheetStateReducer, ...)` and renders one `Steps/*Step.tsx` component per `AttackStep` value, passing down `state` and `dispatch`.
+- `AttackSheet/AttackSheetStateReducer.tsx` is a trivial reducer: `command.apply(state)` — all actual logic lives in the command classes.
+- `AttackSheet/Commands/` contains one class per action (e.g. `RollForAttackCommand`, `ConfirmIsHitCommand`, `SetAdvantageCommand`), each implementing an `I*AttackSheetCommand.apply(prevState) => newState` interface. `dispatch(new SomeCommand(...))` is how Step components trigger transitions. `Commands/AttackSheetCommands.tsx` is the barrel file re-exporting all commands — add new commands there too.
+- `AttackSheet/AttackSheetStateFunctions.tsx` holds shared pure helpers used by commands (dice pool builders, derived-value selectors, building a `HistoryRecord` from final state via an injectable clock).
+- When the sheet's `AttackStep` reaches `Results`, an effect in `*AttackSheet.tsx` converts the state into a `HistoryRecord` and calls `addToHistory`/`addToRollHistory`, which is what actually persists it (via the page's `useEffect` → `SaveLocal*Storage`).
 
-The Paladin page (`src/pages/paladin/`) predates this pattern and uses plain state objects (`AttackStates/*State.tsx`) instead of the command/reducer machinery — don't assume the two character pages share conventions.
+The two pages' commands/state functions/types are separate (not shared through a common interface) since the underlying game rules genuinely differ — don't assume identical mechanics, just identical structure.
+
+### Testing (`npm run test`)
+
+Vitest + jsdom, configured inline in `vite.config.ts` (`test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'] }`). Tests are co-located as `*.test.tsx` next to the source file, one per command/state-function/reducer module — see `AttackSheet/Commands/*.test.tsx` and `AttackSheet/AttackSheetStateFunctions.test.tsx` in either character page for the convention. Coverage is currently pure-logic only (commands, selectors, reducers); no React Testing Library render tests exist yet even though the dependency is installed.
+
+Each `AttackSheet/test/fixtures.ts` exports a fixed `*Info` fixture plus a `buildTestState(overrides)` helper built on top of the real default-state factory — use it instead of constructing state objects by hand. Nondeterminism (dice rolls, timestamps) is handled by constructor/parameter-injected `rng`/`now` functions defaulting to `Math.random`/`Date.now`, never by mocking globals — pass `() => 0` for the lowest die face, `() => 0.999` for the highest.
 
 ### UI components
 

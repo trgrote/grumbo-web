@@ -10,8 +10,6 @@ import {
 	GetHitStatusColorClass,
 	GetHitStatusText,
 	GetPiercingDamageDicePool,
-	RollDice,
-	RollDie,
 	RollHitDice,
 } from './AttackSheetStateFunctions';
 import { CritStatus } from '../GloomStalkerTypes';
@@ -114,22 +112,6 @@ describe('GetHighestHitValue', () => {
 	it('applies the sharpshooter -5 penalty when set', () => {
 		const state = buildTestState({ attackRolls: [12], applySharpShooterPenalty: true });
 		expect(GetHighestHitValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier - 5);
-	});
-});
-
-describe('RollDie', () => {
-	it('maps rng 0 to the lowest face', () => {
-		expect(RollDie(20, () => 0)).toBe(1);
-	});
-
-	it('maps rng just under 1 to the highest face', () => {
-		expect(RollDie(20, () => 0.999)).toBe(20);
-	});
-});
-
-describe('RollDice', () => {
-	it('rolls each die in the pool using the provided rng', () => {
-		expect(RollDice([4, 6, 8], () => 0.5)).toEqual([3, 4, 5]);
 	});
 });
 
