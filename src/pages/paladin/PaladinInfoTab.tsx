@@ -1,9 +1,4 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import {
-	ToggleGroup,
-	ToggleGroupItem,
-} from "@/components/ui/toggle-group";
 import {
 	Card,
 	CardContent,
@@ -15,6 +10,7 @@ import {
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
 import PaladinAttackSheet from "./PaladinAttackSheet";
 import { Label } from "@/components/ui/label";
+import WeaponStatsForm from "@/components/WeaponStatsForm";
 
 export interface PaladinInfoTabProps {
 	paladinInfo: PaladinInfo;
@@ -22,34 +18,8 @@ export interface PaladinInfoTabProps {
 	addToRollHistory: (result: RollHistoryRecord) => void;
 }
 
-const weaponDamageDice = [4, 6, 8, 10, 12];
-
 export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory }: PaladinInfoTabProps) {
 	const { attackModifier, damageDie, damageModifier, hasImprovedDS } = paladinInfo;
-
-	const setAttackModifier = (newValue: number) => {
-		if (Number.isNaN(newValue)) return;
-		onChange({
-			...paladinInfo,
-			attackModifier: newValue
-		});
-	};
-
-	const setDamageDie = (newValue: number) => {
-		if (Number.isNaN(newValue)) return;
-		onChange({
-			...paladinInfo,
-			damageDie: newValue
-		});
-	};
-
-	const setDamageModifier = (newValue: number) => {
-		if (Number.isNaN(newValue)) return;
-		onChange({
-			...paladinInfo,
-			damageModifier: newValue
-		});
-	};
 
 	const setHasImprovedDS = (newValue: boolean) => {
 		onChange({
@@ -65,36 +35,29 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 				<CardDescription>Set Paladin Info</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<div>
-					<label>
-						Attack Modifier:
-						<Input type="number" value={attackModifier}
-							onChange={e => setAttackModifier(parseInt(e.target.value))} />
-					</label>
-				</div>
-				<div>
-					<label>
-						Damage Die:
-					</label>
-					<ToggleGroup type="single"
-						value={damageDie.toString()}
-						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
-						{
-							weaponDamageDice.map((dieValue, i) =>
-								<ToggleGroupItem key={i} value={dieValue.toString()}>
-									d{dieValue}
-								</ToggleGroupItem>
-							)
-						}
-					</ToggleGroup>
-				</div>
-				<div>
-					<label>
-						Damage Modifier
-						<Input type="number" value={damageModifier}
-							onChange={e => setDamageModifier(parseInt(e.target.value))} />
-					</label>
-				</div>
+				<WeaponStatsForm
+					attackModifier={attackModifier}
+					damageDie={damageDie}
+					damageModifier={damageModifier}
+					onAttackModifierChange={(newValue) =>
+						onChange({
+							...paladinInfo,
+							attackModifier: newValue
+						})
+					}
+					onDamageDieChange={(newValue) =>
+						onChange({
+							...paladinInfo,
+							damageDie: newValue
+						})
+					}
+					onDamageModifierChange={(newValue) =>
+						onChange({
+							...paladinInfo,
+							damageModifier: newValue
+						})
+					}
+				/>
 				<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
 					<Label htmlFor="hasImprovedDS">
 						<Checkbox id="hasImprovedDS" checked={hasImprovedDS}

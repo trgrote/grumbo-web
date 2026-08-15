@@ -1,8 +1,3 @@
-import { Input } from "@/components/ui/input";
-import {
-	ToggleGroup,
-	ToggleGroupItem,
-} from "@/components/ui/toggle-group";
 import {
 	Card,
 	CardContent,
@@ -13,14 +8,13 @@ import {
 } from "@/components/ui/card";
 import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import GloomStalkerAttackSheet from "./GloomStalkerAttackSheet";
+import WeaponStatsForm from "@/components/WeaponStatsForm";
 
 export interface GloomStalkerInfoCardProps {
 	gloomStalkerInfo: GloomStalkerInfo;
 	onChange: (gloomStalkerInfo: GloomStalkerInfo) => void;
 	addToHistory: (historyRecord: HistoryRecord) => void;
 }
-
-const weaponDamageDice = [4, 6, 8, 10, 12];
 
 export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addToHistory }: GloomStalkerInfoCardProps) {
 	const {
@@ -29,30 +23,6 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 		damageModifier
 	} = gloomStalkerInfo;
 
-	const setAttackModifier = (newValue: number) => {
-		if (Number.isNaN(newValue)) return;
-		onChange({
-			...gloomStalkerInfo,
-			attackModifier: newValue
-		});
-	};
-
-	const setDamageDie = (newValue: number) => {
-		if (Number.isNaN(newValue)) return;
-		onChange({
-			...gloomStalkerInfo,
-			damageDie: newValue
-		});
-	};
-
-	const setDamageModifier = (newValue: number) => {
-		if (Number.isNaN(newValue)) return;
-		onChange({
-			...gloomStalkerInfo,
-			damageModifier: newValue
-		});
-	};
-
 	return (
 		<Card>
 			<CardHeader>
@@ -60,36 +30,29 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 				<CardDescription>Set GloomStalker Info</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<div>
-					<label>
-						Attack Modifier:
-						<Input type="number" value={attackModifier}
-							onChange={e => setAttackModifier(parseInt(e.target.value))} />
-					</label>
-				</div>
-				<div>
-					<label>
-						Damage Die:
-					</label>
-					<ToggleGroup type="single"
-						value={damageDie.toString()}
-						onValueChange={newValue => setDamageDie(parseInt(newValue))}>
-						{
-							weaponDamageDice.map((dieValue, i) =>
-								<ToggleGroupItem key={i} value={dieValue.toString()}>
-									d{dieValue}
-								</ToggleGroupItem>
-							)
-						}
-					</ToggleGroup>
-				</div>
-				<div>
-					<label>
-						Damage Modifier
-						<Input type="number" value={damageModifier}
-							onChange={e => setDamageModifier(parseInt(e.target.value))} />
-					</label>
-				</div>
+				<WeaponStatsForm
+					attackModifier={attackModifier}
+					damageDie={damageDie}
+					damageModifier={damageModifier}
+					onAttackModifierChange={(newValue) =>
+						onChange({
+							...gloomStalkerInfo,
+							attackModifier: newValue
+						})
+					}
+					onDamageDieChange={(newValue) =>
+						onChange({
+							...gloomStalkerInfo,
+							damageDie: newValue
+						})
+					}
+					onDamageModifierChange={(newValue) =>
+						onChange({
+							...gloomStalkerInfo,
+							damageModifier: newValue
+						})
+					}
+				/>
 			</CardContent>
 			<CardFooter>
 				<GloomStalkerAttackSheet
