@@ -13,7 +13,8 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 		piercingDamageRolls: [],
 		piercingDamageDicePool: [],
 		fireDamageDicePool: [],
-		fireDamageRolls: []
+		fireDamageRolls: [],
+		hasUsedReroll: false
 	};
 }
 

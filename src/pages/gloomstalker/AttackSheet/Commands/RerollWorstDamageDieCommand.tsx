@@ -12,6 +12,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 			return {
 				...prevState,
 				piercingDamageRolls: newPiercingDamageRolls,
+				hasUsedReroll: true,
 			};
 		} else if (bestRerollOption.type === 'fire') {
 			const newFireDamageRolls = [...prevState.fireDamageRolls];
@@ -19,6 +20,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 			return {
 				...prevState,
 				fireDamageRolls: newFireDamageRolls,
+				hasUsedReroll: true,
 			};
 		}
 
