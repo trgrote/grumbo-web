@@ -53,11 +53,11 @@ export function GetBestRerollOption(state: GloomStalkerAttackSheetState): Rolled
 	}, rerollableRolls[0]);
 }
 
-export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState): HistoryRecord {
+export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState, now: () => number = Date.now): HistoryRecord {
 	return {
 		...state,
 		gloomStalkerInfo: { ...state.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
-		timestamp: Date.now()
+		timestamp: now()
 	};
 }
 
