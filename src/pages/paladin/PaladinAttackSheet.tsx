@@ -1,186 +1,76 @@
-import { RollAttack, RollDamage } from "./PaladinFunctions";
 import { Button } from "@/components/ui/button";
-import { JSX, useState } from "react";
-import { AttackRollResult, PaladinInfo, RollDamageResult, RollHistoryRecord } from "./PaladinTypes";
-import {
-	Sheet,
-	SheetContent,
-	SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { JSX, useEffect, useReducer } from "react";
+import { AttackStep, HistoryRecord, PaladinInfo } from "./PaladinTypes";
+import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer";
+import PreAttackRollStep from "./AttackSheet/Steps/PreAttackRollStep";
+import PostAttackRollStep from "./AttackSheet/Steps/PostAttackRollStep";
+import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
+import ResultsStep from "./AttackSheet/Steps/ResultsStep";
+import { CreateHistoryRecordFromState, GetIsCritical, PaladinAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
+import { ResetCommand } from "./AttackSheet/Commands/AttackSheetCommands";
 import { usePaladinSound } from "./hooks/usePaladinSound";
-import ResultState from "./AttackStates/ResultState";
-import DamageInfoState from "./AttackStates/DamageInfoState";
-import IsHitState from "./AttackStates/IsHitState";
-import AttackInfoState from "./AttackStates/AttackInfoState";
 
-export interface PaladinAttackPaladinAttackSheetProps {
+export interface PaladinAttackSheetProps {
 	paladinInfo: PaladinInfo;
-	addToRollHistory: (result: RollHistoryRecord) => void;
+	addToRollHistory: (result: HistoryRecord) => void;
 }
 
-enum AttackState {
-	AttackInfo,
-	isHit,
-	DamageInfo,
-	Result
-}
-
-export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackPaladinAttackSheetProps) {
-	const [attackState, setAttackState] = useState(AttackState.AttackInfo);
-
-	const [hasAdvantage, setHasAdvantage] = useState(false);
-	const [isTargetFiendOrUndead, setIsTargetFiendOrUndead] = useState(false);
-
-	const [attackRollResult, setAttackRollResult] = useState<AttackRollResult | null>(null);
-
-	const [isHit, setIsHit] = useState(false);
-
-	const [spellSlotUsed, setSpellSlotUsed] = useState(0);
-
-	const [damageRollResult, setDamageRollResult] = useState<RollDamageResult | null>(null);
+export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackSheetProps) {
+	const [state, dispatch] = useReducer(
+		AttackSheetStateReducer,
+		paladinInfo,
+		PaladinAttackSheetStateDefault
+	);
 
 	const playRandomPaladinSound = usePaladinSound();
 
-	const getCurrentHistoryResult = (): RollHistoryRecord => {
-		const rval: RollHistoryRecord = {
-			...paladinInfo,
-			hasAdvantage,
-			isHit,
-			isTargetFiendOrUndead,
-			spellSlotUsed,
-			toHitValues: [],
-			isCritical: false,
-			weaponDamageRolls: [],
-			divineSmiteDamageRolls: [],
-			timestamp: Date.now()
-		};
-
-		if (attackRollResult) {
-			rval.toHitValues = attackRollResult.toHitValues;
-			rval.isCritical = attackRollResult.isCritical;
+	// I have to disable the exhaustive-deps rule here because
+	// I only want to trigger this effect when the attack step changes to results,
+	// not on every state change.
+	useEffect(() => {
+		if (state.attackStep === AttackStep.Results) {
+			const historyRecord = CreateHistoryRecordFromState(state);
+			addToRollHistory(historyRecord);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state.attackStep]);
 
-		if (damageRollResult) {
-			rval.weaponDamageRolls = damageRollResult.weaponDamageRolls;
-			rval.divineSmiteDamageRolls = damageRollResult.divineSmiteDamageRolls;
-		}
-
-		return rval;
-	};
-
-	const onRollForAttack = () => {
-		const attackResult = RollAttack({
-			attackModifier: paladinInfo.attackModifier,
-			hasAdvantage: hasAdvantage
-		});
-
-		if (attackResult.isCritical) {
+	// Same reasoning as above: only fire once, exactly when we land on PostAttackRoll with a crit.
+	useEffect(() => {
+		if (state.attackStep === AttackStep.PostAttackRoll && GetIsCritical(state)) {
 			playRandomPaladinSound();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state.attackStep]);
 
-		setAttackRollResult(attackResult);
-		setAttackState(AttackState.isHit);
+	const resetSheet = (): void => {
+		dispatch(new ResetCommand(paladinInfo));
 	};
 
-	const onIsHitBack = () => {
-		setAttackState(AttackState.AttackInfo);
-		setAttackRollResult(null);
-	};
-
-	const onAttackHit = () => {
-		setIsHit(true);
-		setAttackState(AttackState.DamageInfo);
-	};
-
-	const onAttackMiss = () => {
-		if (!attackRollResult) {
-			return;
-		}
-
-		addToRollHistory(getCurrentHistoryResult());
-		setAttackState(AttackState.Result);
-	};
-
-	const onDamageInfoBack = () => {
-		setIsHit(false);
-		setAttackState(AttackState.isHit);
-	};
-
-	const onRollForDamage = () => {
-		if (!attackRollResult) {
-			return;
-		}
-
-		const damageResult = RollDamage({
-			...paladinInfo,
-			...attackRollResult,
-			isTargetFiendOrUndead,
-			spellSlotUsed
-		});
-
-		setDamageRollResult(damageResult);
-
-		addToRollHistory({ ...getCurrentHistoryResult(), ...damageResult });
-		setAttackState(AttackState.Result);
-	};
-
-	const onAttackAgain = () => {
-		setAttackState(AttackState.AttackInfo);
-		setAttackRollResult(null);
-		setIsHit(false);
-		setDamageRollResult(null);
-		setSpellSlotUsed(0);
-	};
-
-	const resetSheet = () => {
-		setAttackState(AttackState.AttackInfo);
-		setHasAdvantage(false);
-		setIsHit(false);
-		setIsTargetFiendOrUndead(false);
-		setAttackRollResult(null);
-		setSpellSlotUsed(0);
-		setDamageRollResult(null);
-	};
+	useEffect(resetSheet, [paladinInfo]);
 
 	const renderSheetContent = (): JSX.Element => {
-		if (attackState === AttackState.AttackInfo) {
-			return (
-				<AttackInfoState
-					hasAdvantage={hasAdvantage}
-					setHasAdvantage={setHasAdvantage}
-					onRollForAttack={onRollForAttack}
-				/>
-			);
-		} else if (attackState === AttackState.isHit && attackRollResult) {
-			return (
-				<IsHitState
-					attackRollResult={attackRollResult}
-					onAttackHit={onAttackHit}
-					onAttackMiss={onAttackMiss}
-					onIsHitBack={onIsHitBack}
-				/>
-			);
-		} else if (attackState === AttackState.DamageInfo) {
-			return (
-				<DamageInfoState
-					isTargetFiendOrUndead={isTargetFiendOrUndead}
-					setIsTargetFiendOrUndead={setIsTargetFiendOrUndead}
-					spellSlotUsed={spellSlotUsed}
-					setSpellSlotUsed={setSpellSlotUsed}
-					onRollForDamage={onRollForDamage}
-					onDamageInfoBack={onDamageInfoBack}
-				/>
-			);
-		} else if (attackState === AttackState.Result && attackRollResult) {
-			return (
-				<ResultState
-					currentHistoryResult={getCurrentHistoryResult()}
-					onAttackAgain={onAttackAgain}
-				/>
-			);
-		}
-
-		return (<>ERROR</>);
+		return (
+			<>
+				{state.attackStep === AttackStep.PreAttackRoll && <PreAttackRollStep
+					state={state}
+					dispatch={dispatch}
+				/>}
+				{state.attackStep === AttackStep.PostAttackRoll && <PostAttackRollStep
+					state={state}
+					dispatch={dispatch}
+				/>}
+				{state.attackStep === AttackStep.PreDamageRoll && <PreDamageRollStep
+					state={state}
+					dispatch={dispatch}
+				/>}
+				{state.attackStep === AttackStep.Results && <ResultsStep
+					state={state}
+					dispatch={dispatch}
+				/>}
+			</>
+		);
 	};
 
 	return (

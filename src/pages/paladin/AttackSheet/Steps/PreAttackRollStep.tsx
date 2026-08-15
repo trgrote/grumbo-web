@@ -1,20 +1,23 @@
 import { Button } from "@/components/ui/button";
+import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { PaladinAttackSheetState } from "../../PaladinTypes";
+import {
+	IPalAttackSheetCommand,
+	SetAdvantageCommand,
+	RollForAttackCommand
+} from "../Commands/AttackSheetCommands";
 
-interface AttackInfoStateProps {
-	hasAdvantage: boolean;
-	setHasAdvantage: (value: boolean) => void;
-	onRollForAttack: () => void;
-};
+interface PreAttackRollStepProps {
+	state: PaladinAttackSheetState;
+	dispatch: React.Dispatch<IPalAttackSheetCommand>;
+}
 
-export default function AttackInfoState(props: AttackInfoStateProps) {
-	const {
-		hasAdvantage,
-		setHasAdvantage,
-		onRollForAttack
-	} = props;
+export default function PreAttackRollStep({ state, dispatch }: PreAttackRollStepProps) {
+	const hasAdvantage = state.hasAdvantage;
+	const setHasAdvantage = (value: boolean) => dispatch(new SetAdvantageCommand(value));
+	const onRollForAttack = () => dispatch(new RollForAttackCommand());
 
 	return (
 		<>

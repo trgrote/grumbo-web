@@ -3,28 +3,30 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { SpellSlotToString } from "../PaladinFunctions";
+import { PaladinAttackSheetState } from "../../PaladinTypes";
+import { SpellSlotToString } from "../AttackSheetStateFunctions";
+import {
+	IPalAttackSheetCommand,
+	GoBackCommand,
+	RollForDamageCommand,
+	SetIsTargetFiendOrUndeadCommand,
+	SetSpellSlotUsedCommand
+} from "../Commands/AttackSheetCommands";
 
-interface DamageInfoStateProps {
-	isTargetFiendOrUndead: boolean;
-	setIsTargetFiendOrUndead: (value: boolean) => void;
-	spellSlotUsed: number;
-	setSpellSlotUsed: (value: number) => void;
-	onRollForDamage: () => void;
-	onDamageInfoBack: () => void;
-};
+interface PreDamageRollStepProps {
+	state: PaladinAttackSheetState;
+	dispatch: React.Dispatch<IPalAttackSheetCommand>;
+}
 
 const spellSlots = [0, 1, 2, 3, 4];
 
-export default function DamageInfoState(props: DamageInfoStateProps) {
-	const {
-		isTargetFiendOrUndead,
-		setIsTargetFiendOrUndead,
-		spellSlotUsed,
-		setSpellSlotUsed,
-		onRollForDamage,
-		onDamageInfoBack
-	} = props;
+export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStepProps) {
+	const isTargetFiendOrUndead = state.isTargetFiendOrUndead;
+	const setIsTargetFiendOrUndead = (value: boolean) => dispatch(new SetIsTargetFiendOrUndeadCommand(value));
+	const spellSlotUsed = state.spellSlotUsed;
+	const setSpellSlotUsed = (value: number) => dispatch(new SetSpellSlotUsedCommand(value));
+	const rollForDamage = () => dispatch(new RollForDamageCommand());
+	const goBack = () => dispatch(new GoBackCommand());
 
 	return (
 		<>
@@ -60,9 +62,9 @@ export default function DamageInfoState(props: DamageInfoStateProps) {
 				</div>
 			</div>
 			<SheetFooter>
-				<Button onClick={onRollForDamage}>Roll For Damage</Button>
-				<Button variant="outline" onClick={onDamageInfoBack}>Back</Button>
+				<Button onClick={rollForDamage}>Roll For Damage</Button>
+				<Button variant="outline" onClick={goBack}>Back</Button>
 			</SheetFooter>
 		</>
 	);
-};
+}
