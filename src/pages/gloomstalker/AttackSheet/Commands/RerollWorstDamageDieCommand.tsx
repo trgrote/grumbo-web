@@ -6,6 +6,10 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
 		const bestRerollOption = GetBestRerollOption(prevState);
 
+		if (!bestRerollOption) {
+			return { ...prevState };
+		}
+
 		if (bestRerollOption.type === 'piercing') {
 			const newPiercingDamageRolls = [...prevState.piercingDamageRolls];
 			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize);
