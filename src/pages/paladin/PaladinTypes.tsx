@@ -5,31 +5,37 @@ export interface PaladinInfo {
 	hasImprovedDS: boolean;
 }
 
-export interface AttackInfo {
-	attackModifier: number;
+export enum AttackStep {
+	PreAttackRoll,
+	PostAttackRoll,
+	PreDamageRoll,
+	Results
+}
+
+export interface PreAttackRollInfo {
 	hasAdvantage: boolean;
 }
 
-export interface AttackRollResult {
-	toHitValues: number[];
-	isCritical: boolean;
+export interface PostAttackRollInfo {
+	attackRolls: number[];   // pre-modifier attack roll values
+	isHit: boolean;
 }
 
-export interface RollDamageInfo {
-	isCritical: boolean;
-	damageDie: number;
-	damageModifier: number;
-	hasImprovedDS: boolean;
+export interface PreDamageRollInfo {
 	isTargetFiendOrUndead: boolean;
 	spellSlotUsed: number;
 }
 
-export interface RollDamageResult {
+export interface PostDamageRollInfo {
 	weaponDamageRolls: number[];
 	divineSmiteDamageRolls: number[];
 }
 
-export interface RollHistoryRecord extends PaladinInfo, AttackInfo, AttackRollResult, RollDamageInfo, RollDamageResult {
-	isHit: boolean;
+export interface PaladinAttackSheetState extends PreAttackRollInfo, PostAttackRollInfo, PreDamageRollInfo, PostDamageRollInfo {
+	attackStep: AttackStep;
+	paladinInfo: PaladinInfo;
+}
+
+export interface HistoryRecord extends PaladinAttackSheetState {
 	timestamp: number;
 }
