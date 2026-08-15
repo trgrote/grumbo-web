@@ -2,7 +2,7 @@ import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import { GetBestRerollOption, RollDie } from "../AttackSheetStateFunctions";
 import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
 
-export default class RerollPiercingDamageDieCommand implements IGSAttackSheetCommand {
+export default class RerollWorstDamageDieCommand implements IGSAttackSheetCommand {
 	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
 		const bestRerollOption = GetBestRerollOption(prevState);
 

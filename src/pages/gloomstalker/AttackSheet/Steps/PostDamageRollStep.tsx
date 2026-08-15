@@ -8,7 +8,7 @@ import {
 	IGSAttackSheetCommand,
 	GoBackCommand,
 	ConfirmDamageCommand,
-	RerollPiercingDamageDieCommand
+	RerollWorstDamageDieCommand
 } from "../Commands/AttackSheetCommands";
 
 interface PostDamageRollStepProps {
@@ -20,7 +20,7 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 	// Only allow reroll once
 	const [rereollUsed, setRerollUsed] = useState(false);
 
-	const rerollDamageDie = () => dispatch(new RerollPiercingDamageDieCommand());
+	const rerollDamageDie = () => dispatch(new RerollWorstDamageDieCommand());
 	const confirmDamage = () => dispatch(new ConfirmDamageCommand());
 	const goBack = () => dispatch(new GoBackCommand());
 

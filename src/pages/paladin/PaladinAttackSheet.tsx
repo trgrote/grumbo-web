@@ -51,7 +51,8 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 			toHitValues: [],
 			isCritical: false,
 			weaponDamageRolls: [],
-			divineSmiteDamageRolls: []
+			divineSmiteDamageRolls: [],
+			timestamp: Date.now()
 		};
 
 		if (attackRollResult) {

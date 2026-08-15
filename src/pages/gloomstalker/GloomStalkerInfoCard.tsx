@@ -30,6 +30,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 	} = gloomStalkerInfo;
 
 	const setAttackModifier = (newValue: number) => {
+		if (Number.isNaN(newValue)) return;
 		onChange({
 			...gloomStalkerInfo,
 			attackModifier: newValue
@@ -37,6 +38,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 	};
 
 	const setDamageDie = (newValue: number) => {
+		if (Number.isNaN(newValue)) return;
 		onChange({
 			...gloomStalkerInfo,
 			damageDie: newValue
@@ -44,6 +46,7 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 	};
 
 	const setDamageModifier = (newValue: number) => {
+		if (Number.isNaN(newValue)) return;
 		onChange({
 			...gloomStalkerInfo,
 			damageModifier: newValue

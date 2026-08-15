@@ -51,7 +51,7 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 			</div>
 			<SheetFooter>
 				<Button onClick={confirmIsHit} disabled={hitStatus === CritStatus.CriticalMiss}>Hit</Button>
-				<Button variant="secondary" onClick={confirmIsMiss}>Missed</Button>
+				<Button variant="secondary" onClick={confirmIsMiss} disabled={hitStatus === CritStatus.CriticalHit}>Missed</Button>
 				<Button variant="outline" onClick={goBack}>Back</Button>
 			</SheetFooter>
 		</>
