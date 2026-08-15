@@ -3,6 +3,8 @@ import { GetBestRerollOption, RollDie } from "../AttackSheetStateFunctions";
 import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
 
 export default class RerollWorstDamageDieCommand implements IGSAttackSheetCommand {
+	constructor(private rng: () => number = Math.random) { }
+
 	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
 		const bestRerollOption = GetBestRerollOption(prevState);
 
@@ -12,7 +14,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 
 		if (bestRerollOption.type === 'piercing') {
 			const newPiercingDamageRolls = [...prevState.piercingDamageRolls];
-			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize);
+			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
 				...prevState,
 				piercingDamageRolls: newPiercingDamageRolls,
@@ -20,7 +22,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 			};
 		} else if (bestRerollOption.type === 'fire') {
 			const newFireDamageRolls = [...prevState.fireDamageRolls];
-			newFireDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize);
+			newFireDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
 				...prevState,
 				fireDamageRolls: newFireDamageRolls,

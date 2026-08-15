@@ -53,11 +53,11 @@ export function GetBestRerollOption(state: GloomStalkerAttackSheetState): Rolled
 	}, rerollableRolls[0]);
 }
 
-export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState): HistoryRecord {
+export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState, now: () => number = Date.now): HistoryRecord {
 	return {
 		...state,
 		gloomStalkerInfo: { ...state.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
-		timestamp: Date.now()
+		timestamp: now()
 	};
 }
 
@@ -119,21 +119,21 @@ export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number 
 	return highestRoll + modifier;
 }
 
-export function RollDie(sides: number): number {
-	return Math.floor(Math.random() * sides) + 1;
+export function RollDie(sides: number, rng: () => number = Math.random): number {
+	return Math.floor(rng() * sides) + 1;
 }
 
-export function RollDice(dicePool: number[]): number[] {
-	return dicePool.map(sides => RollDie(sides));
+export function RollDice(dicePool: number[], rng: () => number = Math.random): number[] {
+	return dicePool.map(sides => RollDie(sides, rng));
 }
 
-export function RollHitDice(hasAdvantage: boolean): number[] {
-	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest. 
+export function RollHitDice(hasAdvantage: boolean, rng: () => number = Math.random): number[] {
+	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest.
 	// effectively giving you one extra die to roll when you have advantage.
 	const numberOfDice = hasAdvantage ? 3 : 1;
 	const rolls: number[] = [];
 	for (let i = 0; i < numberOfDice; i++) {
-		rolls.push(RollDie(20));
+		rolls.push(RollDie(20, rng));
 	}
 
 	return rolls;
