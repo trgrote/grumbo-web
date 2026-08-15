@@ -10,15 +10,14 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { RollHistoryRecord } from "./PaladinTypes";
 
-export interface PaladinHistoryProps {
-	attackResults: RollHistoryRecord[];
+export interface HistoryTabProps<T extends { timestamp: number }> {
+	records: T[];
 	onClearHistory: () => void;
-	rollRecordRenderer: (record: RollHistoryRecord) => React.JSX.Element;
+	rollRecordRenderer: (record: T) => React.JSX.Element;
 }
 
-export default function PaladinHistoryTab({ attackResults, onClearHistory, rollRecordRenderer }: PaladinHistoryProps) {
+export default function HistoryTab<T extends { timestamp: number }>({ records, onClearHistory, rollRecordRenderer }: HistoryTabProps<T>) {
 	return (
 		<Card>
 			<CardHeader>
@@ -29,9 +28,9 @@ export default function PaladinHistoryTab({ attackResults, onClearHistory, rollR
 				<ScrollArea className="h-120 rounded-md border">
 					<div className="p-4">
 						{
-							attackResults.map((attackResult) =>
-								<React.Fragment key={attackResult.timestamp}>
-									{rollRecordRenderer(attackResult)}
+							records.map((record) =>
+								<React.Fragment key={record.timestamp}>
+									{rollRecordRenderer(record)}
 									<Separator className="my-2" />
 								</React.Fragment>
 							)

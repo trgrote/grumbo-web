@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PaladinHistoryTab from "./PaladinHistoryTab";
+import HistoryTab from "@/components/HistoryTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PaladinInfoTab from "./PaladinInfoTab";
 import { PaladinInfo, RollHistoryRecord } from "./PaladinTypes";
@@ -34,7 +34,7 @@ function PaladinPage() {
 					addToRollHistory={roll => setAttackResults([roll, ...attackResults])} />
 			</TabsContent>
 			<TabsContent value="history">
-				<PaladinHistoryTab attackResults={attackResults}
+				<HistoryTab<RollHistoryRecord> records={attackResults}
 					rollRecordRenderer={(attackResult) => <RollResultView {...attackResult} />}
 					onClearHistory={() => setAttackResults([])} />
 			</TabsContent>
