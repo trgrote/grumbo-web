@@ -4,7 +4,7 @@ import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import { GetLocalGloomStalkerStorage, SaveLocalGloomStalkerStorage } from "./GloomStalkerLocalStorage";
 import GloomStalkerInfoCard from "./GloomStalkerInfoCard";
 import AttackHistoryView from "./AttackHistoryView";
-import GloomStalkerHistoryTab from "./GloomStalkerHistoryTab";
+import HistoryTab from "@/components/HistoryTab";
 
 function GloomStalkerPage() {
 	const [localStorageData] = useState(() => GetLocalGloomStalkerStorage());
@@ -35,7 +35,7 @@ function GloomStalkerPage() {
 				/>
 			</TabsContent>
 			<TabsContent value="history">
-				<GloomStalkerHistoryTab historyRecords={historyRecords}
+				<HistoryTab<HistoryRecord> records={historyRecords}
 					rollRecordRenderer={(historyRecord) => <AttackHistoryView historyRecord={historyRecord} />}
 					onClearHistory={() => setHistoryRecords([])} />
 			</TabsContent>
