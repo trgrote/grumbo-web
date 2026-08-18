@@ -1,4 +1,4 @@
-import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
+import { DamageType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 import { RollDie } from "@/utils/Dice";
 import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
@@ -13,7 +13,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 			return { ...prevState };
 		}
 
-		if (bestRerollOption.type === 'piercing') {
+		if (bestRerollOption.type === DamageType.Piercing) {
 			const newPiercingDamageRolls = [...prevState.piercingDamageRolls];
 			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
@@ -21,7 +21,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 				piercingDamageRolls: newPiercingDamageRolls,
 				hasUsedReroll: true,
 			};
-		} else if (bestRerollOption.type === 'fire') {
+		} else if (bestRerollOption.type === DamageType.Fire) {
 			const newFireDamageRolls = [...prevState.fireDamageRolls];
 			newFireDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
@@ -29,7 +29,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 				fireDamageRolls: newFireDamageRolls,
 				hasUsedReroll: true,
 			};
-		} else if (bestRerollOption.type === 'force') {
+		} else if (bestRerollOption.type === DamageType.Force) {
 			const newForceDamageRolls = [...prevState.forceDamageRolls];
 			newForceDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {

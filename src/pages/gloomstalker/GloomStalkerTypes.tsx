@@ -58,3 +58,9 @@ export enum CritStatus {
 	CriticalMiss,
 	Normal
 }
+
+export enum DamageType {
+	Piercing = 'piercing',
+	Fire = 'fire',
+	Force = 'force'
+}

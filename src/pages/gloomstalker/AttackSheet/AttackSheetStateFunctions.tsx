@@ -1,4 +1,4 @@
-import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus } from "../GloomStalkerTypes";
+import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus, DamageType } from "../GloomStalkerTypes";
 import { RollDie } from "@/utils/Dice";
 
 export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
@@ -24,7 +24,7 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 export interface RolledDie {
 	dieSize: number;
 	roll: number;
-	type: string;
+	type: DamageType;
 	dicePoolIndex: number;
 }
 
@@ -33,9 +33,9 @@ export interface RolledDie {
 // Tiebreaker goes to the highest die (e.g. it's better to reroll a 1 on a d12 than a 1 on a d6)
 export function GetBestRerollOption(state: GloomStalkerAttackSheetState): RolledDie | null {
 	const allRolls: RolledDie[] = [
-		...state.piercingDamageRolls.map((roll, i) => ({ roll, dieSize: state.piercingDamageDicePool[i], type: 'piercing', dicePoolIndex: i })),
-		...state.fireDamageRolls.map((roll, i) => ({ roll, dieSize: state.fireDamageDicePool[i], type: 'fire', dicePoolIndex: i })),
-		...state.forceDamageRolls.map((roll, i) => ({ roll, dieSize: state.forceDamageDicePool[i], type: 'force', dicePoolIndex: i }))
+		...state.piercingDamageRolls.map((roll, i) => ({ roll, dieSize: state.piercingDamageDicePool[i], type: DamageType.Piercing, dicePoolIndex: i })),
+		...state.fireDamageRolls.map((roll, i) => ({ roll, dieSize: state.fireDamageDicePool[i], type: DamageType.Fire, dicePoolIndex: i })),
+		...state.forceDamageRolls.map((roll, i) => ({ roll, dieSize: state.forceDamageDicePool[i], type: DamageType.Force, dicePoolIndex: i }))
 	];
 
 	const rerollableRolls = allRolls.filter(r => r.roll < r.dieSize);

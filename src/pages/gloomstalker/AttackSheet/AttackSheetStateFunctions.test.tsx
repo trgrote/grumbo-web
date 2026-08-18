@@ -13,7 +13,7 @@ import {
 	GetPiercingDamageDicePool,
 	RollHitDice,
 } from './AttackSheetStateFunctions';
-import { CritStatus } from '../GloomStalkerTypes';
+import { CritStatus, DamageType } from '../GloomStalkerTypes';
 import { buildTestState, testGloomStalkerInfo } from './test/fixtures';
 
 describe('GetBestRerollOption', () => {
@@ -35,7 +35,7 @@ describe('GetBestRerollOption', () => {
 		expect(GetBestRerollOption(state)).toEqual({
 			dieSize: 8,
 			roll: 1,
-			type: 'piercing',
+			type: DamageType.Piercing,
 			dicePoolIndex: 0,
 		});
 	});
@@ -49,7 +49,7 @@ describe('GetBestRerollOption', () => {
 		expect(GetBestRerollOption(state)).toEqual({
 			dieSize: 12,
 			roll: 1,
-			type: 'piercing',
+			type: DamageType.Piercing,
 			dicePoolIndex: 1,
 		});
 	});
