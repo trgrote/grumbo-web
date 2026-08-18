@@ -31,6 +31,8 @@ export interface PostDamageRollInfo {
 	piercingDamageRolls: number[];
 	fireDamageDicePool: number[];
 	fireDamageRolls: number[];
+	forceDamageDicePool: number[];
+	forceDamageRolls: number[];
 }
 
 export enum AttackStep {
