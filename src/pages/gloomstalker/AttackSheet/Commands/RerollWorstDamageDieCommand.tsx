@@ -29,6 +29,14 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 				fireDamageRolls: newFireDamageRolls,
 				hasUsedReroll: true,
 			};
+		} else if (bestRerollOption.type === 'force') {
+			const newForceDamageRolls = [...prevState.forceDamageRolls];
+			newForceDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
+			return {
+				...prevState,
+				forceDamageRolls: newForceDamageRolls,
+				hasUsedReroll: true,
+			};
 		}
 
 		// If for some reason there are no valid reroll options, return the state unchanged
