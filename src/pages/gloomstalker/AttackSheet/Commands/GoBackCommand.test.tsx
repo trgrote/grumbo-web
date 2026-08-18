@@ -28,6 +28,8 @@ describe('GoBackCommand', () => {
 			piercingDamageRolls: [5],
 			fireDamageDicePool: [6],
 			fireDamageRolls: [3],
+			forceDamageDicePool: [6],
+			forceDamageRolls: [2],
 		});
 		const result = new GoBackCommand().apply(state);
 
@@ -36,6 +38,8 @@ describe('GoBackCommand', () => {
 		expect(result.piercingDamageRolls).toEqual([]);
 		expect(result.fireDamageDicePool).toEqual([]);
 		expect(result.fireDamageRolls).toEqual([]);
+		expect(result.forceDamageDicePool).toEqual([]);
+		expect(result.forceDamageRolls).toEqual([]);
 	});
 
 	it('is a no-op from any other step', () => {
