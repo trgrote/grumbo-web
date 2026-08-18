@@ -2,7 +2,7 @@ import { GetLocalStorage, ILocalStorageItem, SaveLocalStorage } from "@/utils/Lo
 import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 
 const storageKey = 'gloomstalker-storage';
-const storageVersion = '0.1';
+const storageVersion = '0.2';
 const defaultItem = {
 	gloomStalkerInfo: {
 		attackModifier: 14,

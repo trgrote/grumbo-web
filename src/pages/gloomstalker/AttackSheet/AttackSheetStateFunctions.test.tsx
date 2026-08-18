@@ -4,6 +4,7 @@ import {
 	GetBestRerollOption,
 	GetCritStatus,
 	GetFireDamageDicePool,
+	GetForceDamageDicePool,
 	GetHighestHitRoll,
 	GetHighestHitValue,
 	GetHitPreConfirmStatusColorClass,
@@ -12,7 +13,7 @@ import {
 	GetPiercingDamageDicePool,
 	RollHitDice,
 } from './AttackSheetStateFunctions';
-import { CritStatus } from '../GloomStalkerTypes';
+import { CritStatus, DamageType } from '../GloomStalkerTypes';
 import { buildTestState, testGloomStalkerInfo } from './test/fixtures';
 
 describe('GetBestRerollOption', () => {
@@ -34,7 +35,7 @@ describe('GetBestRerollOption', () => {
 		expect(GetBestRerollOption(state)).toEqual({
 			dieSize: 8,
 			roll: 1,
-			type: 'piercing',
+			type: DamageType.Piercing,
 			dicePoolIndex: 0,
 		});
 	});
@@ -48,7 +49,7 @@ describe('GetBestRerollOption', () => {
 		expect(GetBestRerollOption(state)).toEqual({
 			dieSize: 12,
 			roll: 1,
-			type: 'piercing',
+			type: DamageType.Piercing,
 			dicePoolIndex: 1,
 		});
 	});
@@ -136,9 +137,9 @@ describe('GetPiercingDamageDicePool', () => {
 		expect(GetPiercingDamageDicePool(state)).toEqual([8, 8]);
 	});
 
-	it("adds a d6 for Hunter's Mark", () => {
+	it("is unaffected by Hunter's Mark (now Force damage)", () => {
 		const state = buildTestState({ attackRolls: [10], applyHuntersMark: true });
-		expect(GetPiercingDamageDicePool(state)).toEqual([8, 6]);
+		expect(GetPiercingDamageDicePool(state)).toEqual([8]);
 	});
 
 	it('doubles the pool and adds one more weapon die on a critical hit', () => {
@@ -146,13 +147,29 @@ describe('GetPiercingDamageDicePool', () => {
 		expect(GetPiercingDamageDicePool(state)).toEqual([8, 8, 8]);
 	});
 
-	it('combines Dread Ambusher, Hunter\'s Mark, and a crit', () => {
+	it('combines Dread Ambusher and a crit', () => {
 		const state = buildTestState({
 			attackRolls: [20],
 			isDreadAmbusherExtraAttack: true,
-			applyHuntersMark: true,
 		});
-		expect(GetPiercingDamageDicePool(state)).toEqual([8, 8, 6, 8, 8, 6, 8]);
+		expect(GetPiercingDamageDicePool(state)).toEqual([8, 8, 8, 8, 8]);
+	});
+});
+
+describe('GetForceDamageDicePool', () => {
+	it("returns an empty pool when Hunter's Mark is not applied", () => {
+		const state = buildTestState({ attackRolls: [10] });
+		expect(GetForceDamageDicePool(state)).toEqual([]);
+	});
+
+	it("adds a d6 when Hunter's Mark is applied", () => {
+		const state = buildTestState({ attackRolls: [10], applyHuntersMark: true });
+		expect(GetForceDamageDicePool(state)).toEqual([6]);
+	});
+
+	it('doubles the pool on a critical hit', () => {
+		const state = buildTestState({ attackRolls: [20], applyHuntersMark: true });
+		expect(GetForceDamageDicePool(state)).toEqual([6, 6]);
 	});
 });
 

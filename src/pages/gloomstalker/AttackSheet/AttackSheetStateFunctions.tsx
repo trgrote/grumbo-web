@@ -1,4 +1,4 @@
-import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus } from "../GloomStalkerTypes";
+import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus, DamageType } from "../GloomStalkerTypes";
 import { RollDie } from "@/utils/Dice";
 
 export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
@@ -15,6 +15,8 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 		piercingDamageDicePool: [],
 		fireDamageDicePool: [],
 		fireDamageRolls: [],
+		forceDamageDicePool: [],
+		forceDamageRolls: [],
 		hasUsedReroll: false
 	};
 }
@@ -22,7 +24,7 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 export interface RolledDie {
 	dieSize: number;
 	roll: number;
-	type: string;
+	type: DamageType;
 	dicePoolIndex: number;
 }
 
@@ -31,8 +33,9 @@ export interface RolledDie {
 // Tiebreaker goes to the highest die (e.g. it's better to reroll a 1 on a d12 than a 1 on a d6)
 export function GetBestRerollOption(state: GloomStalkerAttackSheetState): RolledDie | null {
 	const allRolls: RolledDie[] = [
-		...state.piercingDamageRolls.map((roll, i) => ({ roll, dieSize: state.piercingDamageDicePool[i], type: 'piercing', dicePoolIndex: i })),
-		...state.fireDamageRolls.map((roll, i) => ({ roll, dieSize: state.fireDamageDicePool[i], type: 'fire', dicePoolIndex: i }))
+		...state.piercingDamageRolls.map((roll, i) => ({ roll, dieSize: state.piercingDamageDicePool[i], type: DamageType.Piercing, dicePoolIndex: i })),
+		...state.fireDamageRolls.map((roll, i) => ({ roll, dieSize: state.fireDamageDicePool[i], type: DamageType.Fire, dicePoolIndex: i })),
+		...state.forceDamageRolls.map((roll, i) => ({ roll, dieSize: state.forceDamageDicePool[i], type: DamageType.Force, dicePoolIndex: i }))
 	];
 
 	const rerollableRolls = allRolls.filter(r => r.roll < r.dieSize);
@@ -135,7 +138,6 @@ export function RollHitDice(hasAdvantage: boolean, rng: () => number = Math.rand
 export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
 	const {
 		isDreadAmbusherExtraAttack,
-		applyHuntersMark,
 	} = state;
 
 	const {
@@ -152,10 +154,6 @@ export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): 
 	// Dread Ambusher Bonus: If it's the first turn of combat, and the attack is the first attack of the turn, then Dread Ambusher adds an additional weapon damage
 	if (isDreadAmbusherExtraAttack) {
 		piercingDamageDicePool.push(damageDie);
-	}
-
-	if (applyHuntersMark) {
-		piercingDamageDicePool.push(6);   // Hunter's Mark adds 1d6 damage on hit
 	}
 
 	if (isCriticalHit) {
@@ -181,4 +179,22 @@ export function GetFireDamageDicePool(state: GloomStalkerAttackSheetState): numb
 	}
 
 	return fireDamageDicePool;
+}
+
+export function GetForceDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
+	const { applyHuntersMark } = state;
+
+	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;
+
+	const forceDamageDicePool: number[] = [];
+
+	if (applyHuntersMark) {
+		forceDamageDicePool.push(6);   // Hunter's Mark adds 1d6 Force damage on hit
+	}
+
+	if (isCriticalHit) {
+		forceDamageDicePool.push(...forceDamageDicePool);   // on a critical hit, you roll all of the attack's damage dice an additional time
+	}
+
+	return forceDamageDicePool;
 }

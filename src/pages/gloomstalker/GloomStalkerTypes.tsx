@@ -31,6 +31,8 @@ export interface PostDamageRollInfo {
 	piercingDamageRolls: number[];
 	fireDamageDicePool: number[];
 	fireDamageRolls: number[];
+	forceDamageDicePool: number[];
+	forceDamageRolls: number[];
 }
 
 export enum AttackStep {
@@ -55,4 +57,10 @@ export enum CritStatus {
 	CriticalHit,
 	CriticalMiss,
 	Normal
+}
+
+export enum DamageType {
+	Piercing = 'piercing',
+	Fire = 'fire',
+	Force = 'force'
 }

@@ -15,7 +15,8 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 		+ gloomStalkerInfo.damageModifier
 		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);
 	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
-	const totalDamage = totalPiercingDamage + totalFireDamage;
+	const totalForceDamage = historyRecord.forceDamageRolls.reduce((a, value) => a + value, 0);
+	const totalDamage = totalPiercingDamage + totalFireDamage + totalForceDamage;
 
 	const damageSummary = (
 		<Fragment key="damageSummary">
@@ -27,6 +28,9 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			</li>
 			<li>
 				<Label>Total Fire Damage: {totalFireDamage}</Label>
+			</li>
+			<li>
+				<Label>Total Force Damage: {totalForceDamage}</Label>
 			</li>
 			{hitStatus === CritStatus.CriticalHit && (
 				<li>
@@ -86,7 +90,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			)}
 			{historyRecord.applyHuntersMark && (
 				<li>
-					<Label>Hunter's Mark added 1d6 Piercing</Label>
+					<Label>Hunter's Mark added 1d6 Force</Label>
 				</li>
 			)}
 			{historyRecord.isDreadAmbusherExtraAttack && (
@@ -105,6 +109,12 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			</li>
 			<li>
 				<Label>Fire Damage Rolls: {RollArrayToString(historyRecord.fireDamageRolls)}</Label>
+			</li>
+			<li>
+				<Label>Force Damage Dice: {diceArrayToString(historyRecord.forceDamageDicePool)}</Label>
+			</li>
+			<li>
+				<Label>Force Damage Rolls: {RollArrayToString(historyRecord.forceDamageRolls)}</Label>
 			</li>
 			{historyRecord.applySharpShooterPenalty && (
 				<li>

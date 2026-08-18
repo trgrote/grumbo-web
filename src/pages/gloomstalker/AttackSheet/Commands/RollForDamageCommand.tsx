@@ -1,5 +1,5 @@
 import { GloomStalkerAttackSheetState, AttackStep } from "../../GloomStalkerTypes";
-import { GetFireDamageDicePool, GetPiercingDamageDicePool } from "../AttackSheetStateFunctions";
+import { GetFireDamageDicePool, GetForceDamageDicePool, GetPiercingDamageDicePool } from "../AttackSheetStateFunctions";
 import { RollDice } from "@/utils/Dice";
 import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
 
@@ -9,6 +9,7 @@ export default class RollForDamageCommand implements IGSAttackSheetCommand {
 	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
 		const piercingDamageDicePool = GetPiercingDamageDicePool(prevState);
 		const fireDamageDicePool = GetFireDamageDicePool(prevState);
+		const forceDamageDicePool = GetForceDamageDicePool(prevState);
 
 		return {
 			...prevState,
@@ -17,6 +18,8 @@ export default class RollForDamageCommand implements IGSAttackSheetCommand {
 			piercingDamageRolls: RollDice(piercingDamageDicePool, this.rng),
 			fireDamageDicePool,
 			fireDamageRolls: RollDice(fireDamageDicePool, this.rng),
+			forceDamageDicePool,
+			forceDamageRolls: RollDice(forceDamageDicePool, this.rng),
 			hasUsedReroll: false,
 		};
 	}

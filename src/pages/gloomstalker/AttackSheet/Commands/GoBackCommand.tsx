@@ -24,6 +24,8 @@ export default class GoBackCommand implements IGSAttackSheetCommand {
 					fireDamageRolls: [],
 					piercingDamageDicePool: [],
 					fireDamageDicePool: [],
+					forceDamageRolls: [],
+					forceDamageDicePool: [],
 				};
 			default:
 				return prevState;
