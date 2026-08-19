@@ -6,6 +6,7 @@ import {
 	GetFireDamageDicePool,
 	GetForceDamageDicePool,
 	GetHighestHitRoll,
+	GetFavoredEnemyBonus,
 	GetHighestHitValue,
 	GetHitPreConfirmStatusColorClass,
 	GetHitStatusColorClass,
@@ -113,6 +114,23 @@ describe('GetHighestHitValue', () => {
 	it('applies the sharpshooter -5 penalty when set', () => {
 		const state = buildTestState({ attackRolls: [12], applySharpShooterPenalty: true });
 		expect(GetHighestHitValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier - 5);
+	});
+
+	it('adds +2 per selected favored enemy', () => {
+		const state = buildTestState({ attackRolls: [12], selectedFavoredEnemies: ['Giant', 'Goblin'] });
+		expect(GetHighestHitValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier + 4);
+	});
+});
+
+describe('GetFavoredEnemyBonus', () => {
+	it('returns 0 when no favored enemies are selected', () => {
+		const state = buildTestState({ selectedFavoredEnemies: [] });
+		expect(GetFavoredEnemyBonus(state)).toBe(0);
+	});
+
+	it('returns +2 per selected favored enemy', () => {
+		const state = buildTestState({ selectedFavoredEnemies: ['Giant', 'Goblin'] });
+		expect(GetFavoredEnemyBonus(state)).toBe(4);
 	});
 });
 

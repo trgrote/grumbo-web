@@ -7,6 +7,7 @@ export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalk
 		attackStep: AttackStep.PreHitRoll,
 		hasAdvantage: false,
 		applySharpShooterPenalty: false,
+		selectedFavoredEnemies: [],
 		attackRolls: [],
 		isHit: false,
 		isDreadAmbusherExtraAttack: false,
@@ -117,9 +118,13 @@ export function GetHitPreConfirmStatusColorClass(state: GloomStalkerAttackSheetS
 	return 'text-green-500';
 }
 
+export function GetFavoredEnemyBonus(state: GloomStalkerAttackSheetState): number {
+	return state.selectedFavoredEnemies.length * 2;
+}
+
 export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number {
 	const highestRoll = GetHighestHitRoll(state);
-	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0);
+	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0) + GetFavoredEnemyBonus(state);
 	return highestRoll + modifier;
 }
 

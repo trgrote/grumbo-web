@@ -14,3 +14,4 @@ export { default as SetAdvantageCommand } from "./SetAdvantageCommand";
 export { default as SetApplyHuntersMarkCommand } from "./SetApplyHuntersMarkCommand";
 export { default as SetApplySharpShooterPenaltyCommand } from "./SetApplySharpShooterPenaltyCommand";
 export { default as SetIsDreadAmbusherExtraAttackCommand } from "./SetIsDreadAmbusherExtraAttackCommand";
+export { default as ToggleFavoredEnemyCommand } from "./ToggleFavoredEnemyCommand";

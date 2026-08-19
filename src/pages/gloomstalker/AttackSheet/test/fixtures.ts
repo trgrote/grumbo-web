@@ -5,6 +5,7 @@ export const testGloomStalkerInfo: GloomStalkerInfo = {
 	attackModifier: 5,
 	damageDie: 8,
 	damageModifier: 3,
+	favoredEnemies: [],
 };
 
 export function buildTestState(overrides: Partial<GloomStalkerAttackSheetState> = {}): GloomStalkerAttackSheetState {
