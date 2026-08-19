@@ -25,6 +25,5 @@ export function GetLocalStorage<T extends ILocalStorageItem>(storageKey: string,
 }
 
 export function SaveLocalStorage<T extends ILocalStorageItem>(storageKey: string, storageVersion: string, localStorageItem: T) {
-	localStorageItem.storageVersion = storageVersion;
-	localStorage.setItem(storageKey, JSON.stringify(localStorageItem));
+	localStorage.setItem(storageKey, JSON.stringify({ ...localStorageItem, storageVersion }));
 }
