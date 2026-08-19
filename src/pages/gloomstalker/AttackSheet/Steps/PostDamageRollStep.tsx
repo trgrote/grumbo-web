@@ -44,7 +44,7 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Post Hit Roll</SheetTitle>
+				<SheetTitle>Post Damage Roll</SheetTitle>
 				<SheetDescription>
 					Apply any additional damage modifiers and confirm final damage rolls
 				</SheetDescription>

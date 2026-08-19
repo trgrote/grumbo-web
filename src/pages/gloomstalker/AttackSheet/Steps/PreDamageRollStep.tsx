@@ -27,7 +27,7 @@ export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStep
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Pre Damgage Roll</SheetTitle>
+				<SheetTitle>Pre Damage Roll</SheetTitle>
 				<SheetDescription>
 					Provide Additional Damage Information before rolling for damage
 				</SheetDescription>
