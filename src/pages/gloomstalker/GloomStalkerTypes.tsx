@@ -2,6 +2,7 @@ export interface GloomStalkerInfo {
 	attackModifier: number;
 	damageDie: number;
 	damageModifier: number;
+	favoredEnemies: string[];
 }
 
 export enum AttackState {
@@ -14,6 +15,7 @@ export enum AttackState {
 export interface PreHitRollInfo {
 	hasAdvantage: boolean;
 	applySharpShooterPenalty: boolean;   // apply -5 to hit to get +10 damage?
+	selectedFavoredEnemies: string[];   // which of gloomStalkerInfo.favoredEnemies apply to this attack's target (+2 to hit/damage each, stacking)
 }
 
 export interface PostHitRollInfo {
