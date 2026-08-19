@@ -5,13 +5,6 @@ export interface GloomStalkerInfo {
 	favoredEnemies: string[];
 }
 
-export enum AttackState {
-	PreHitRoll,
-	PostHitRoll,
-	PreDamageRoll,
-	PostDamageRoll
-}
-
 export interface PreHitRollInfo {
 	hasAdvantage: boolean;
 	applySharpShooterPenalty: boolean;   // apply -5 to hit to get +10 damage?
