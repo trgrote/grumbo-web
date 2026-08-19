@@ -29,7 +29,7 @@ export default function PostAttackRollStep({ state, dispatch }: PostAttackRollSt
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Roll for Attack</SheetTitle>
+				<SheetTitle>Post Attack Roll</SheetTitle>
 				<SheetDescription>
 					Did Attack Hit?
 				</SheetDescription>
