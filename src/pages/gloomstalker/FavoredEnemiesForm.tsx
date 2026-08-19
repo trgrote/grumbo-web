@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export interface FavoredEnemiesFormProps {
 	favoredEnemies: string[];
@@ -24,29 +25,36 @@ export default function FavoredEnemiesForm({ favoredEnemies, onChange }: Favored
 	};
 
 	return (
-		<div>
-			<Label>Favored Enemies</Label>
-			<ul>
+		<div className="flex flex-col gap-2 mt-4">
+			<label>Favored Enemies</label>
+			<ul className="flex flex-wrap gap-2">
 				{favoredEnemies.map(name => (
 					<li key={name}>
-						{name}
-						<Button variant="outline" onClick={() => removeFavoredEnemy(name)}>Remove</Button>
+						<Badge variant="secondary">
+							{name}
+							<button type="button" aria-label={`Remove ${name}`} onClick={() => removeFavoredEnemy(name)}>
+								<X className="size-3 cursor-pointer" />
+							</button>
+						</Badge>
 					</li>
 				))}
 			</ul>
-			<Input
-				type="text"
-				value={newFavoredEnemy}
-				placeholder="Enemy type (e.g. Giant)"
-				onChange={e => setNewFavoredEnemy(e.target.value)}
-				onKeyDown={e => {
-					if (e.key === 'Enter') {
-						e.preventDefault();
-						addFavoredEnemy();
-					}
-				}}
-			/>
-			<Button onClick={addFavoredEnemy}>Add</Button>
+			<div className="flex gap-2">
+				<Input
+					type="text"
+					className="flex-1"
+					value={newFavoredEnemy}
+					placeholder="Enemy type (e.g. Giant)"
+					onChange={e => setNewFavoredEnemy(e.target.value)}
+					onKeyDown={e => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							addFavoredEnemy();
+						}
+					}}
+				/>
+				<Button onClick={addFavoredEnemy}>Add</Button>
+			</div>
 		</div>
 	);
 }
