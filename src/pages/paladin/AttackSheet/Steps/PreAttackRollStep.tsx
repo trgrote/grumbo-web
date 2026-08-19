@@ -29,8 +29,8 @@ export default function PreAttackRollStep({ state, dispatch }: PreAttackRollStep
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<div className="grid gap-3">
-					<Label htmlFor="hasAdvantage">
-						<Checkbox id="hasAdvantage" checked={hasAdvantage}
+					<Label htmlFor="hasAdvantage" className="flex items-center space-x-2">
+						<Checkbox id="hasAdvantage" className="flex items-center space-x-2" checked={hasAdvantage}
 							onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
 						Has Advantage?
 					</Label>

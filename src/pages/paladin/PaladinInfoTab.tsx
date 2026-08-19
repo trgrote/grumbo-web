@@ -59,8 +59,8 @@ export default function PaladinInfoTab({ paladinInfo, onChange, addToRollHistory
 					}
 				/>
 				<div title="Automaticlly adds 1d8 Radiant Damage on any attack">
-					<Label htmlFor="hasImprovedDS">
-						<Checkbox id="hasImprovedDS" checked={hasImprovedDS}
+					<Label htmlFor="hasImprovedDS" className="flex items-center space-x-2">
+						<Checkbox id="hasImprovedDS" className="flex items-center space-x-2" checked={hasImprovedDS}
 							onCheckedChange={() => setHasImprovedDS(!hasImprovedDS)} />
 						Has Improved Divine Smite?
 					</Label>
