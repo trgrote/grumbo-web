@@ -128,6 +128,25 @@ export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number 
 	return highestRoll + modifier;
 }
 
+export function GetTotalPiercingDamage(state: GloomStalkerAttackSheetState): number {
+	return state.piercingDamageRolls.reduce((a, value) => a + value, 0)
+		+ state.gloomStalkerInfo.damageModifier
+		+ (state.applySharpShooterPenalty ? 10 : 0)
+		+ GetFavoredEnemyBonus(state);
+}
+
+export function GetTotalFireDamage(state: GloomStalkerAttackSheetState): number {
+	return state.fireDamageRolls.reduce((a, value) => a + value, 0);
+}
+
+export function GetTotalForceDamage(state: GloomStalkerAttackSheetState): number {
+	return state.forceDamageRolls.reduce((a, value) => a + value, 0);
+}
+
+export function GetTotalDamage(state: GloomStalkerAttackSheetState): number {
+	return GetTotalPiercingDamage(state) + GetTotalFireDamage(state) + GetTotalForceDamage(state);
+}
+
 export function RollHitDice(hasAdvantage: boolean, rng: () => number = Math.random): number[] {
 	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest.
 	// effectively giving you one extra die to roll when you have advantage.

@@ -12,6 +12,10 @@ import {
 	GetHitStatusColorClass,
 	GetHitStatusText,
 	GetPiercingDamageDicePool,
+	GetTotalDamage,
+	GetTotalFireDamage,
+	GetTotalForceDamage,
+	GetTotalPiercingDamage,
 	RollHitDice,
 } from './AttackSheetStateFunctions';
 import { CritStatus, DamageType } from '../GloomStalkerTypes';
@@ -131,6 +135,84 @@ describe('GetFavoredEnemyBonus', () => {
 	it('returns +2 per selected favored enemy', () => {
 		const state = buildTestState({ selectedFavoredEnemies: ['Giant', 'Goblin'] });
 		expect(GetFavoredEnemyBonus(state)).toBe(4);
+	});
+});
+
+describe('GetTotalPiercingDamage', () => {
+	it('sums the piercing damage rolls and adds the damage modifier', () => {
+		const state = buildTestState({ piercingDamageRolls: [4, 5] });
+		// 4 + 5 + damageModifier(3)
+		expect(GetTotalPiercingDamage(state)).toBe(12);
+	});
+
+	it('adds the Sharpshooter +10 bonus when the penalty is applied', () => {
+		const state = buildTestState({ piercingDamageRolls: [4], applySharpShooterPenalty: true });
+		// 4 + damageModifier(3) + sharpshooter(10)
+		expect(GetTotalPiercingDamage(state)).toBe(17);
+	});
+
+	it('adds +2 per selected favored enemy', () => {
+		const state = buildTestState({ piercingDamageRolls: [4], selectedFavoredEnemies: ['Giant', 'Goblin'] });
+		// 4 + damageModifier(3) + favoredEnemyBonus(4)
+		expect(GetTotalPiercingDamage(state)).toBe(11);
+	});
+
+	it('combines the damage modifier, Sharpshooter bonus, and favored enemy bonus together', () => {
+		const state = buildTestState({
+			piercingDamageRolls: [4, 5],
+			applySharpShooterPenalty: true,
+			selectedFavoredEnemies: ['Giant'],
+		});
+		// (4 + 5) + damageModifier(3) + sharpshooter(10) + favoredEnemyBonus(2)
+		expect(GetTotalPiercingDamage(state)).toBe(24);
+	});
+});
+
+describe('GetTotalFireDamage', () => {
+	it('sums the fire damage rolls', () => {
+		const state = buildTestState({ fireDamageRolls: [4, 5] });
+		expect(GetTotalFireDamage(state)).toBe(9);
+	});
+
+	it('is 0 when there are no fire damage rolls', () => {
+		const state = buildTestState({ fireDamageRolls: [] });
+		expect(GetTotalFireDamage(state)).toBe(0);
+	});
+});
+
+describe('GetTotalForceDamage', () => {
+	it('sums the force damage rolls', () => {
+		const state = buildTestState({ forceDamageRolls: [4, 5] });
+		expect(GetTotalForceDamage(state)).toBe(9);
+	});
+
+	it('is 0 when there are no force damage rolls', () => {
+		const state = buildTestState({ forceDamageRolls: [] });
+		expect(GetTotalForceDamage(state)).toBe(0);
+	});
+});
+
+describe('GetTotalDamage', () => {
+	it('sums piercing, fire, and force damage together', () => {
+		const state = buildTestState({
+			piercingDamageRolls: [4],
+			fireDamageRolls: [2],
+			forceDamageRolls: [1],
+		});
+		// piercing(4 + damageModifier(3)) + fire(2) + force(1)
+		expect(GetTotalDamage(state)).toBe(10);
+	});
+
+	it('includes the Sharpshooter and favored enemy bonuses via GetTotalPiercingDamage', () => {
+		const state = buildTestState({
+			piercingDamageRolls: [4],
+			applySharpShooterPenalty: true,
+			selectedFavoredEnemies: ['Giant'],
+			fireDamageRolls: [2],
+			forceDamageRolls: [1],
+		});
+		// piercing(4 + damageModifier(3) + sharpshooter(10) + favoredEnemyBonus(2)) + fire(2) + force(1)
+		expect(GetTotalDamage(state)).toBe(22);
 	});
 });
 
