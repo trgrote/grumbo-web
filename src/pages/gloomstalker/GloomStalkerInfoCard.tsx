@@ -9,6 +9,7 @@ import {
 import { GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import GloomStalkerAttackSheet from "./GloomStalkerAttackSheet";
 import WeaponStatsForm from "@/components/WeaponStatsForm";
+import FavoredEnemiesForm from "./FavoredEnemiesForm";
 
 export interface GloomStalkerInfoCardProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -20,7 +21,8 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 	const {
 		attackModifier,
 		damageDie,
-		damageModifier
+		damageModifier,
+		favoredEnemies
 	} = gloomStalkerInfo;
 
 	return (
@@ -50,6 +52,15 @@ export default function GloomStalkerInfoCard({ gloomStalkerInfo, onChange, addTo
 						onChange({
 							...gloomStalkerInfo,
 							damageModifier: newValue
+						})
+					}
+				/>
+				<FavoredEnemiesForm
+					favoredEnemies={favoredEnemies}
+					onChange={(newFavoredEnemies) =>
+						onChange({
+							...gloomStalkerInfo,
+							favoredEnemies: newFavoredEnemies
 						})
 					}
 				/>
