@@ -31,20 +31,16 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 
 	const bestRerollOption = GetBestRerollOption(state);
 	const alreadyBestRolls = bestRerollOption === null;
-	let rerollButtonText = bestRerollOption
-		? `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`
-		: "Already best rolls!";
-
-	if (state.hasUsedReroll) {
-		rerollButtonText = "Reroll Used";
-	} else if (alreadyBestRolls) {
-		rerollButtonText = "Already best rolls!";
-	}
+	const rerollButtonText = state.hasUsedReroll
+		? "Reroll Used"
+		: bestRerollOption
+			? `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`
+			: "Already best rolls!";
 
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Post Hit Roll</SheetTitle>
+				<SheetTitle>Post Damage Roll</SheetTitle>
 				<SheetDescription>
 					Apply any additional damage modifiers and confirm final damage rolls
 				</SheetDescription>
