@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { PaladinAttackSheetState } from "../../PaladinTypes";
@@ -35,7 +34,9 @@ export default function PostAttackRollStep({ state, dispatch }: PostAttackRollSt
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<Label>Critical Hit: <Checkbox disabled checked={isCritical} /></Label>
+				{isCritical && (
+					<Label>Critical Hit</Label>
+				)}
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
 						{isCritical && <strong>{highestAttackValue}</strong>}
