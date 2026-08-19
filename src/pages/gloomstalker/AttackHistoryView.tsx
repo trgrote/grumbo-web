@@ -6,16 +6,15 @@ import AttackHistoryDetails from "./AttackHistoryDetails";
 import { GetHitStatusColorClass, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
 
 interface AttackHistoryViewProps {
-	defaultOpen?: boolean;
 	historyRecord: HistoryRecord;
 }
 
-export default function AttackHistoryView({ defaultOpen, historyRecord }: AttackHistoryViewProps) {
+export default function AttackHistoryView({ historyRecord }: AttackHistoryViewProps) {
 	const hitText = GetHitStatusText(historyRecord);
 	const hitTextColorClass = GetHitStatusColorClass(historyRecord);
 
 	return (
-		<Collapsible defaultOpen={defaultOpen ?? false} className="group/collapsible">
+		<Collapsible className="group/collapsible">
 			<CollapsibleTrigger asChild className="w-full">
 				<Button variant="ghost">
 					<h3>
