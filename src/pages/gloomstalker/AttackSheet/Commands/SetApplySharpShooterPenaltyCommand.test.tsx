@@ -7,5 +7,6 @@ describe('SetApplySharpShooterPenaltyCommand', () => {
 		const state = buildTestState({ applySharpShooterPenalty: false });
 
 		expect(new SetApplySharpShooterPenaltyCommand(true).apply(state).applySharpShooterPenalty).toBe(true);
+		expect(new SetApplySharpShooterPenaltyCommand(false).apply(buildTestState({ applySharpShooterPenalty: true })).applySharpShooterPenalty).toBe(false);
 	});
 });

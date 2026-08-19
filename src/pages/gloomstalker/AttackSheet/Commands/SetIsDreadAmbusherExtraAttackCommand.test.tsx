@@ -7,5 +7,6 @@ describe('SetIsDreadAmbusherExtraAttackCommand', () => {
 		const state = buildTestState({ isDreadAmbusherExtraAttack: false });
 
 		expect(new SetIsDreadAmbusherExtraAttackCommand(true).apply(state).isDreadAmbusherExtraAttack).toBe(true);
+		expect(new SetIsDreadAmbusherExtraAttackCommand(false).apply(buildTestState({ isDreadAmbusherExtraAttack: true })).isDreadAmbusherExtraAttack).toBe(false);
 	});
 });
