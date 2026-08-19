@@ -31,9 +31,9 @@ export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStep
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Damage Info</SheetTitle>
+				<SheetTitle>Pre Damage Roll</SheetTitle>
 				<SheetDescription>
-					Provide Additional Damage Information
+					Provide Additional Damage Information before rolling for damage
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">

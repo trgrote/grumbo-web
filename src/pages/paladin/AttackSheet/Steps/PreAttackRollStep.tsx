@@ -24,7 +24,7 @@ export default function PreAttackRollStep({ state, dispatch }: PreAttackRollStep
 			<SheetHeader>
 				<SheetTitle>Roll for Attack</SheetTitle>
 				<SheetDescription>
-					Provide Attack Information, roll for attack, provide damage information, and then roll for damage.
+					Provide pre-attack-roll information and roll for attack
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
