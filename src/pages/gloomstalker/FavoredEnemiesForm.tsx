@@ -16,6 +16,8 @@ export default function FavoredEnemiesForm({ favoredEnemies, onChange }: Favored
 		const trimmedName = newFavoredEnemy.trim();
 		if (trimmedName === '' || favoredEnemies.includes(trimmedName)) return;
 
+		// Dedupe defensively: a stale closure could otherwise let two rapid adds insert the same name twice,
+		// which would collide as a React key/id on the badge list below.
 		onChange(Array.from(new Set([...favoredEnemies, trimmedName])));
 		setNewFavoredEnemy('');
 	};
