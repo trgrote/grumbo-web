@@ -1,6 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { GetHighestHitRoll, GetCritStatus, GetFavoredEnemyBonus, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
+import {
+	GetHighestHitRoll,
+	GetHighestHitValue,
+	GetCritStatus,
+	GetFavoredEnemyBonus,
+	GetHitStatusText,
+	GetTotalDamage,
+	GetTotalFireDamage,
+	GetTotalForceDamage,
+	GetTotalPiercingDamage,
+} from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
 import { Fragment } from "react";
 import { JoinWithElement, RollArrayToString } from "@/utils/Formatting";
@@ -12,13 +22,10 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 
 	const hitStatus = GetCritStatus(historyRecord);
 	const favoredEnemyBonus = GetFavoredEnemyBonus(historyRecord);
-	const totalPiercingDamage = historyRecord.piercingDamageRolls.reduce((a, value) => a + value, 0)
-		+ gloomStalkerInfo.damageModifier
-		+ (historyRecord.applySharpShooterPenalty ? 10 : 0)
-		+ favoredEnemyBonus;
-	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
-	const totalForceDamage = historyRecord.forceDamageRolls.reduce((a, value) => a + value, 0);
-	const totalDamage = totalPiercingDamage + totalFireDamage + totalForceDamage;
+	const totalPiercingDamage = GetTotalPiercingDamage(historyRecord);
+	const totalFireDamage = GetTotalFireDamage(historyRecord);
+	const totalForceDamage = GetTotalForceDamage(historyRecord);
+	const totalDamage = GetTotalDamage(historyRecord);
 
 	const damageSummary = (
 		<Fragment key="damageSummary">
@@ -51,7 +58,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	);
 
 	const highestHitRoll = GetHighestHitRoll(historyRecord);
-	const totalHitValue = highestHitRoll + gloomStalkerInfo.attackModifier + (historyRecord.applySharpShooterPenalty ? -5 : 0) + favoredEnemyBonus;
+	const totalHitValue = GetHighestHitValue(historyRecord);
 
 	const toHitSummary = (
 		<Fragment key="toHitSummary">
