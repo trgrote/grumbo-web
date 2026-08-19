@@ -7,5 +7,6 @@ describe('SetApplyHuntersMarkCommand', () => {
 		const state = buildTestState({ applyHuntersMark: false });
 
 		expect(new SetApplyHuntersMarkCommand(true).apply(state).applyHuntersMark).toBe(true);
+		expect(new SetApplyHuntersMarkCommand(false).apply(buildTestState({ applyHuntersMark: true })).applyHuntersMark).toBe(false);
 	});
 });

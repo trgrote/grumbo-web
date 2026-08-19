@@ -48,4 +48,11 @@ describe('GoBackCommand', () => {
 
 		expect(result).toBe(state);
 	});
+
+	it('is a no-op from Results', () => {
+		const state = buildTestState({ attackStep: AttackStep.Results });
+		const result = new GoBackCommand().apply(state);
+
+		expect(result).toBe(state);
+	});
 });
