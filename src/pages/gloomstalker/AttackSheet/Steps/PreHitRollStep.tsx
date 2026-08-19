@@ -7,7 +7,8 @@ import {
 	IGSAttackSheetCommand,
 	SetAdvantageCommand,
 	RollForAttackCommand,
-	SetApplySharpShooterPenaltyCommand
+	SetApplySharpShooterPenaltyCommand,
+	ToggleFavoredEnemyCommand
 } from "../Commands/AttackSheetCommands";
 
 interface PreHitRollStepProps {
@@ -20,6 +21,9 @@ export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps)
 	const setHasAdvantage = (value: boolean) => dispatch(new SetAdvantageCommand(value));
 	const applySharpShooterPenalty = state.applySharpShooterPenalty;
 	const setApplySharpShooterPenalty = (value: boolean) => dispatch(new SetApplySharpShooterPenaltyCommand(value));
+	const favoredEnemies = state.gloomStalkerInfo.favoredEnemies;
+	const selectedFavoredEnemies = state.selectedFavoredEnemies;
+	const toggleFavoredEnemy = (name: string) => dispatch(new ToggleFavoredEnemyCommand(name));
 	const onRollForAttack = () => dispatch(new RollForAttackCommand());
 
 	return (
@@ -45,6 +49,17 @@ export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps)
 						Apply Sharp Shooter Penalty? (-5 to hit for +10 damage)
 					</Label>
 				</div>
+				{favoredEnemies.length > 0 && (
+					<div className="grid gap-3">
+						{favoredEnemies.map(name => (
+							<Label key={name} htmlFor={`favoredEnemy-${name}`}>
+								<Checkbox id={`favoredEnemy-${name}`} checked={selectedFavoredEnemies.includes(name)}
+									onCheckedChange={() => toggleFavoredEnemy(name)} />
+								Favored Enemy: {name}? (+2 to hit, +2 damage)
+							</Label>
+						))}
+					</div>
+				)}
 			</div>
 			<SheetFooter>
 				<Button onClick={onRollForAttack} type="submit">Roll for Attack</Button>

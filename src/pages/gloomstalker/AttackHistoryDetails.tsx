@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { GetHighestHitRoll, GetCritStatus, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
+import { GetHighestHitRoll, GetCritStatus, GetFavoredEnemyBonus, GetHitStatusText } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
 import { Fragment } from "react";
 import { JoinWithElement, RollArrayToString } from "@/utils/Formatting";
@@ -11,9 +11,11 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const { gloomStalkerInfo } = historyRecord;
 
 	const hitStatus = GetCritStatus(historyRecord);
+	const favoredEnemyBonus = GetFavoredEnemyBonus(historyRecord);
 	const totalPiercingDamage = historyRecord.piercingDamageRolls.reduce((a, value) => a + value, 0)
 		+ gloomStalkerInfo.damageModifier
-		+ (historyRecord.applySharpShooterPenalty ? 10 : 0);
+		+ (historyRecord.applySharpShooterPenalty ? 10 : 0)
+		+ favoredEnemyBonus;
 	const totalFireDamage = historyRecord.fireDamageRolls.reduce((a, value) => a + value, 0);
 	const totalForceDamage = historyRecord.forceDamageRolls.reduce((a, value) => a + value, 0);
 	const totalDamage = totalPiercingDamage + totalFireDamage + totalForceDamage;
@@ -49,12 +51,12 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	);
 
 	const highestHitRoll = GetHighestHitRoll(historyRecord);
-	const totalHitValue = highestHitRoll + gloomStalkerInfo.attackModifier + (historyRecord.applySharpShooterPenalty ? -5 : 0);
+	const totalHitValue = highestHitRoll + gloomStalkerInfo.attackModifier + (historyRecord.applySharpShooterPenalty ? -5 : 0) + favoredEnemyBonus;
 
 	const toHitSummary = (
 		<Fragment key="toHitSummary">
 			<li>
-				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {gloomStalkerInfo.attackModifier}{historyRecord.applySharpShooterPenalty ? ' - 5' : ''})</Label>
+				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {gloomStalkerInfo.attackModifier}{historyRecord.applySharpShooterPenalty ? ' - 5' : ''}{favoredEnemyBonus > 0 ? ` + ${favoredEnemyBonus}` : ''})</Label>
 			</li>
 			{historyRecord.hasAdvantage && (
 				<li>
@@ -73,6 +75,11 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			{historyRecord.applySharpShooterPenalty && (
 				<li>
 					<Label>Sharp Shooter Penalty: -5</Label>
+				</li>
+			)}
+			{historyRecord.selectedFavoredEnemies.length > 0 && (
+				<li>
+					<Label>Favored Enemy Bonus: +{favoredEnemyBonus} ({historyRecord.selectedFavoredEnemies.join(', ')})</Label>
 				</li>
 			)}
 		</Fragment>
@@ -119,6 +126,11 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 			{historyRecord.applySharpShooterPenalty && (
 				<li>
 					<Label>Sharp Shooter Bonus: +10 Piercing</Label>
+				</li>
+			)}
+			{historyRecord.selectedFavoredEnemies.length > 0 && (
+				<li>
+					<Label>Favored Enemy Bonus: +{favoredEnemyBonus} Piercing ({historyRecord.selectedFavoredEnemies.join(', ')})</Label>
 				</li>
 			)}
 		</Fragment>

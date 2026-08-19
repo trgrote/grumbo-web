@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
-import { GetCritStatus, GetHighestHitValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
+import { GetCritStatus, GetFavoredEnemyBonus, GetHighestHitValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
 import {
 	IGSAttackSheetCommand,
 	GoBackCommand,
@@ -39,6 +39,9 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 				<Label>To Hit Rolls: [{attackRolls.join(', ')}]</Label>
 				<Label>Attack Modifier: {attackModifier >= 0 ? `+${attackModifier}` : attackModifier}</Label>
 				{state.applySharpShooterPenalty && <Label>Sharp Shooter Penalty: -5</Label>}
+				{state.selectedFavoredEnemies.length > 0 && (
+					<Label>Favored Enemy Bonus: +{GetFavoredEnemyBonus(state)} ({state.selectedFavoredEnemies.join(', ')})</Label>
+				)}
 				{hitStatus === CritStatus.CriticalHit && (
 					<Label>Critical Hit</Label>
 				)}
