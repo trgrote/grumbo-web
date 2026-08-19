@@ -38,8 +38,8 @@ export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStep
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<div className="grid gap-3" title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-					<Label htmlFor="isTargetFiendOrUndead">
-						<Checkbox id="isTargetFiendOrUndead" checked={isTargetFiendOrUndead}
+					<Label htmlFor="isTargetFiendOrUndead" className="flex items-center space-x-2">
+						<Checkbox id="isTargetFiendOrUndead" className="flex items-center space-x-2" checked={isTargetFiendOrUndead}
 							onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
 						Is Target Fiend or Undead?
 					</Label>
