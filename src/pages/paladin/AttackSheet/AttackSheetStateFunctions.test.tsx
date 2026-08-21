@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	CreateHistoryRecordFromState,
+	GetCritStatus,
 	GetDivineSmiteDamageDicePool,
 	GetHighestAttackRoll,
 	GetHighestAttackValue,
@@ -16,6 +17,7 @@ import {
 	SpellSlotToString,
 } from './AttackSheetStateFunctions';
 import { buildTestState, testPaladinInfo } from './test/fixtures';
+import { CritStatus } from '../PaladinTypes';
 
 describe('GetHighestAttackRoll / GetIsCritical', () => {
 	it('treats a 20 as a critical hit', () => {
@@ -30,6 +32,24 @@ describe('GetHighestAttackRoll / GetIsCritical', () => {
 	});
 });
 
+describe('GetCritStatus', () => {
+	it('reports a critical hit on a natural 20', () => {
+		expect(GetCritStatus(buildTestState({ attackRolls: [5, 20] }))).toBe(CritStatus.CriticalHit);
+	});
+
+	it('reports a critical miss on a natural 1', () => {
+		expect(GetCritStatus(buildTestState({ attackRolls: [1] }))).toBe(CritStatus.CriticalMiss);
+	});
+
+	it('reports Normal for anything in between', () => {
+		expect(GetCritStatus(buildTestState({ attackRolls: [10] }))).toBe(CritStatus.Normal);
+	});
+
+	it('only considers the highest roll, so advantage can rescue a 1', () => {
+		expect(GetCritStatus(buildTestState({ attackRolls: [1, 10] }))).toBe(CritStatus.Normal);
+	});
+});
+
 describe('GetHighestAttackValue', () => {
 	it('adds the attack modifier to the highest roll', () => {
 		const state = buildTestState({ attackRolls: [12] });
@@ -38,9 +58,9 @@ describe('GetHighestAttackValue', () => {
 });
 
 describe('GetHitStatusText', () => {
-	it('prefixes Critical only on a natural 20', () => {
+	it('prefixes Critical on a natural 20 and a natural 1', () => {
 		expect(GetHitStatusText(buildTestState({ attackRolls: [20], isHit: true }))).toBe('Critical Hit');
-		expect(GetHitStatusText(buildTestState({ attackRolls: [1], isHit: false }))).toBe('Miss');
+		expect(GetHitStatusText(buildTestState({ attackRolls: [1], isHit: false }))).toBe('Critical Miss');
 	});
 
 	it('reports plain Hit/Miss otherwise', () => {

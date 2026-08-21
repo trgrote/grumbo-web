@@ -1,4 +1,4 @@
-import { AttackStep, HistoryRecord, PaladinAttackSheetState, PaladinInfo } from "../PaladinTypes";
+import { AttackStep, CritStatus, HistoryRecord, PaladinAttackSheetState, PaladinInfo } from "../PaladinTypes";
 import { RollDie } from "@/utils/Dice";
 
 export function PaladinAttackSheetStateDefault(paladinInfo: PaladinInfo): PaladinAttackSheetState {
@@ -27,8 +27,20 @@ export function GetHighestAttackRoll(state: PaladinAttackSheetState): number {
 	return Math.max(...state.attackRolls);
 }
 
+export function GetCritStatus(state: PaladinAttackSheetState): CritStatus {
+	const highestRoll = GetHighestAttackRoll(state);
+
+	if (highestRoll === 20) {
+		return CritStatus.CriticalHit;
+	}
+	if (highestRoll === 1) {
+		return CritStatus.CriticalMiss;
+	}
+	return CritStatus.Normal;
+}
+
 export function GetIsCritical(state: PaladinAttackSheetState): boolean {
-	return GetHighestAttackRoll(state) === 20;
+	return GetCritStatus(state) === CritStatus.CriticalHit;
 }
 
 export function GetHighestAttackValue(state: PaladinAttackSheetState): number {
@@ -36,7 +48,10 @@ export function GetHighestAttackValue(state: PaladinAttackSheetState): number {
 }
 
 export function GetHitStatusText(state: PaladinAttackSheetState): string {
-	return (GetIsCritical(state) ? 'Critical ' : '') + (state.isHit ? 'Hit' : 'Miss');
+	const critStatus = GetCritStatus(state);
+
+	const isCriticalHitOrMiss = critStatus !== CritStatus.Normal;
+	return (isCriticalHitOrMiss ? 'Critical ' : '') + (state.isHit ? 'Hit' : 'Miss');
 }
 
 export function GetHitStatusColorClass(state: PaladinAttackSheetState): string {
