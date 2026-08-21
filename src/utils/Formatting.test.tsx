@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { JoinWithElement, RollArrayToString } from './Formatting';
+import { DiceArrayToString, JoinWithElement, RollArrayToString } from './Formatting';
 
 describe('RollArrayToString', () => {
 	it('formats an array of rolls as a bracketed, comma-separated list', () => {
@@ -8,6 +8,16 @@ describe('RollArrayToString', () => {
 
 	it('formats an empty array', () => {
 		expect(RollArrayToString([])).toBe('[]');
+	});
+});
+
+describe('DiceArrayToString', () => {
+	it('formats an array of die sizes as a bracketed, comma-separated list of dice', () => {
+		expect(DiceArrayToString([8, 8, 6])).toBe('[d8, d8, d6]');
+	});
+
+	it('formats an empty array', () => {
+		expect(DiceArrayToString([])).toBe('[]');
 	});
 });
 
