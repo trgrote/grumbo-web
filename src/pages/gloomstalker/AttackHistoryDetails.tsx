@@ -13,9 +13,7 @@ import {
 } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
 import { Fragment } from "react";
-import { JoinWithElement, RollArrayToString } from "@/utils/Formatting";
-
-const diceArrayToString = (arr: number[]) => '[' + arr.map(die => `d${die}`).join(', ') + ']';
+import { DiceArrayToString, JoinWithElement, RollArrayToString } from "@/utils/Formatting";
 
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { gloomStalkerInfo } = historyRecord;
@@ -113,19 +111,19 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 				</li>
 			)}
 			<li>
-				<Label>Piercing Damage Dice: {diceArrayToString(historyRecord.piercingDamageDicePool)}</Label>
+				<Label>Piercing Damage Dice: {DiceArrayToString(historyRecord.piercingDamageDicePool)}</Label>
 			</li>
 			<li>
 				<Label>Piercing Damage Rolls: {RollArrayToString(historyRecord.piercingDamageRolls)}</Label>
 			</li>
 			<li>
-				<Label>Fire Damage Dice: {diceArrayToString(historyRecord.fireDamageDicePool)}</Label>
+				<Label>Fire Damage Dice: {DiceArrayToString(historyRecord.fireDamageDicePool)}</Label>
 			</li>
 			<li>
 				<Label>Fire Damage Rolls: {RollArrayToString(historyRecord.fireDamageRolls)}</Label>
 			</li>
 			<li>
-				<Label>Force Damage Dice: {diceArrayToString(historyRecord.forceDamageDicePool)}</Label>
+				<Label>Force Damage Dice: {DiceArrayToString(historyRecord.forceDamageDicePool)}</Label>
 			</li>
 			<li>
 				<Label>Force Damage Rolls: {RollArrayToString(historyRecord.forceDamageRolls)}</Label>

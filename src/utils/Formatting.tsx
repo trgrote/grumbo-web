@@ -4,6 +4,10 @@ export function RollArrayToString(arr: number[]): string {
 	return '[' + arr.join(', ') + ']';
 }
 
+export function DiceArrayToString(arr: number[]): string {
+	return '[' + arr.map(die => `d${die}`).join(', ') + ']';
+}
+
 export function JoinWithElement(arr: JSX.Element[], element: JSX.Element): JSX.Element[] {
 	return arr.flatMap((item, index) =>
 		index < arr.length - 1 ? [item, cloneElement(element, { key: `separator-${index}` })] : [item]

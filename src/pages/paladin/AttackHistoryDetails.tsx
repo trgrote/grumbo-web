@@ -1,67 +1,127 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Fragment } from "react";
+import {
+	GetDivineSmiteDamageDicePool,
+	GetHighestAttackRoll,
+	GetHighestAttackValue,
+	GetHitStatusText,
+	GetIsCritical,
+	GetTotalDamage,
+	GetTotalDivineSmiteDamage,
+	GetTotalWeaponDamage,
+	GetWeaponDamageDicePool,
+	SpellSlotToString,
+} from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord } from "./PaladinTypes";
-import { GetHitStatusText, GetTotalDivineSmiteDamage, GetTotalWeaponDamage, SpellSlotToString } from "./AttackSheet/AttackSheetStateFunctions";
-import { JoinWithElement, RollArrayToString } from "@/utils/Formatting";
+import { Fragment } from "react";
+import { DiceArrayToString, JoinWithElement, RollArrayToString } from "@/utils/Formatting";
 
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { paladinInfo } = historyRecord;
 
+	const isCritical = GetIsCritical(historyRecord);
 	const totalWeaponDamage = GetTotalWeaponDamage(historyRecord);
 	const totalDivineSmiteDamage = GetTotalDivineSmiteDamage(historyRecord);
+	const totalDamage = GetTotalDamage(historyRecord);
+
+	const damageSummary = (
+		<Fragment key="damageSummary">
+			<li>
+				<Label>Total Damage: {totalDamage}</Label>
+			</li>
+			<li>
+				<Label>Total Slashing Damage: {totalWeaponDamage}</Label>
+			</li>
+			<li>
+				<Label>Total Radiant Damage: {totalDivineSmiteDamage}</Label>
+			</li>
+		</Fragment>
+	);
 
 	const hitSummary = (
 		<Fragment key="hitSummary">
-			<li>
-				<Label>Attack Modifier: {paladinInfo.attackModifier}</Label>
-			</li>
-			<li>
-				<Label>Weapon Stats: d{paladinInfo.damageDie} + {paladinInfo.damageModifier}</Label>
-			</li>
-			<li>
-				<Label>Improved Divine Smite: <Checkbox disabled checked={paladinInfo.hasImprovedDS} /></Label>
-			</li>
-			<li>
-				<Label>Had Advantage: <Checkbox disabled checked={historyRecord.hasAdvantage} /></Label>
-			</li>
-			<li>
-				<Label>To Hit Rolls: {RollArrayToString(historyRecord.attackRolls)}</Label>
-			</li>
 			<li>
 				<Label>{GetHitStatusText(historyRecord)}</Label>
 			</li>
 		</Fragment>
 	);
 
-	const damageDetails = (
-		<Fragment key="damageDetails">
+	const highestHitRoll = GetHighestAttackRoll(historyRecord);
+	const totalHitValue = GetHighestAttackValue(historyRecord);
+
+	const toHitSummary = (
+		<Fragment key="toHitSummary">
 			<li>
-				<Label>Was Target Fiend or Undead: <Checkbox disabled checked={historyRecord.isTargetFiendOrUndead} /></Label>
+				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {paladinInfo.attackModifier})</Label>
+			</li>
+			{historyRecord.hasAdvantage && (
+				<li>
+					<Label>Advantage (Rolled 2d20)</Label>
+				</li>
+			)}
+			<li>
+				<Label>Hit Rolls: {RollArrayToString(historyRecord.attackRolls)}</Label>
 			</li>
 			<li>
-				<Label>Weapon Rolls: {RollArrayToString(historyRecord.weaponDamageRolls)}</Label>
+				<Label>Highest Hit Roll: {highestHitRoll}</Label>
 			</li>
 			<li>
-				<Label>Total Weapon Damage: {totalWeaponDamage}</Label>
-			</li>
-			<li>
-				<Label>Spell Slot Used: {SpellSlotToString(historyRecord.spellSlotUsed)}</Label>
-			</li>
-			<li>
-				<Label>Divine Smite Rolls: {RollArrayToString(historyRecord.divineSmiteDamageRolls)}</Label>
-			</li>
-			<li>
-				<Label>Total Divine Smite Damage: {totalDivineSmiteDamage}</Label>
+				<Label>Hit Modifier: +{paladinInfo.attackModifier}</Label>
 			</li>
 		</Fragment>
 	);
 
+	const damageRolls = (
+		<Fragment key="damageRolls">
+			<li>
+				<Label>Weapon Damage: d{paladinInfo.damageDie} + {paladinInfo.damageModifier} (Slashing)</Label>
+			</li>
+			{isCritical && (
+				<li>
+					<Label>Critical Hit doubled the damage dice</Label>
+				</li>
+			)}
+			{paladinInfo.hasImprovedDS && (
+				<li>
+					<Label>Improved Divine Smite added 1d8 Radiant</Label>
+				</li>
+			)}
+			{historyRecord.isTargetFiendOrUndead && (
+				<li>
+					<Label>Fiend or Undead target added 1d8 Radiant</Label>
+				</li>
+			)}
+			{historyRecord.spellSlotUsed > 0 && (
+				<li>
+					<Label>Level {SpellSlotToString(historyRecord.spellSlotUsed)} Spell Slot added {historyRecord.spellSlotUsed + 1}d8 Radiant</Label>
+				</li>
+			)}
+			<li>
+				<Label>Slashing Damage Dice: {DiceArrayToString(GetWeaponDamageDicePool(historyRecord))}</Label>
+			</li>
+			<li>
+				<Label>Slashing Damage Rolls: {RollArrayToString(historyRecord.weaponDamageRolls)}</Label>
+			</li>
+			<li>
+				<Label>Radiant Damage Dice: {DiceArrayToString(GetDivineSmiteDamageDicePool(historyRecord))}</Label>
+			</li>
+			<li>
+				<Label>Radiant Damage Rolls: {RollArrayToString(historyRecord.divineSmiteDamageRolls)}</Label>
+			</li>
+		</Fragment>
+	);
+
+	// Build the detail array in the order we want to display the details, and conditionally include details based on the history record properties
 	const detailArray = [hitSummary];
 
 	if (historyRecord.isHit) {
-		detailArray.push(damageDetails);
+		detailArray.push(damageSummary);
+	}
+
+	detailArray.push(toHitSummary);
+
+	if (historyRecord.isHit) {
+		detailArray.push(damageRolls);
 	}
 
 	return (

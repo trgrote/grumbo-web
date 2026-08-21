@@ -39,3 +39,9 @@ export interface PaladinAttackSheetState extends PreAttackRollInfo, PostAttackRo
 export interface HistoryRecord extends PaladinAttackSheetState {
 	timestamp: number;
 }
+
+export enum CritStatus {
+	CriticalHit,
+	CriticalMiss,
+	Normal
+}

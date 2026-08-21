@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
-import { PaladinAttackSheetState } from "../../PaladinTypes";
-import { GetHighestAttackValue, GetHitPreConfirmStatusColorClass, GetIsCritical } from "../AttackSheetStateFunctions";
+import { PaladinAttackSheetState, CritStatus } from "../../PaladinTypes";
+import { GetCritStatus, GetHighestAttackValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
 import {
 	IPalAttackSheetCommand,
 	GoBackCommand,
@@ -21,7 +21,8 @@ export default function PostAttackRollStep({ state, dispatch }: PostAttackRollSt
 	const confirmIsMiss = () => dispatch(new ConfirmIsMissCommand());
 	const goBack = () => dispatch(new GoBackCommand());
 
-	const isCritical = GetIsCritical(state);
+	const critStatus = GetCritStatus(state);
+	const isCritical = critStatus === CritStatus.CriticalHit;
 	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(state);
 	const highestAttackValue = GetHighestAttackValue(state);
 
@@ -37,6 +38,9 @@ export default function PostAttackRollStep({ state, dispatch }: PostAttackRollSt
 				{isCritical && (
 					<Label>Critical Hit</Label>
 				)}
+				{critStatus === CritStatus.CriticalMiss && (
+					<Label>Critical Miss</Label>
+				)}
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
 						{isCritical && <strong>{highestAttackValue}</strong>}
@@ -45,8 +49,8 @@ export default function PostAttackRollStep({ state, dispatch }: PostAttackRollSt
 				</Card>
 			</div>
 			<SheetFooter>
-				<Button onClick={confirmIsHit}>Hit</Button>
-				<Button variant="secondary" onClick={confirmIsMiss}>Missed</Button>
+				<Button onClick={confirmIsHit} disabled={critStatus === CritStatus.CriticalMiss}>Hit</Button>
+				<Button variant="secondary" onClick={confirmIsMiss} disabled={isCritical}>Missed</Button>
 				<Button variant="outline" onClick={goBack}>Back</Button>
 			</SheetFooter>
 		</>
