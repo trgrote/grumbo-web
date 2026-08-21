@@ -81,10 +81,14 @@ describe('GetHitStatusColorClass', () => {
 });
 
 describe('GetHitPreConfirmStatusColorClass', () => {
-	it('is blue on 20, green otherwise (no critical-miss concept)', () => {
+	it('is blue on 20, red on a critical miss, green otherwise', () => {
 		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [20] }))).toBe('text-blue-500');
-		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [1] }))).toBe('text-green-500');
+		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [1] }))).toBe('text-red-500');
 		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [10] }))).toBe('text-green-500');
+	});
+
+	it('ignores a 1 that advantage has already beaten', () => {
+		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [1, 10] }))).toBe('text-green-500');
 	});
 });
 

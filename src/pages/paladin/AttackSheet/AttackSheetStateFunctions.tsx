@@ -67,7 +67,17 @@ export function GetHitStatusColorClass(state: PaladinAttackSheetState): string {
 }
 
 export function GetHitPreConfirmStatusColorClass(state: PaladinAttackSheetState): string {
-	return GetIsCritical(state) ? 'text-blue-500' : 'text-green-500';
+	const critStatus = GetCritStatus(state);
+
+	if (critStatus === CritStatus.CriticalHit) {
+		return 'text-blue-500';
+	}
+
+	if (critStatus === CritStatus.CriticalMiss) {
+		return 'text-red-500';
+	}
+
+	return 'text-green-500';
 }
 
 export function GetTotalWeaponDamage(state: PaladinAttackSheetState): number {
