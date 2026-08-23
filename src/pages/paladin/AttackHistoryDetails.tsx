@@ -13,8 +13,8 @@ import {
 	SpellSlotToString,
 } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord } from "./PaladinTypes";
-import { Fragment } from "react";
-import { DiceArrayToString, JoinWithElement, RollArrayToString } from "@/utils/Formatting";
+import { Fragment, JSX } from "react";
+import { DetailSectionKey, DiceArrayToString, GetDetailSectionOrder, JoinWithElement, RollArrayToString } from "@/utils/Formatting";
 
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { paladinInfo } = historyRecord;
@@ -111,18 +111,14 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 		</Fragment>
 	);
 
-	// Build the detail array in the order we want to display the details, and conditionally include details based on the history record properties
-	const detailArray = [hitSummary];
+	const sectionsByKey: Record<DetailSectionKey, JSX.Element> = {
+		hitSummary,
+		damageSummary,
+		toHitSummary,
+		damageRolls,
+	};
 
-	if (historyRecord.isHit) {
-		detailArray.push(damageSummary);
-	}
-
-	detailArray.push(toHitSummary);
-
-	if (historyRecord.isHit) {
-		detailArray.push(damageRolls);
-	}
+	const detailArray = GetDetailSectionOrder(historyRecord.isHit).map(key => sectionsByKey[key]);
 
 	return (
 		<Card>

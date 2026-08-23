@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
 	CreateHistoryRecordFromState,
+	FormatDieRolls,
+	FormatHitValueBreakdown,
 	GetBestRerollOption,
 	GetCritStatus,
 	GetFireDamageDicePool,
@@ -11,7 +13,9 @@ import {
 	GetHitPreConfirmStatusColorClass,
 	GetHitStatusColorClass,
 	GetHitStatusText,
+	GetIsAlreadyBestRolls,
 	GetPiercingDamageDicePool,
+	GetRerollButtonText,
 	GetTotalDamage,
 	GetTotalFireDamage,
 	GetTotalForceDamage,
@@ -57,6 +61,48 @@ describe('GetBestRerollOption', () => {
 			type: DamageType.Piercing,
 			dicePoolIndex: 1,
 		});
+	});
+});
+
+describe('FormatDieRolls', () => {
+	it('zips rolls and dice into a d{size}->{roll} string', () => {
+		expect(FormatDieRolls([6, 3], [8, 8])).toBe('d8->6, d8->3');
+	});
+
+	it('formats an empty pool', () => {
+		expect(FormatDieRolls([], [])).toBe('');
+	});
+});
+
+describe('GetIsAlreadyBestRolls / GetRerollButtonText', () => {
+	it('reports "Reroll Used" once a reroll has been used', () => {
+		const state = buildTestState({
+			piercingDamageDicePool: [8],
+			piercingDamageRolls: [1],
+			hasUsedReroll: true,
+		});
+		expect(GetRerollButtonText(state)).toBe('Reroll Used');
+		expect(GetIsAlreadyBestRolls(state)).toBe(false);
+	});
+
+	it('offers the best rerollable die when one exists', () => {
+		const state = buildTestState({
+			piercingDamageDicePool: [8],
+			piercingDamageRolls: [1],
+			hasUsedReroll: false,
+		});
+		expect(GetRerollButtonText(state)).toBe('Reroll Lowest Damage Roll? (d8->1)');
+		expect(GetIsAlreadyBestRolls(state)).toBe(false);
+	});
+
+	it('reports "Already best rolls!" when every die is maxed', () => {
+		const state = buildTestState({
+			piercingDamageDicePool: [8],
+			piercingDamageRolls: [8],
+			hasUsedReroll: false,
+		});
+		expect(GetRerollButtonText(state)).toBe('Already best rolls!');
+		expect(GetIsAlreadyBestRolls(state)).toBe(true);
 	});
 });
 
@@ -135,6 +181,36 @@ describe('GetFavoredEnemyBonus', () => {
 	it('returns +2 per selected favored enemy', () => {
 		const state = buildTestState({ selectedFavoredEnemies: ['Giant', 'Goblin'] });
 		expect(GetFavoredEnemyBonus(state)).toBe(4);
+	});
+});
+
+describe('FormatHitValueBreakdown', () => {
+	it('formats a plain hit with no penalty or bonus', () => {
+		const state = buildTestState({ attackRolls: [12] });
+		// 12 + attackModifier(5) = 17
+		expect(FormatHitValueBreakdown(state)).toBe('17 (12 + 5)');
+	});
+
+	it('includes the sharpshooter penalty', () => {
+		const state = buildTestState({ attackRolls: [12], applySharpShooterPenalty: true });
+		// 12 + attackModifier(5) - 5 = 12
+		expect(FormatHitValueBreakdown(state)).toBe('12 (12 + 5 - 5)');
+	});
+
+	it('includes the favored enemy bonus', () => {
+		const state = buildTestState({ attackRolls: [12], selectedFavoredEnemies: ['Giant'] });
+		// 12 + attackModifier(5) + favoredEnemyBonus(2) = 19
+		expect(FormatHitValueBreakdown(state)).toBe('19 (12 + 5 + 2)');
+	});
+
+	it('combines the penalty and bonus together', () => {
+		const state = buildTestState({
+			attackRolls: [12],
+			applySharpShooterPenalty: true,
+			selectedFavoredEnemies: ['Giant'],
+		});
+		// 12 + attackModifier(5) - 5 + favoredEnemyBonus(2) = 14
+		expect(FormatHitValueBreakdown(state)).toBe('14 (12 + 5 - 5 + 2)');
 	});
 });
 

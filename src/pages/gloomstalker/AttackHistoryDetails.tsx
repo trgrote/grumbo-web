@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
-	GetHighestHitRoll,
-	GetHighestHitValue,
+	FormatHitValueBreakdown,
 	GetCritStatus,
 	GetFavoredEnemyBonus,
+	GetHighestHitRoll,
 	GetHitStatusText,
 	GetTotalDamage,
 	GetTotalFireDamage,
@@ -12,8 +12,8 @@ import {
 	GetTotalPiercingDamage,
 } from "./AttackSheet/AttackSheetStateFunctions";
 import { HistoryRecord, CritStatus } from "./GloomStalkerTypes";
-import { Fragment } from "react";
-import { DiceArrayToString, JoinWithElement, RollArrayToString } from "@/utils/Formatting";
+import { Fragment, JSX } from "react";
+import { DetailSectionKey, DiceArrayToString, GetDetailSectionOrder, JoinWithElement, RollArrayToString } from "@/utils/Formatting";
 
 export default function AttackHistoryDetails({ historyRecord }: { historyRecord: HistoryRecord; }) {
 	const { gloomStalkerInfo } = historyRecord;
@@ -24,6 +24,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const totalFireDamage = GetTotalFireDamage(historyRecord);
 	const totalForceDamage = GetTotalForceDamage(historyRecord);
 	const totalDamage = GetTotalDamage(historyRecord);
+	const highestHitRoll = GetHighestHitRoll(historyRecord);
 
 	const damageSummary = (
 		<Fragment key="damageSummary">
@@ -55,13 +56,10 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 		</Fragment>
 	);
 
-	const highestHitRoll = GetHighestHitRoll(historyRecord);
-	const totalHitValue = GetHighestHitValue(historyRecord);
-
 	const toHitSummary = (
 		<Fragment key="toHitSummary">
 			<li>
-				<Label>Total Hit Value: {totalHitValue} ({highestHitRoll} + {gloomStalkerInfo.attackModifier}{historyRecord.applySharpShooterPenalty ? ' - 5' : ''}{favoredEnemyBonus > 0 ? ` + ${favoredEnemyBonus}` : ''})</Label>
+				<Label>Total Hit Value: {FormatHitValueBreakdown(historyRecord)}</Label>
 			</li>
 			{historyRecord.hasAdvantage && (
 				<li>
@@ -141,18 +139,14 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 		</Fragment>
 	);
 
-	// Build the detail array in the order we want to display the details, and conditionally include details based on the history record properties
-	const detailArray = [hitSummary];
+	const sectionsByKey: Record<DetailSectionKey, JSX.Element> = {
+		hitSummary,
+		damageSummary,
+		toHitSummary,
+		damageRolls,
+	};
 
-	if (historyRecord.isHit) {
-		detailArray.push(damageSummary);
-	}
-
-	detailArray.push(toHitSummary);
-
-	if (historyRecord.isHit) {
-		detailArray.push(damageRolls);
-	}
+	const detailArray = GetDetailSectionOrder(historyRecord.isHit).map(key => sectionsByKey[key]);
 
 	return (
 		<Card>
