@@ -2,7 +2,6 @@
 This is the web front end for The Grumbros website where we try our dumb stuff, just for fun.
 
 # TODO
-- Add input validation to only allow integers for modifier fields
 - The "can't confirm a Hit on a natural 1" rule lives only in the step component's `disabled` props. `ConfirmIsHitCommand` would still produce the contradictory state if dispatched directly, and any history record saved *before* PR #34 in that state renders as "Critical Hit" retroactively. Both characters share this; only changing `GetHitStatusText` would fix the stored records, at the cost of the two sheets no longer matching.
 - Neither character's `AttackHistoryDetails` has render tests — coverage is still pure-logic only (commands, selectors, reducers), even though React Testing Library is already installed.
 - Minor wording: the Paladin damage note reads "Level 4+ Spell Slot added 5d8 Radiant". "Level 4 or Higher Spell Slot" reads better. Kept as-is because `4` is a bucket, not an exact level — a bare "Level 4" would claim precision the app never captures.
