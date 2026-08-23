@@ -10,6 +10,10 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 # Test Locally
 `npm run dev`
 
+# Run Unit Tests
+- `npm run test` — run the Vitest suite once
+- `npm run test:coverage` — run the suite with coverage
+
 # Deploy
 - site location: http://www.grumbo.me:3000/
 - In `/var/www/grumbo-web`: 
