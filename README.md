@@ -5,6 +5,15 @@ This is the web front end for The Grumbros website where we try our dumb stuff, 
 - Add input validation to only allow integers for modifier fields
 - Implement Gloom Stalker Attack Page (https://www.dndbeyond.com/characters/75379398)
 - Add Crit miss check to automatically miss (disable Hit button) and display critical miss in special manner.
+	- Done for the Paladin in PR #34, and already done for the Gloom Stalker apart from the label (see below).
+
+## Follow-ups from the Paladin history-details parity work (PR #34)
+- Gloom Stalker's `PostHitRollStep` disables the Hit button on a critical miss but never says why — it has a "Critical Hit" label and no "Critical Miss" one. The Paladin's `PostAttackRollStep` now has both; porting the label back closes the crit-miss TODO above for both characters.
+- Gloom Stalker's `GetHitStatusText` still open-codes `highest === 20 || highest === 1` instead of using its own `GetCritStatus` selector. The Paladin's is now the cleaner of the two.
+- The "can't confirm a Hit on a natural 1" rule lives only in the step component's `disabled` props. `ConfirmIsHitCommand` would still produce the contradictory state if dispatched directly, and any history record saved *before* PR #34 in that state renders as "Critical Hit" retroactively. Both characters share this; only changing `GetHitStatusText` would fix the stored records, at the cost of the two sheets no longer matching.
+- Neither character's `AttackHistoryDetails` has render tests — coverage is still pure-logic only (commands, selectors, reducers), even though React Testing Library is already installed.
+- Minor wording: the Paladin damage note reads "Level 4+ Spell Slot added 5d8 Radiant". "Level 4 or Higher Spell Slot" reads better. Kept as-is because `4` is a bucket, not an exact level — a bare "Level 4" would claim precision the app never captures.
+- `GetHighestAttackRoll` / `GetHighestHitRoll` both do `Math.max(...attackRolls)`, which is `-Infinity` on an empty array. Unreachable from any path that produces a history record today, but it's a shared sharp edge in both characters' state functions.
 
 ## Gloom Stalker Questions
 - For Dread Amubusher, if you don't attack your first turn of combat, does that mean you lose out on that additonal attack? I.e. It's not your first attack of combat, it's only your attack on the first round.
