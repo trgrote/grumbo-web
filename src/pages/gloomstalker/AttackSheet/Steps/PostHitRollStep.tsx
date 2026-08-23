@@ -45,6 +45,9 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 				{hitStatus === CritStatus.CriticalHit && (
 					<Label>Critical Hit</Label>
 				)}
+				{hitStatus === CritStatus.CriticalMiss && (
+					<Label>Critical Miss</Label>
+				)}
 				<Card>
 					<h2 className={`text-center ${hitValueTextColorClass}`}>
 						{hitStatus === CritStatus.CriticalHit && <strong>{highestHitValue}</strong>}
