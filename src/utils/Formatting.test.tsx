@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DiceArrayToString, JoinWithElement, RollArrayToString } from './Formatting';
+import { DiceArrayToString, FormatSignedModifier, GetDetailSectionOrder, JoinWithElement, RollArrayToString } from './Formatting';
 
 describe('RollArrayToString', () => {
 	it('formats an array of rolls as a bracketed, comma-separated list', () => {
@@ -18,6 +18,30 @@ describe('DiceArrayToString', () => {
 
 	it('formats an empty array', () => {
 		expect(DiceArrayToString([])).toBe('[]');
+	});
+});
+
+describe('FormatSignedModifier', () => {
+	it('prefixes a positive modifier with +', () => {
+		expect(FormatSignedModifier(3)).toBe('+3');
+	});
+
+	it('prefixes zero with +', () => {
+		expect(FormatSignedModifier(0)).toBe('+0');
+	});
+
+	it('leaves a negative modifier as-is', () => {
+		expect(FormatSignedModifier(-2)).toBe('-2');
+	});
+});
+
+describe('GetDetailSectionOrder', () => {
+	it('omits damage sections on a miss', () => {
+		expect(GetDetailSectionOrder(false)).toEqual(['hitSummary', 'toHitSummary']);
+	});
+
+	it('includes damage sections around toHitSummary on a hit', () => {
+		expect(GetDetailSectionOrder(true)).toEqual(['hitSummary', 'damageSummary', 'toHitSummary', 'damageRolls']);
 	});
 });
 

@@ -3,7 +3,7 @@ import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/compon
 import { Label } from "@/components/ui/label";
 import { JSX } from "react";
 import { GloomStalkerAttackSheetState } from '../../GloomStalkerTypes';
-import { GetBestRerollOption } from "../AttackSheetStateFunctions";
+import { FormatDieRolls, GetIsAlreadyBestRolls, GetRerollButtonText } from "../AttackSheetStateFunctions";
 import {
 	IGSAttackSheetCommand,
 	GoBackCommand,
@@ -25,17 +25,8 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 		rerollDamageDie();
 	};
 
-	const formatDieRolls = (rolls: number[], dicePool: number[]): string => {
-		return rolls.map((roll, index) => `d${dicePool[index]}->${roll}`).join(', ');
-	};
-
-	const bestRerollOption = GetBestRerollOption(state);
-	const alreadyBestRolls = bestRerollOption === null;
-	const rerollButtonText = state.hasUsedReroll
-		? "Reroll Used"
-		: bestRerollOption
-			? `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`
-			: "Already best rolls!";
+	const alreadyBestRolls = GetIsAlreadyBestRolls(state);
+	const rerollButtonText = GetRerollButtonText(state);
 
 	return (
 		<>
@@ -46,9 +37,9 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<Label>Piercing Damage Rolls: [{formatDieRolls(state.piercingDamageRolls, state.piercingDamageDicePool)}]</Label>
-				<Label>Fire Damage Rolls: [{formatDieRolls(state.fireDamageRolls, state.fireDamageDicePool)}]</Label>
-				<Label>Force Damage Rolls: [{formatDieRolls(state.forceDamageRolls, state.forceDamageDicePool)}]</Label>
+				<Label>Piercing Damage Rolls: [{FormatDieRolls(state.piercingDamageRolls, state.piercingDamageDicePool)}]</Label>
+				<Label>Fire Damage Rolls: [{FormatDieRolls(state.fireDamageRolls, state.fireDamageDicePool)}]</Label>
+				<Label>Force Damage Rolls: [{FormatDieRolls(state.forceDamageRolls, state.forceDamageDicePool)}]</Label>
 				<Button onClick={handleReroll} disabled={state.hasUsedReroll || alreadyBestRolls}>
 					{rerollButtonText}
 				</Button>

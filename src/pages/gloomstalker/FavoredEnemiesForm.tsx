@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AddFavoredEnemy, RemoveFavoredEnemy } from "./FavoredEnemiesFormFunctions";
 
 export interface FavoredEnemiesFormProps {
 	favoredEnemies: string[];
@@ -13,17 +14,15 @@ export default function FavoredEnemiesForm({ favoredEnemies, onChange }: Favored
 	const [newFavoredEnemy, setNewFavoredEnemy] = useState('');
 
 	const addFavoredEnemy = () => {
-		const trimmedName = newFavoredEnemy.trim();
-		if (trimmedName === '' || favoredEnemies.includes(trimmedName)) return;
-
-		// Dedupe defensively: a stale closure could otherwise let two rapid adds insert the same name twice,
-		// which would collide as a React key/id on the badge list below.
-		onChange(Array.from(new Set([...favoredEnemies, trimmedName])));
-		setNewFavoredEnemy('');
+		const result = AddFavoredEnemy(favoredEnemies, newFavoredEnemy);
+		if (result.added) {
+			onChange(result.favoredEnemies);
+			setNewFavoredEnemy('');
+		}
 	};
 
 	const removeFavoredEnemy = (name: string) => {
-		onChange(favoredEnemies.filter(favoredEnemy => favoredEnemy !== name));
+		onChange(RemoveFavoredEnemy(favoredEnemies, name));
 	};
 
 	return (

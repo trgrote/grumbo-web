@@ -120,6 +120,18 @@ export function GetFavoredEnemyBonus(state: GloomStalkerAttackSheetState): numbe
 	return state.selectedFavoredEnemies.length * 2;
 }
 
+export function FormatHitValueBreakdown(state: GloomStalkerAttackSheetState): string {
+	const highestHitRoll = GetHighestHitRoll(state);
+	const totalHitValue = GetHighestHitValue(state);
+	const favoredEnemyBonus = GetFavoredEnemyBonus(state);
+	const { attackModifier } = state.gloomStalkerInfo;
+
+	return `${totalHitValue} (${highestHitRoll} + ${attackModifier}`
+		+ (state.applySharpShooterPenalty ? ' - 5' : '')
+		+ (favoredEnemyBonus > 0 ? ` + ${favoredEnemyBonus}` : '')
+		+ ')';
+}
+
 export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number {
 	const highestRoll = GetHighestHitRoll(state);
 	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0) + GetFavoredEnemyBonus(state);
@@ -201,6 +213,27 @@ export function GetFireDamageDicePool(state: GloomStalkerAttackSheetState): numb
 	}
 
 	return fireDamageDicePool;
+}
+
+export function FormatDieRolls(rolls: number[], dicePool: number[]): string {
+	return rolls.map((roll, index) => `d${dicePool[index]}->${roll}`).join(', ');
+}
+
+export function GetIsAlreadyBestRolls(state: GloomStalkerAttackSheetState): boolean {
+	return GetBestRerollOption(state) === null;
+}
+
+export function GetRerollButtonText(state: GloomStalkerAttackSheetState): string {
+	if (state.hasUsedReroll) {
+		return "Reroll Used";
+	}
+
+	const bestRerollOption = GetBestRerollOption(state);
+	if (bestRerollOption === null) {
+		return "Already best rolls!";
+	}
+
+	return `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`;
 }
 
 export function GetForceDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
