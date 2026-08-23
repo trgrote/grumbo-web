@@ -39,7 +39,9 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<Label>Piercing Damage Rolls: [{FormatDieRolls(state.piercingDamageRolls, state.piercingDamageDicePool)}]</Label>
 				<Label>Fire Damage Rolls: [{FormatDieRolls(state.fireDamageRolls, state.fireDamageDicePool)}]</Label>
-				<Label>Force Damage Rolls: [{FormatDieRolls(state.forceDamageRolls, state.forceDamageDicePool)}]</Label>
+				{state.forceDamageRolls.length > 0 && (
+					<Label>Force Damage Rolls: [{FormatDieRolls(state.forceDamageRolls, state.forceDamageDicePool)}]</Label>
+				)}
 				<Button onClick={handleReroll} disabled={state.hasUsedReroll || alreadyBestRolls}>
 					{rerollButtonText}
 				</Button>
