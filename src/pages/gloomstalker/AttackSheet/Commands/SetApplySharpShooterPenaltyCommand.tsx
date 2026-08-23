@@ -1,11 +1,12 @@
-import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 
-export default class SetApplySharpShooterPenaltyCommand implements IGSAttackSheetCommand {
-	constructor(private applySharpShooterPenalty: boolean) { }
-	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
+export default class SetApplySharpShooterPenaltyCommand extends CharacterStateCommand<GloomStalkerAttackState> {
+	constructor(private applySharpShooterPenalty: boolean) { super(); }
+
+	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
 		return {
-			...prevState,
+			...character,
 			applySharpShooterPenalty: this.applySharpShooterPenalty
 		};
 	}

@@ -1,12 +1,12 @@
-import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 
-export default class SetAdvantageCommand implements IGSAttackSheetCommand {
-	constructor(private hasAdvantage: boolean) { }
+export default class SetAdvantageCommand extends CharacterStateCommand<GloomStalkerAttackState> {
+	constructor(private hasAdvantage: boolean) { super(); }
 
-	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
+	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
 		return {
-			...prevState,
+			...character,
 			hasAdvantage: this.hasAdvantage
 		};
 	}

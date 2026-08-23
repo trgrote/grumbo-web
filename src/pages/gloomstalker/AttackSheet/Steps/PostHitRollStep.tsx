@@ -18,15 +18,16 @@ interface PostHitRollStepProps {
 }
 
 export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProps) {
-	const attackRolls = state.attackRolls;
-	const attackModifier = state.gloomStalkerInfo.attackModifier;
+	const character = state.character;
+	const attackRolls = character.attackRolls;
+	const attackModifier = character.gloomStalkerInfo.attackModifier;
 	const confirmIsHit = () => dispatch(new ConfirmIsHitCommand());
 	const confirmIsMiss = () => dispatch(new ConfirmIsMissCommand());
 	const goBack = () => dispatch(new GoBackCommand());
 
-	const hitStatus = GetCritStatus(state);
-	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(state);
-	const highestHitValue = GetHighestHitValue(state);
+	const hitStatus = GetCritStatus(character);
+	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(character);
+	const highestHitValue = GetHighestHitValue(character);
 
 	return (
 		<>
@@ -39,9 +40,9 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
 				<Label>To Hit Rolls: [{attackRolls.join(', ')}]</Label>
 				<Label>Attack Modifier: {FormatSignedModifier(attackModifier)}</Label>
-				{state.applySharpShooterPenalty && <Label>Sharp Shooter Penalty: -5</Label>}
-				{state.selectedFavoredEnemies.length > 0 && (
-					<Label>Favored Enemy Bonus: +{GetFavoredEnemyBonus(state)} ({state.selectedFavoredEnemies.join(', ')})</Label>
+				{character.applySharpShooterPenalty && <Label>Sharp Shooter Penalty: -5</Label>}
+				{character.selectedFavoredEnemies.length > 0 && (
+					<Label>Favored Enemy Bonus: +{GetFavoredEnemyBonus(character)} ({character.selectedFavoredEnemies.join(', ')})</Label>
 				)}
 				{hitStatus === CritStatus.CriticalHit && (
 					<Label>Critical Hit</Label>

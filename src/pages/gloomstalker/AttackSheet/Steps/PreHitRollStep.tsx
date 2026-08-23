@@ -17,12 +17,13 @@ interface PreHitRollStepProps {
 }
 
 export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps) {
-	const hasAdvantage = state.hasAdvantage;
+	const character = state.character;
+	const hasAdvantage = character.hasAdvantage;
 	const setHasAdvantage = (value: boolean) => dispatch(new SetAdvantageCommand(value));
-	const applySharpShooterPenalty = state.applySharpShooterPenalty;
+	const applySharpShooterPenalty = character.applySharpShooterPenalty;
 	const setApplySharpShooterPenalty = (value: boolean) => dispatch(new SetApplySharpShooterPenaltyCommand(value));
-	const favoredEnemies = state.gloomStalkerInfo.favoredEnemies;
-	const selectedFavoredEnemies = state.selectedFavoredEnemies;
+	const favoredEnemies = character.gloomStalkerInfo.favoredEnemies;
+	const selectedFavoredEnemies = character.selectedFavoredEnemies;
 	const toggleFavoredEnemy = (name: string) => dispatch(new ToggleFavoredEnemyCommand(name));
 	const onRollForAttack = () => dispatch(new RollForAttackCommand());
 

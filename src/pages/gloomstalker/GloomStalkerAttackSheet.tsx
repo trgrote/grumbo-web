@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { JSX, useEffect, useReducer } from "react";
+import { JSX, useEffect, useMemo, useReducer } from "react";
 import { AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
-import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer.tsx";
+import { CreateAttackSheetReducer } from "@/attackSheet/AttackSheetStateReducer";
+import { CreateInitialState } from "@/attackSheet/AttackSheetStateFunctions";
+import GloomStalkerAttackModel from "./AttackSheet/GloomStalkerAttackModel";
 import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
 import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
-import { CreateHistoryRecordFromState, GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
+import { CreateHistoryRecordFromState } from "./AttackSheet/AttackSheetStateFunctions";
 import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
 import { ResetCommand } from "./AttackSheet/Commands/AttackSheetCommands";
 
@@ -17,14 +19,17 @@ export interface GloomStalkerAttackSheetProps {
 }
 
 export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory }: GloomStalkerAttackSheetProps) {
+	const model = useMemo(() => new GloomStalkerAttackModel(gloomStalkerInfo), [gloomStalkerInfo]);
+	const reducer = useMemo(() => CreateAttackSheetReducer(model), [model]);
+
 	const [state, dispatch] = useReducer(
-		AttackSheetStateReducer,
-		gloomStalkerInfo,
-		GloomStalkerAttackSheetStateDefault
+		reducer,
+		model,
+		CreateInitialState
 	);
 
-	// I have to disable the exhaustive-deps rule here because 
-	// I only want to trigger this effect when the attack step changes to results, 
+	// I have to disable the exhaustive-deps rule here because
+	// I only want to trigger this effect when the attack step changes to results,
 	// not on every state change.
 	useEffect(() => {
 		if (state.attackStep === AttackStep.Results) {
@@ -35,10 +40,10 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 	}, [state.attackStep]);
 
 	const resetSheet = (): void => {
-		dispatch(new ResetCommand(gloomStalkerInfo));
+		dispatch(new ResetCommand());
 	};
 
-	useEffect(resetSheet, [gloomStalkerInfo]);
+	useEffect(resetSheet, [model]);
 
 	const renderSheetContent = (): JSX.Element => {
 		return (

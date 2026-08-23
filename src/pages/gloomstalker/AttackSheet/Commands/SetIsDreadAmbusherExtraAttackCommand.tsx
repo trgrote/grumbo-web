@@ -1,12 +1,12 @@
-import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 
-export default class SetIsDreadAmbusherExtraAttackCommand implements IGSAttackSheetCommand {
-	constructor(private isDreadAmbusherExtraAttack: boolean) { }
+export default class SetIsDreadAmbusherExtraAttackCommand extends CharacterStateCommand<GloomStalkerAttackState> {
+	constructor(private isDreadAmbusherExtraAttack: boolean) { super(); }
 
-	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
+	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
 		return {
-			...prevState,
+			...character,
 			isDreadAmbusherExtraAttack: this.isDreadAmbusherExtraAttack
 		};
 	}

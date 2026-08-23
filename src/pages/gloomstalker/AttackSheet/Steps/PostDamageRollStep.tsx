@@ -17,6 +17,7 @@ interface PostDamageRollStepProps {
 }
 
 export default function PostDamageRollStep({ state, dispatch }: PostDamageRollStepProps): JSX.Element {
+	const character = state.character;
 	const rerollDamageDie = () => dispatch(new RerollWorstDamageDieCommand());
 	const confirmDamage = () => dispatch(new ConfirmDamageCommand());
 	const goBack = () => dispatch(new GoBackCommand());
@@ -25,8 +26,8 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 		rerollDamageDie();
 	};
 
-	const alreadyBestRolls = GetIsAlreadyBestRolls(state);
-	const rerollButtonText = GetRerollButtonText(state);
+	const alreadyBestRolls = GetIsAlreadyBestRolls(character);
+	const rerollButtonText = GetRerollButtonText(character);
 
 	return (
 		<>
@@ -37,12 +38,12 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<Label>Piercing Damage Rolls: [{FormatDieRolls(state.piercingDamageRolls, state.piercingDamageDicePool)}]</Label>
-				<Label>Fire Damage Rolls: [{FormatDieRolls(state.fireDamageRolls, state.fireDamageDicePool)}]</Label>
-				{state.forceDamageRolls.length > 0 && (
-					<Label>Force Damage Rolls: [{FormatDieRolls(state.forceDamageRolls, state.forceDamageDicePool)}]</Label>
+				<Label>Piercing Damage Rolls: [{FormatDieRolls(character.piercingDamageRolls, character.piercingDamageDicePool)}]</Label>
+				<Label>Fire Damage Rolls: [{FormatDieRolls(character.fireDamageRolls, character.fireDamageDicePool)}]</Label>
+				{character.forceDamageRolls.length > 0 && (
+					<Label>Force Damage Rolls: [{FormatDieRolls(character.forceDamageRolls, character.forceDamageDicePool)}]</Label>
 				)}
-				<Button onClick={handleReroll} disabled={state.hasUsedReroll || alreadyBestRolls}>
+				<Button onClick={handleReroll} disabled={character.hasUsedReroll || alreadyBestRolls}>
 					{rerollButtonText}
 				</Button>
 			</div>

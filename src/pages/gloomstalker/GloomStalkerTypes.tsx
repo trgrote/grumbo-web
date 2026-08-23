@@ -1,3 +1,8 @@
+import { AttackSheetState, AttackStep } from "@/attackSheet/AttackSheetTypes";
+
+// Re-exported so the rest of the Gloom Stalker page keeps a single import site for the flow's steps.
+export { AttackStep };
+
 export interface GloomStalkerInfo {
 	attackModifier: number;
 	damageDie: number;
@@ -30,21 +35,19 @@ export interface PostDamageRollInfo {
 	forceDamageRolls: number[];
 }
 
-export enum AttackStep {
-	PreHitRoll,
-	PostHitRoll,
-	PreDamageRoll,
-	PostDamageRoll,
-	Results
-}
-
-export interface GloomStalkerAttackSheetState extends PreHitRollInfo, PostHitRollInfo, PreDamageRollInfo, PostDamageRollInfo {
-	attackStep: AttackStep;
+// Everything the Gloom Stalker's own rules care about. The shared attack sheet flow owns
+// the attack step and knows nothing about any of this.
+export interface GloomStalkerAttackState extends PreHitRollInfo, PostHitRollInfo, PreDamageRollInfo, PostDamageRollInfo {
 	gloomStalkerInfo: GloomStalkerInfo;
 	hasUsedReroll: boolean;
 }
 
-export interface HistoryRecord extends GloomStalkerAttackSheetState {
+export type GloomStalkerAttackSheetState = AttackSheetState<GloomStalkerAttackState>;
+
+// Deliberately flat (rather than mirroring the nested sheet state) so records persisted by
+// earlier versions keep deserializing - see GloomStalkerLocalStorage's storageVersion.
+export interface HistoryRecord extends GloomStalkerAttackState {
+	attackStep: AttackStep;
 	timestamp: number;
 }
 

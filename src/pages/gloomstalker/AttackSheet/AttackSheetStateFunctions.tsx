@@ -1,10 +1,9 @@
-import { GloomStalkerInfo, GloomStalkerAttackSheetState, AttackStep, HistoryRecord, CritStatus, DamageType } from "../GloomStalkerTypes";
+import { GloomStalkerInfo, GloomStalkerAttackState, GloomStalkerAttackSheetState, HistoryRecord, CritStatus, DamageType } from "../GloomStalkerTypes";
 import { RollDie } from "@/utils/Dice";
 
-export function GloomStalkerAttackSheetStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackSheetState {
+export function GloomStalkerAttackStateDefault(gloomStalkerInfo: GloomStalkerInfo): GloomStalkerAttackState {
 	return {
 		gloomStalkerInfo: { ...gloomStalkerInfo },
-		attackStep: AttackStep.PreHitRoll,
 		hasAdvantage: false,
 		applySharpShooterPenalty: false,
 		selectedFavoredEnemies: [],
@@ -32,7 +31,7 @@ export interface RolledDie {
 // Select the best die to reroll.
 // The best die to reroll is the one that has the lowest value.
 // Tiebreaker goes to the highest die (e.g. it's better to reroll a 1 on a d12 than a 1 on a d6)
-export function GetBestRerollOption(state: GloomStalkerAttackSheetState): RolledDie | null {
+export function GetBestRerollOption(state: GloomStalkerAttackState): RolledDie | null {
 	const allRolls: RolledDie[] = [
 		...state.piercingDamageRolls.map((roll, i) => ({ roll, dieSize: state.piercingDamageDicePool[i], type: DamageType.Piercing, dicePoolIndex: i })),
 		...state.fireDamageRolls.map((roll, i) => ({ roll, dieSize: state.fireDamageDicePool[i], type: DamageType.Fire, dicePoolIndex: i })),
@@ -58,20 +57,22 @@ export function GetBestRerollOption(state: GloomStalkerAttackSheetState): Rolled
 	}, rerollableRolls[0]);
 }
 
+// Flattens the sheet state into the shape history has always been persisted in.
 export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState, now: () => number = Date.now): HistoryRecord {
 	return {
-		...state,
-		gloomStalkerInfo: { ...state.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
+		...state.character,
+		gloomStalkerInfo: { ...state.character.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
+		attackStep: state.attackStep,
 		timestamp: now()
 	};
 }
 
-export function GetHighestHitRoll(state: GloomStalkerAttackSheetState): number {
+export function GetHighestHitRoll(state: GloomStalkerAttackState): number {
 	// TODO If we add disadvantage, we need to select the lowest instead of the highest
 	return Math.max(...state.attackRolls);
 }
 
-export function GetCritStatus(state: GloomStalkerAttackSheetState): CritStatus {
+export function GetCritStatus(state: GloomStalkerAttackState): CritStatus {
 	const highestRoll = GetHighestHitRoll(state);
 
 	if (highestRoll === 20) {
@@ -83,12 +84,12 @@ export function GetCritStatus(state: GloomStalkerAttackSheetState): CritStatus {
 	return CritStatus.Normal;
 }
 
-export function GetHitStatusText(state: GloomStalkerAttackSheetState): string {
+export function GetHitStatusText(state: GloomStalkerAttackState): string {
 	const isCriticalHitOrMiss = GetCritStatus(state) !== CritStatus.Normal;
 	return (isCriticalHitOrMiss ? 'Critical ' : '') + (state.isHit ? "Hit" : "Miss");
 }
 
-export function GetHitStatusColorClass(state: GloomStalkerAttackSheetState): string {
+export function GetHitStatusColorClass(state: GloomStalkerAttackState): string {
 	const highestRoll = GetHighestHitRoll(state);
 
 	if (highestRoll === 20) {
@@ -102,7 +103,7 @@ export function GetHitStatusColorClass(state: GloomStalkerAttackSheetState): str
 	return 'text-red-500';
 }
 
-export function GetHitPreConfirmStatusColorClass(state: GloomStalkerAttackSheetState): string {
+export function GetHitPreConfirmStatusColorClass(state: GloomStalkerAttackState): string {
 	const highestRoll = GetHighestHitRoll(state);
 
 	if (highestRoll === 20) {
@@ -116,11 +117,11 @@ export function GetHitPreConfirmStatusColorClass(state: GloomStalkerAttackSheetS
 	return 'text-green-500';
 }
 
-export function GetFavoredEnemyBonus(state: GloomStalkerAttackSheetState): number {
+export function GetFavoredEnemyBonus(state: GloomStalkerAttackState): number {
 	return state.selectedFavoredEnemies.length * 2;
 }
 
-export function FormatHitValueBreakdown(state: GloomStalkerAttackSheetState): string {
+export function FormatHitValueBreakdown(state: GloomStalkerAttackState): string {
 	const highestHitRoll = GetHighestHitRoll(state);
 	const totalHitValue = GetHighestHitValue(state);
 	const favoredEnemyBonus = GetFavoredEnemyBonus(state);
@@ -132,28 +133,28 @@ export function FormatHitValueBreakdown(state: GloomStalkerAttackSheetState): st
 		+ ')';
 }
 
-export function GetHighestHitValue(state: GloomStalkerAttackSheetState): number {
+export function GetHighestHitValue(state: GloomStalkerAttackState): number {
 	const highestRoll = GetHighestHitRoll(state);
 	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0) + GetFavoredEnemyBonus(state);
 	return highestRoll + modifier;
 }
 
-export function GetTotalPiercingDamage(state: GloomStalkerAttackSheetState): number {
+export function GetTotalPiercingDamage(state: GloomStalkerAttackState): number {
 	return state.piercingDamageRolls.reduce((a, value) => a + value, 0)
 		+ state.gloomStalkerInfo.damageModifier
 		+ (state.applySharpShooterPenalty ? 10 : 0)
 		+ GetFavoredEnemyBonus(state);
 }
 
-export function GetTotalFireDamage(state: GloomStalkerAttackSheetState): number {
+export function GetTotalFireDamage(state: GloomStalkerAttackState): number {
 	return state.fireDamageRolls.reduce((a, value) => a + value, 0);
 }
 
-export function GetTotalForceDamage(state: GloomStalkerAttackSheetState): number {
+export function GetTotalForceDamage(state: GloomStalkerAttackState): number {
 	return state.forceDamageRolls.reduce((a, value) => a + value, 0);
 }
 
-export function GetTotalDamage(state: GloomStalkerAttackSheetState): number {
+export function GetTotalDamage(state: GloomStalkerAttackState): number {
 	return GetTotalPiercingDamage(state) + GetTotalFireDamage(state) + GetTotalForceDamage(state);
 }
 
@@ -169,7 +170,7 @@ export function RollHitDice(hasAdvantage: boolean, rng: () => number = Math.rand
 	return rolls;
 }
 
-export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
+export function GetPiercingDamageDicePool(state: GloomStalkerAttackState): number[] {
 	const {
 		isDreadAmbusherExtraAttack,
 	} = state;
@@ -201,7 +202,7 @@ export function GetPiercingDamageDicePool(state: GloomStalkerAttackSheetState): 
 	return piercingDamageDicePool;
 }
 
-export function GetFireDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
+export function GetFireDamageDicePool(state: GloomStalkerAttackState): number[] {
 	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;
 
 	const fireDamageDicePool: number[] = [];
@@ -219,11 +220,11 @@ export function FormatDieRolls(rolls: number[], dicePool: number[]): string {
 	return rolls.map((roll, index) => `d${dicePool[index]}->${roll}`).join(', ');
 }
 
-export function GetIsAlreadyBestRolls(state: GloomStalkerAttackSheetState): boolean {
+export function GetIsAlreadyBestRolls(state: GloomStalkerAttackState): boolean {
 	return GetBestRerollOption(state) === null;
 }
 
-export function GetRerollButtonText(state: GloomStalkerAttackSheetState): string {
+export function GetRerollButtonText(state: GloomStalkerAttackState): string {
 	if (state.hasUsedReroll) {
 		return "Reroll Used";
 	}
@@ -236,7 +237,7 @@ export function GetRerollButtonText(state: GloomStalkerAttackSheetState): string
 	return `Reroll Lowest Damage Roll? (d${bestRerollOption.dieSize}->${bestRerollOption.roll})`;
 }
 
-export function GetForceDamageDicePool(state: GloomStalkerAttackSheetState): number[] {
+export function GetForceDamageDicePool(state: GloomStalkerAttackState): number[] {
 	const { applyHuntersMark } = state;
 
 	const isCriticalHit = GetCritStatus(state) === CritStatus.CriticalHit;
