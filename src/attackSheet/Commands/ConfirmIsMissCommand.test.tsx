@@ -8,7 +8,7 @@ describe('ConfirmIsMissCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.PostHitRoll, isHit: true });
 		const result = new ConfirmIsMissCommand<TestCharacterState>().apply(state, buildTestModel());
 
-		expect(result.character.isHit).toBe(false);
+		expect(result.characterState.isHit).toBe(false);
 		expect(result.attackStep).toBe(AttackStep.Results);
 	});
 

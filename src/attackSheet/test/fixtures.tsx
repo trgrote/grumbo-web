@@ -40,10 +40,10 @@ export function buildTestModel(steps: AttackStep[] = allSteps): ICharacterAttack
 	return {
 		steps,
 		createInitialCharacterState: () => ({ ...testCharacterStateDefault }),
-		rollForAttack: (character, rng) => ({ ...character, attackRolls: [rng()] }),
-		setIsHit: (character, isHit) => ({ ...character, isHit }),
-		rollForDamage: (character, rng) => ({ ...character, damageRolls: [rng()] }),
-		onStepReverted: (character, from, to) => ({ ...character, revertedFrom: from, revertedTo: to })
+		rollForAttack: (characterState, rng) => ({ ...characterState, attackRolls: [rng()] }),
+		setIsHit: (characterState, isHit) => ({ ...characterState, isHit }),
+		rollForDamage: (characterState, rng) => ({ ...characterState, damageRolls: [rng()] }),
+		onStepReverted: (characterState, from, to) => ({ ...characterState, revertedFrom: from, revertedTo: to })
 	};
 }
 
@@ -54,6 +54,6 @@ export function buildTestState(
 
 	return {
 		attackStep,
-		character: { ...testCharacterStateDefault, ...characterOverrides }
+		characterState: { ...testCharacterStateDefault, ...characterOverrides }
 	};
 }

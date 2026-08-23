@@ -27,15 +27,15 @@ describe('GloomStalkerAttackModel', () => {
 
 	describe('rollForAttack', () => {
 		it('rolls a single d20 without advantage', () => {
-			const character = buildTestCharacterState({ hasAdvantage: false });
-			const result = buildTestModel().rollForAttack(character, () => 0);
+			const characterState = buildTestCharacterState({ hasAdvantage: false });
+			const result = buildTestModel().rollForAttack(characterState, () => 0);
 
 			expect(result.attackRolls).toEqual([1]);
 		});
 
 		it('rolls three d20s (elven accuracy) with advantage', () => {
-			const character = buildTestCharacterState({ hasAdvantage: true });
-			const result = buildTestModel().rollForAttack(character, () => 0.999);
+			const characterState = buildTestCharacterState({ hasAdvantage: true });
+			const result = buildTestModel().rollForAttack(characterState, () => 0.999);
 
 			expect(result.attackRolls).toEqual([20, 20, 20]);
 		});
@@ -52,8 +52,8 @@ describe('GloomStalkerAttackModel', () => {
 
 	describe('rollForDamage', () => {
 		it('builds the dice pools, rolls them, and clears the used reroll', () => {
-			const character = buildTestCharacterState({ attackRolls: [10], hasUsedReroll: true });
-			const result = buildTestModel().rollForDamage(character, () => 0.5);
+			const characterState = buildTestCharacterState({ attackRolls: [10], hasUsedReroll: true });
+			const result = buildTestModel().rollForDamage(characterState, () => 0.5);
 
 			expect(result.piercingDamageDicePool).toEqual([8]);
 			expect(result.piercingDamageRolls).toEqual([5]);
@@ -65,16 +65,16 @@ describe('GloomStalkerAttackModel', () => {
 		});
 
 		it('doubles the pools on a critical hit', () => {
-			const character = buildTestCharacterState({ attackRolls: [20] });
-			const result = buildTestModel().rollForDamage(character, () => 0);
+			const characterState = buildTestCharacterState({ attackRolls: [20] });
+			const result = buildTestModel().rollForDamage(characterState, () => 0);
 
 			expect(result.piercingDamageDicePool).toEqual([8, 8, 8]);
 			expect(result.fireDamageDicePool).toEqual([6, 6]);
 		});
 
 		it("builds and rolls the force pool when Hunter's Mark is applied", () => {
-			const character = buildTestCharacterState({ attackRolls: [10], applyHuntersMark: true });
-			const result = buildTestModel().rollForDamage(character, () => 0.5);
+			const characterState = buildTestCharacterState({ attackRolls: [10], applyHuntersMark: true });
+			const result = buildTestModel().rollForDamage(characterState, () => 0.5);
 
 			expect(result.forceDamageDicePool).toEqual([6]);
 			expect(result.forceDamageRolls).toEqual([4]);
@@ -83,15 +83,15 @@ describe('GloomStalkerAttackModel', () => {
 
 	describe('onStepReverted', () => {
 		it('clears the attack roll and hit flag when leaving PostHitRoll', () => {
-			const character = buildTestCharacterState({ attackRolls: [15], isHit: true });
-			const result = buildTestModel().onStepReverted(character, AttackStep.PostHitRoll);
+			const characterState = buildTestCharacterState({ attackRolls: [15], isHit: true });
+			const result = buildTestModel().onStepReverted(characterState, AttackStep.PostHitRoll);
 
 			expect(result.attackRolls).toEqual([]);
 			expect(result.isHit).toBe(false);
 		});
 
 		it('clears the damage pools and rolls when leaving PostDamageRoll', () => {
-			const character = buildTestCharacterState({
+			const characterState = buildTestCharacterState({
 				piercingDamageDicePool: [8],
 				piercingDamageRolls: [5],
 				fireDamageDicePool: [6],
@@ -99,7 +99,7 @@ describe('GloomStalkerAttackModel', () => {
 				forceDamageDicePool: [6],
 				forceDamageRolls: [2],
 			});
-			const result = buildTestModel().onStepReverted(character, AttackStep.PostDamageRoll);
+			const result = buildTestModel().onStepReverted(characterState, AttackStep.PostDamageRoll);
 
 			expect(result.piercingDamageDicePool).toEqual([]);
 			expect(result.piercingDamageRolls).toEqual([]);
@@ -110,10 +110,10 @@ describe('GloomStalkerAttackModel', () => {
 		});
 
 		it('clears nothing when leaving PreDamageRoll', () => {
-			const character = buildTestCharacterState({ attackRolls: [15], isHit: true });
-			const result = buildTestModel().onStepReverted(character, AttackStep.PreDamageRoll);
+			const characterState = buildTestCharacterState({ attackRolls: [15], isHit: true });
+			const result = buildTestModel().onStepReverted(characterState, AttackStep.PreDamageRoll);
 
-			expect(result).toBe(character);
+			expect(result).toBe(characterState);
 		});
 	});
 });

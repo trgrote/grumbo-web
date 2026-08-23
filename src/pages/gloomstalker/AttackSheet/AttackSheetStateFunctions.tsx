@@ -60,8 +60,8 @@ export function GetBestRerollOption(state: GloomStalkerAttackState): RolledDie |
 // Flattens the sheet state into the shape history has always been persisted in.
 export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState, now: () => number = Date.now): HistoryRecord {
 	return {
-		...state.character,
-		gloomStalkerInfo: { ...state.character.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
+		...state.characterState,
+		gloomStalkerInfo: { ...state.characterState.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
 		attackStep: state.attackStep,
 		timestamp: now()
 	};

@@ -20,7 +20,7 @@ export function buildTestCharacterState(overrides: Partial<GloomStalkerAttackSta
 	};
 }
 
-// Takes flat overrides (with `attackStep` alongside the character fields) and splits them
+// Takes flat overrides (with `attackStep` alongside the character-state fields) and splits them
 // into the two slices, so callers don't have to spell out the nesting.
 export function buildTestState(
 	overrides: Partial<GloomStalkerAttackState> & { attackStep?: AttackStep; } = {}
@@ -29,6 +29,6 @@ export function buildTestState(
 
 	return {
 		attackStep,
-		character: buildTestCharacterState(characterOverrides),
+		characterState: buildTestCharacterState(characterOverrides),
 	};
 }

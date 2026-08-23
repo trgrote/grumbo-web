@@ -17,7 +17,7 @@ interface PostDamageRollStepProps {
 }
 
 export default function PostDamageRollStep({ state, dispatch }: PostDamageRollStepProps): JSX.Element {
-	const character = state.character;
+	const characterState = state.characterState;
 	const rerollDamageDie = () => dispatch(new RerollWorstDamageDieCommand());
 	const confirmDamage = () => dispatch(new ConfirmDamageCommand());
 	const goBack = () => dispatch(new GoBackCommand());
@@ -26,8 +26,8 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 		rerollDamageDie();
 	};
 
-	const alreadyBestRolls = GetIsAlreadyBestRolls(character);
-	const rerollButtonText = GetRerollButtonText(character);
+	const alreadyBestRolls = GetIsAlreadyBestRolls(characterState);
+	const rerollButtonText = GetRerollButtonText(characterState);
 
 	return (
 		<>
@@ -38,12 +38,12 @@ export default function PostDamageRollStep({ state, dispatch }: PostDamageRollSt
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<Label>Piercing Damage Rolls: [{FormatDieRolls(character.piercingDamageRolls, character.piercingDamageDicePool)}]</Label>
-				<Label>Fire Damage Rolls: [{FormatDieRolls(character.fireDamageRolls, character.fireDamageDicePool)}]</Label>
-				{character.forceDamageRolls.length > 0 && (
-					<Label>Force Damage Rolls: [{FormatDieRolls(character.forceDamageRolls, character.forceDamageDicePool)}]</Label>
+				<Label>Piercing Damage Rolls: [{FormatDieRolls(characterState.piercingDamageRolls, characterState.piercingDamageDicePool)}]</Label>
+				<Label>Fire Damage Rolls: [{FormatDieRolls(characterState.fireDamageRolls, characterState.fireDamageDicePool)}]</Label>
+				{characterState.forceDamageRolls.length > 0 && (
+					<Label>Force Damage Rolls: [{FormatDieRolls(characterState.forceDamageRolls, characterState.forceDamageDicePool)}]</Label>
 				)}
-				<Button onClick={handleReroll} disabled={character.hasUsedReroll || alreadyBestRolls}>
+				<Button onClick={handleReroll} disabled={characterState.hasUsedReroll || alreadyBestRolls}>
 					{rerollButtonText}
 				</Button>
 			</div>

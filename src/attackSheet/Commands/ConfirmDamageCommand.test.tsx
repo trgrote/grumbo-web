@@ -9,6 +9,6 @@ describe('ConfirmDamageCommand', () => {
 		const result = new ConfirmDamageCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.attackStep).toBe(AttackStep.Results);
-		expect(result.character).toBe(state.character);
+		expect(result.characterState).toBe(state.characterState);
 	});
 });

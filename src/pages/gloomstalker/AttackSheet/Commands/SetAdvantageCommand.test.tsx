@@ -6,7 +6,7 @@ describe('SetAdvantageCommand', () => {
 	it('sets hasAdvantage to the constructor value', () => {
 		const state = buildTestState({ hasAdvantage: false });
 
-		expect(new SetAdvantageCommand(true).apply(state).character.hasAdvantage).toBe(true);
-		expect(new SetAdvantageCommand(false).apply(buildTestState({ hasAdvantage: true })).character.hasAdvantage).toBe(false);
+		expect(new SetAdvantageCommand(true).apply(state).characterState.hasAdvantage).toBe(true);
+		expect(new SetAdvantageCommand(false).apply(buildTestState({ hasAdvantage: true })).characterState.hasAdvantage).toBe(false);
 	});
 });

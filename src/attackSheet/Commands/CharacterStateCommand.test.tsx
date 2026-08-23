@@ -6,8 +6,8 @@ import CharacterStateCommand from './CharacterStateCommand';
 class SetIsHitTestCommand extends CharacterStateCommand<TestCharacterState> {
 	constructor(private isHit: boolean) { super(); }
 
-	protected applyToCharacter(character: TestCharacterState): TestCharacterState {
-		return { ...character, isHit: this.isHit };
+	protected applyToCharacterState(characterState: TestCharacterState): TestCharacterState {
+		return { ...characterState, isHit: this.isHit };
 	}
 }
 
@@ -16,7 +16,7 @@ describe('CharacterStateCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
 		const result = new SetIsHitTestCommand(true).apply(state);
 
-		expect(result.character.isHit).toBe(true);
+		expect(result.characterState.isHit).toBe(true);
 		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
 	});
 
@@ -24,6 +24,6 @@ describe('CharacterStateCommand', () => {
 		const state = buildTestState();
 		new SetIsHitTestCommand(true).apply(state);
 
-		expect(state.character.isHit).toBe(false);
+		expect(state.characterState.isHit).toBe(false);
 	});
 });

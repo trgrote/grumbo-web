@@ -8,7 +8,7 @@ describe('RollForAttackCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
 		const result = new RollForAttackCommand<TestCharacterState>(() => 0.5).apply(state, buildTestModel());
 
-		expect(result.character.attackRolls).toEqual([0.5]);
+		expect(result.characterState.attackRolls).toEqual([0.5]);
 		expect(result.attackStep).toBe(AttackStep.PostHitRoll);
 	});
 
@@ -16,6 +16,6 @@ describe('RollForAttackCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
 		const result = new RollForAttackCommand<TestCharacterState>().apply(state, buildTestModel());
 
-		expect(result.character.attackRolls).toHaveLength(1);
+		expect(result.characterState.attackRolls).toHaveLength(1);
 	});
 });

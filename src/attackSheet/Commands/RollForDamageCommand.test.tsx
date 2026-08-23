@@ -8,7 +8,7 @@ describe('RollForDamageCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.PreDamageRoll });
 		const result = new RollForDamageCommand<TestCharacterState>(() => 0.5).apply(state, buildTestModel());
 
-		expect(result.character.damageRolls).toEqual([0.5]);
+		expect(result.characterState.damageRolls).toEqual([0.5]);
 		expect(result.attackStep).toBe(AttackStep.PostDamageRoll);
 	});
 

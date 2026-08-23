@@ -6,34 +6,34 @@ import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 export default class RerollWorstDamageDieCommand extends CharacterStateCommand<GloomStalkerAttackState> {
 	constructor(private rng: () => number = Math.random) { super(); }
 
-	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
-		const bestRerollOption = GetBestRerollOption(character);
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
+		const bestRerollOption = GetBestRerollOption(characterState);
 
 		if (!bestRerollOption) {
-			return { ...character };
+			return { ...characterState };
 		}
 
 		if (bestRerollOption.type === DamageType.Piercing) {
-			const newPiercingDamageRolls = [...character.piercingDamageRolls];
+			const newPiercingDamageRolls = [...characterState.piercingDamageRolls];
 			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
-				...character,
+				...characterState,
 				piercingDamageRolls: newPiercingDamageRolls,
 				hasUsedReroll: true,
 			};
 		} else if (bestRerollOption.type === DamageType.Fire) {
-			const newFireDamageRolls = [...character.fireDamageRolls];
+			const newFireDamageRolls = [...characterState.fireDamageRolls];
 			newFireDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
-				...character,
+				...characterState,
 				fireDamageRolls: newFireDamageRolls,
 				hasUsedReroll: true,
 			};
 		} else if (bestRerollOption.type === DamageType.Force) {
-			const newForceDamageRolls = [...character.forceDamageRolls];
+			const newForceDamageRolls = [...characterState.forceDamageRolls];
 			newForceDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
-				...character,
+				...characterState,
 				forceDamageRolls: newForceDamageRolls,
 				hasUsedReroll: true,
 			};
@@ -41,7 +41,7 @@ export default class RerollWorstDamageDieCommand extends CharacterStateCommand<G
 
 		// If for some reason there are no valid reroll options, return the state unchanged
 		return {
-			...character
+			...characterState
 		};
 	}
 }

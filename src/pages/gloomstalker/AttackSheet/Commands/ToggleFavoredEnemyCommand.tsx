@@ -4,13 +4,13 @@ import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 export default class ToggleFavoredEnemyCommand extends CharacterStateCommand<GloomStalkerAttackState> {
 	constructor(private name: string) { super(); }
 
-	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
-		const isSelected = character.selectedFavoredEnemies.includes(this.name);
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
+		const isSelected = characterState.selectedFavoredEnemies.includes(this.name);
 		return {
-			...character,
+			...characterState,
 			selectedFavoredEnemies: isSelected
-				? character.selectedFavoredEnemies.filter(name => name !== this.name)
-				: [...character.selectedFavoredEnemies, this.name]
+				? characterState.selectedFavoredEnemies.filter(name => name !== this.name)
+				: [...characterState.selectedFavoredEnemies, this.name]
 		};
 	}
 }

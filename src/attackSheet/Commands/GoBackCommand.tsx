@@ -1,8 +1,8 @@
 import { GetFinalStep, GetPreviousStep } from "../AttackSheetStateFunctions";
 import { AttackSheetState, IAttackSheetCommand, ICharacterAttackModel } from "../AttackSheetTypes";
 
-export default class GoBackCommand<TCharacter> implements IAttackSheetCommand<TCharacter> {
-	apply(prevState: AttackSheetState<TCharacter>, model: ICharacterAttackModel<TCharacter>): AttackSheetState<TCharacter> {
+export default class GoBackCommand<TCharacterState> implements IAttackSheetCommand<TCharacterState> {
+	apply(prevState: AttackSheetState<TCharacterState>, model: ICharacterAttackModel<TCharacterState>): AttackSheetState<TCharacterState> {
 		const from = prevState.attackStep;
 
 		// The final step is a dead end: the flow doesn't record how it got there, and a miss
@@ -21,7 +21,7 @@ export default class GoBackCommand<TCharacter> implements IAttackSheetCommand<TC
 
 		return {
 			attackStep: to,
-			character: model.onStepReverted(prevState.character, from, to)
+			characterState: model.onStepReverted(prevState.characterState, from, to)
 		};
 	}
 }

@@ -4,9 +4,9 @@ import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 export default class SetIsDreadAmbusherExtraAttackCommand extends CharacterStateCommand<GloomStalkerAttackState> {
 	constructor(private isDreadAmbusherExtraAttack: boolean) { super(); }
 
-	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
 		return {
-			...character,
+			...characterState,
 			isDreadAmbusherExtraAttack: this.isDreadAmbusherExtraAttack
 		};
 	}

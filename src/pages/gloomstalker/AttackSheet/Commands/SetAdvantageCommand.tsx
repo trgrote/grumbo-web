@@ -4,9 +4,9 @@ import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 export default class SetAdvantageCommand extends CharacterStateCommand<GloomStalkerAttackState> {
 	constructor(private hasAdvantage: boolean) { super(); }
 
-	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
 		return {
-			...character,
+			...characterState,
 			hasAdvantage: this.hasAdvantage
 		};
 	}

@@ -383,6 +383,6 @@ describe('CreateHistoryRecordFromState', () => {
 
 		record.gloomStalkerInfo.attackModifier = 999;
 
-		expect(state.character.gloomStalkerInfo.attackModifier).toBe(testGloomStalkerInfo.attackModifier);
+		expect(state.characterState.gloomStalkerInfo.attackModifier).toBe(testGloomStalkerInfo.attackModifier);
 	});
 });

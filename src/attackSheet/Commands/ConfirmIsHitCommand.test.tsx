@@ -8,7 +8,7 @@ describe('ConfirmIsHitCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.PostHitRoll });
 		const result = new ConfirmIsHitCommand<TestCharacterState>().apply(state, buildTestModel());
 
-		expect(result.character.isHit).toBe(true);
+		expect(result.characterState.isHit).toBe(true);
 		expect(result.attackStep).toBe(AttackStep.PreDamageRoll);
 	});
 });

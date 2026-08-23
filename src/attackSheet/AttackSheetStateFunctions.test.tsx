@@ -8,7 +8,7 @@ describe('CreateInitialState', () => {
 		const result = CreateInitialState(buildTestModel());
 
 		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
-		expect(result.character).toEqual(testCharacterStateDefault);
+		expect(result.characterState).toEqual(testCharacterStateDefault);
 	});
 });
 

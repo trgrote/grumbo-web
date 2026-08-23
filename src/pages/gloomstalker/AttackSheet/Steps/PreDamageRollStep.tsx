@@ -17,10 +17,10 @@ interface PreDamageRollStepProps {
 }
 
 export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStepProps) {
-	const character = state.character;
-	const isDreadAmbusherExtraAttack = character.isDreadAmbusherExtraAttack;
+	const characterState = state.characterState;
+	const isDreadAmbusherExtraAttack = characterState.isDreadAmbusherExtraAttack;
 	const setIsDreadAmbusherExtraAttack = (value: boolean) => dispatch(new SetIsDreadAmbusherExtraAttackCommand(value));
-	const applyHuntersMark = character.applyHuntersMark;
+	const applyHuntersMark = characterState.applyHuntersMark;
 	const setApplyHuntersMark = (value: boolean) => dispatch(new SetApplyHuntersMarkCommand(value));
 	const rollForDamage = () => dispatch(new RollForDamageCommand());
 	const goBack = () => dispatch(new GoBackCommand());

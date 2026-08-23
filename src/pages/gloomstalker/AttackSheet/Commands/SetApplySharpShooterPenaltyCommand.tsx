@@ -4,9 +4,9 @@ import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 export default class SetApplySharpShooterPenaltyCommand extends CharacterStateCommand<GloomStalkerAttackState> {
 	constructor(private applySharpShooterPenalty: boolean) { super(); }
 
-	protected applyToCharacter(character: GloomStalkerAttackState): GloomStalkerAttackState {
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
 		return {
-			...character,
+			...characterState,
 			applySharpShooterPenalty: this.applySharpShooterPenalty
 		};
 	}

@@ -26,27 +26,27 @@ export default class GloomStalkerAttackModel implements ICharacterAttackModel<Gl
 		return GloomStalkerAttackStateDefault(this.gloomStalkerInfo);
 	}
 
-	rollForAttack(character: GloomStalkerAttackState, rng: () => number): GloomStalkerAttackState {
+	rollForAttack(characterState: GloomStalkerAttackState, rng: () => number): GloomStalkerAttackState {
 		return {
-			...character,
-			attackRolls: RollHitDice(character.hasAdvantage, rng)
+			...characterState,
+			attackRolls: RollHitDice(characterState.hasAdvantage, rng)
 		};
 	}
 
-	setIsHit(character: GloomStalkerAttackState, isHit: boolean): GloomStalkerAttackState {
+	setIsHit(characterState: GloomStalkerAttackState, isHit: boolean): GloomStalkerAttackState {
 		return {
-			...character,
+			...characterState,
 			isHit
 		};
 	}
 
-	rollForDamage(character: GloomStalkerAttackState, rng: () => number): GloomStalkerAttackState {
-		const piercingDamageDicePool = GetPiercingDamageDicePool(character);
-		const fireDamageDicePool = GetFireDamageDicePool(character);
-		const forceDamageDicePool = GetForceDamageDicePool(character);
+	rollForDamage(characterState: GloomStalkerAttackState, rng: () => number): GloomStalkerAttackState {
+		const piercingDamageDicePool = GetPiercingDamageDicePool(characterState);
+		const fireDamageDicePool = GetFireDamageDicePool(characterState);
+		const forceDamageDicePool = GetForceDamageDicePool(characterState);
 
 		return {
-			...character,
+			...characterState,
 			piercingDamageDicePool,
 			piercingDamageRolls: RollDice(piercingDamageDicePool, rng),
 			fireDamageDicePool,
@@ -61,17 +61,17 @@ export default class GloomStalkerAttackModel implements ICharacterAttackModel<Gl
 	// matters, so `to` is unused: every reachable backward transition is between adjacent
 	// steps, because GoBackCommand refuses to step back out of the final step (the only
 	// step this flow can reach by skipping others).
-	onStepReverted(character: GloomStalkerAttackState, from: AttackStep): GloomStalkerAttackState {
+	onStepReverted(characterState: GloomStalkerAttackState, from: AttackStep): GloomStalkerAttackState {
 		switch (from) {
 			case AttackStep.PostHitRoll:
 				return {
-					...character,
+					...characterState,
 					attackRolls: [],
 					isHit: false
 				};
 			case AttackStep.PostDamageRoll:
 				return {
-					...character,
+					...characterState,
 					piercingDamageDicePool: [],
 					piercingDamageRolls: [],
 					fireDamageDicePool: [],
@@ -80,7 +80,7 @@ export default class GloomStalkerAttackModel implements ICharacterAttackModel<Gl
 					forceDamageRolls: []
 				};
 			default:
-				return character;
+				return characterState;
 		}
 	}
 }

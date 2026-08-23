@@ -26,8 +26,8 @@ describe('RerollWorstDamageDieCommand', () => {
 
 		const result = new RerollWorstDamageDieCommand(() => 0.999).apply(state);
 
-		expect(result.character.piercingDamageRolls).toEqual([8, 6]);
-		expect(result.character.hasUsedReroll).toBe(true);
+		expect(result.characterState.piercingDamageRolls).toEqual([8, 6]);
+		expect(result.characterState.hasUsedReroll).toBe(true);
 	});
 
 	it('rerolls the worst fire die when no piercing die is rerollable', () => {
@@ -40,9 +40,9 @@ describe('RerollWorstDamageDieCommand', () => {
 
 		const result = new RerollWorstDamageDieCommand(() => 0.5).apply(state);
 
-		expect(result.character.fireDamageRolls).toEqual([4]);
-		expect(result.character.piercingDamageRolls).toEqual([6]);
-		expect(result.character.hasUsedReroll).toBe(true);
+		expect(result.characterState.fireDamageRolls).toEqual([4]);
+		expect(result.characterState.piercingDamageRolls).toEqual([6]);
+		expect(result.characterState.hasUsedReroll).toBe(true);
 	});
 
 	it('rerolls the worst force die when no piercing/fire die is rerollable', () => {
@@ -57,9 +57,9 @@ describe('RerollWorstDamageDieCommand', () => {
 
 		const result = new RerollWorstDamageDieCommand(() => 0.5).apply(state);
 
-		expect(result.character.forceDamageRolls).toEqual([4]);
-		expect(result.character.piercingDamageRolls).toEqual([6]);
-		expect(result.character.fireDamageRolls).toEqual([6]);
-		expect(result.character.hasUsedReroll).toBe(true);
+		expect(result.characterState.forceDamageRolls).toEqual([4]);
+		expect(result.characterState.piercingDamageRolls).toEqual([6]);
+		expect(result.characterState.fireDamageRolls).toEqual([6]);
+		expect(result.characterState.hasUsedReroll).toBe(true);
 	});
 });

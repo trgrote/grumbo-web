@@ -9,8 +9,8 @@ describe('GoBackCommand', () => {
 		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
-		expect(result.character.revertedFrom).toBe(AttackStep.PostHitRoll);
-		expect(result.character.revertedTo).toBe(AttackStep.PreHitRoll);
+		expect(result.characterState.revertedFrom).toBe(AttackStep.PostHitRoll);
+		expect(result.characterState.revertedTo).toBe(AttackStep.PreHitRoll);
 	});
 
 	it('skips steps the model omits', () => {
@@ -18,7 +18,7 @@ describe('GoBackCommand', () => {
 		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.attackStep).toBe(AttackStep.PreDamageRoll);
-		expect(result.character.revertedTo).toBe(AttackStep.PreDamageRoll);
+		expect(result.characterState.revertedTo).toBe(AttackStep.PreDamageRoll);
 	});
 
 	// A miss reaches the final step by skipping the damage steps, so stepping back one

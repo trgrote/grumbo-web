@@ -9,6 +9,6 @@ describe('AttackAgainCommand', () => {
 		const result = new AttackAgainCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
-		expect(result.character).toEqual(testCharacterStateDefault);
+		expect(result.characterState).toEqual(testCharacterStateDefault);
 	});
 });
