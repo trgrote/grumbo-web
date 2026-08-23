@@ -14,11 +14,27 @@ describe('GoBackCommand', () => {
 	});
 
 	it('skips steps the model omits', () => {
-		const state = buildTestState({ attackStep: AttackStep.Results });
-		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel(stepsWithoutPostDamageRoll));
+		const state = buildTestState({ attackStep: AttackStep.PostDamageRoll });
+		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.attackStep).toBe(AttackStep.PreDamageRoll);
 		expect(result.character.revertedTo).toBe(AttackStep.PreDamageRoll);
+	});
+
+	// A miss reaches the final step by skipping the damage steps, so stepping back one
+	// place from there would drop the user into a step that never ran.
+	it('is a no-op on the final step', () => {
+		const state = buildTestState({ attackStep: AttackStep.Results });
+		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel());
+
+		expect(result).toBe(state);
+	});
+
+	it('is a no-op on the final step of a flow that omits steps', () => {
+		const state = buildTestState({ attackStep: AttackStep.Results });
+		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel(stepsWithoutPostDamageRoll));
+
+		expect(result).toBe(state);
 	});
 
 	it('is a no-op on the first step', () => {

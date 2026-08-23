@@ -26,6 +26,8 @@ export interface IAttackSheetCommand<TCharacter> {
 export interface ICharacterAttackModel<TCharacter> {
 	// The ordered steps this character's flow walks through. Drives both advancing and
 	// going back, so a character that has no PostDamageRoll step simply omits it.
+	// Must be non-empty and in flow order: the first entry is where the sheet starts and
+	// the last is where a miss short-circuits to.
 	readonly steps: AttackStep[];
 
 	createInitialCharacterState: () => TCharacter;

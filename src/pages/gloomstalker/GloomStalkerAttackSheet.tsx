@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { JSX, useEffect, useMemo, useReducer } from "react";
 import { AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import { CreateAttackSheetReducer } from "@/attackSheet/AttackSheetStateReducer";
-import { CreateInitialState } from "@/attackSheet/AttackSheetStateFunctions";
+import { CreateInitialState, GetFinalStep } from "@/attackSheet/AttackSheetStateFunctions";
 import GloomStalkerAttackModel from "./AttackSheet/GloomStalkerAttackModel";
 import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
 import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
@@ -32,7 +32,7 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 	// I only want to trigger this effect when the attack step changes to results,
 	// not on every state change.
 	useEffect(() => {
-		if (state.attackStep === AttackStep.Results) {
+		if (state.attackStep === GetFinalStep(model)) {
 			const historyRecord = CreateHistoryRecordFromState(state);
 			addToHistory(historyRecord);
 		}

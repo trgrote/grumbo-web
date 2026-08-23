@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CreateInitialState, GetNextStep, GetPreviousStep } from './AttackSheetStateFunctions';
+import { CreateInitialState, GetFinalStep, GetNextStep, GetPreviousStep } from './AttackSheetStateFunctions';
 import { AttackStep } from './AttackSheetTypes';
 import { buildTestModel, stepsWithoutPostDamageRoll, testCharacterStateDefault } from './test/fixtures';
 
@@ -34,6 +34,14 @@ describe('GetNextStep', () => {
 		const model = buildTestModel(stepsWithoutPostDamageRoll);
 
 		expect(GetNextStep(model, AttackStep.PostDamageRoll)).toBe(AttackStep.PostDamageRoll);
+	});
+});
+
+describe('GetFinalStep', () => {
+	it("returns the last step of the model's flow", () => {
+		expect(GetFinalStep(buildTestModel())).toBe(AttackStep.Results);
+		expect(GetFinalStep(buildTestModel(stepsWithoutPostDamageRoll))).toBe(AttackStep.Results);
+		expect(GetFinalStep(buildTestModel([AttackStep.PreHitRoll, AttackStep.PostHitRoll]))).toBe(AttackStep.PostHitRoll);
 	});
 });
 

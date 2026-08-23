@@ -1,13 +1,15 @@
 import { IAttackSheetCommand } from "@/attackSheet/AttackSheetTypes";
-import SharedAttackAgainCommand from "@/attackSheet/Commands/AttackAgainCommand";
-import SharedConfirmDamageCommand from "@/attackSheet/Commands/ConfirmDamageCommand";
-import SharedConfirmIsHitCommand from "@/attackSheet/Commands/ConfirmIsHitCommand";
-import SharedConfirmIsMissCommand from "@/attackSheet/Commands/ConfirmIsMissCommand";
-import SharedGoBackCommand from "@/attackSheet/Commands/GoBackCommand";
-import SharedNullCommand from "@/attackSheet/Commands/NullCommand";
-import SharedResetCommand from "@/attackSheet/Commands/ResetCommand";
-import SharedRollForAttackCommand from "@/attackSheet/Commands/RollForAttackCommand";
-import SharedRollForDamageCommand from "@/attackSheet/Commands/RollForDamageCommand";
+import {
+	AttackAgainCommand as SharedAttackAgainCommand,
+	ConfirmDamageCommand as SharedConfirmDamageCommand,
+	ConfirmIsHitCommand as SharedConfirmIsHitCommand,
+	ConfirmIsMissCommand as SharedConfirmIsMissCommand,
+	GoBackCommand as SharedGoBackCommand,
+	NullCommand as SharedNullCommand,
+	ResetCommand as SharedResetCommand,
+	RollForAttackCommand as SharedRollForAttackCommand,
+	RollForDamageCommand as SharedRollForDamageCommand
+} from "@/attackSheet/Commands/AttackSheetCommands";
 import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 
 export type IGSAttackSheetCommand = IAttackSheetCommand<GloomStalkerAttackState>;

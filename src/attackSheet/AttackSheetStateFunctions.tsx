@@ -30,3 +30,8 @@ export function GetPreviousStep<TCharacter>(model: ICharacterAttackModel<TCharac
 
 	return model.steps[index - 1];
 }
+
+// The step the flow ends on. A miss jumps straight here, skipping the damage steps.
+export function GetFinalStep<TCharacter>(model: ICharacterAttackModel<TCharacter>): AttackStep {
+	return model.steps[model.steps.length - 1];
+}

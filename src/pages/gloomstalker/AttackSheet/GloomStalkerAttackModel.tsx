@@ -57,8 +57,10 @@ export default class GloomStalkerAttackModel implements ICharacterAttackModel<Gl
 		};
 	}
 
-	// Discard whatever rolls the step being abandoned produced. Which step is being
-	// returned *to* doesn't matter here - the Gloom Stalker's flow has no skipped steps.
+	// Discard whatever rolls the step being abandoned produced. Only the step being left
+	// matters, so `to` is unused: every reachable backward transition is between adjacent
+	// steps, because GoBackCommand refuses to step back out of the final step (the only
+	// step this flow can reach by skipping others).
 	onStepReverted(character: GloomStalkerAttackState, from: AttackStep): GloomStalkerAttackState {
 		switch (from) {
 			case AttackStep.PostHitRoll:

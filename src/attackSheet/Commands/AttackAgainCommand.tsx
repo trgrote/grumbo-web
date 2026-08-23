@@ -1,8 +1,6 @@
-import { CreateInitialState } from "../AttackSheetStateFunctions";
-import { AttackSheetState, IAttackSheetCommand, ICharacterAttackModel } from "../AttackSheetTypes";
+import ResetCommand from "./ResetCommand";
 
-export default class AttackAgainCommand<TCharacter> implements IAttackSheetCommand<TCharacter> {
-	apply(_prevState: AttackSheetState<TCharacter>, model: ICharacterAttackModel<TCharacter>): AttackSheetState<TCharacter> {
-		return CreateInitialState(model);
-	}
-}
+// Currently identical to ResetCommand, but kept distinct because the intents differ:
+// this is the user starting a new attack from the results screen, where Reset is the
+// sheet being torn down. Keeping the names separate means one can change without the other.
+export default class AttackAgainCommand<TCharacter> extends ResetCommand<TCharacter> { }

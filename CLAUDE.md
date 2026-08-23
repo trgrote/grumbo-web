@@ -41,24 +41,39 @@ Each character page follows the same shape: a top-level `*Page.tsx` renders a `T
 - **Local storage** (`src/utils/LocalStorage.tsx`): generic `GetLocalStorage`/`SaveLocalStorage` helpers keyed by a `storageKey` + `storageVersion`. If the version stored in `localStorage` doesn't match the current `storageVersion`, the default item is used instead (a cheap migration strategy — bump the version string when changing the shape of persisted data, e.g. `GloomStalkerLocalStorage.tsx`'s `storageVersion`).
 - **Shared dice/formatting utils** (`src/utils/Dice.tsx`, `src/utils/Formatting.tsx`): `RollDie`/`RollDice` (RNG-injectable, default to `Math.random`) and `RollArrayToString`/`JoinWithElement` are used by both character pages' command/state-function modules — put character-agnostic helpers here rather than duplicating them per page.
 
-### Attack sheets — Command pattern (`src/pages/gloomstalker/AttackSheet/`, `src/pages/paladin/AttackSheet/`)
+### Attack sheets — Command pattern
 
-This is the most involved part of the codebase, and both character pages now follow the same shape. The attack flow (roll to hit → confirm hit/miss → roll damage → results) is modeled as an explicit state machine driven by a command pattern, not ad hoc `useState` calls:
+This is the most involved part of the codebase. The attack flow (roll to hit → confirm hit/miss → roll damage → results) is modeled as an explicit state machine driven by a command pattern, not ad hoc `useState` calls.
 
-- `GloomStalkerTypes.tsx` / `PaladinTypes.tsx` define the full sheet state (composed from `PreHitRollInfo` / `PostHitRollInfo` / `PreDamageRollInfo` / `PostDamageRollInfo`-style interfaces) and an `AttackStep` enum tracking which step of the flow is active.
-- `*AttackSheet.tsx` holds a `useReducer(AttackSheetStateReducer, ...)` and renders one `Steps/*Step.tsx` component per `AttackStep` value, passing down `state` and `dispatch`.
-- `AttackSheet/AttackSheetStateReducer.tsx` is a trivial reducer: `command.apply(state)` — all actual logic lives in the command classes.
-- `AttackSheet/Commands/` contains one class per action (e.g. `RollForAttackCommand`, `ConfirmIsHitCommand`, `SetAdvantageCommand`), each implementing an `I*AttackSheetCommand.apply(prevState) => newState` interface. `dispatch(new SomeCommand(...))` is how Step components trigger transitions. `Commands/AttackSheetCommands.tsx` is the barrel file re-exporting all commands — add new commands there too.
-- `AttackSheet/AttackSheetStateFunctions.tsx` holds shared pure helpers used by commands (dice pool builders, derived-value selectors, building a `HistoryRecord` from final state via an injectable clock).
-- When the sheet's `AttackStep` reaches `Results`, an effect in `*AttackSheet.tsx` converts the state into a `HistoryRecord` and calls `addToHistory`/`addToRollHistory`, which is what actually persists it (via the page's `useEffect` → `SaveLocal*Storage`).
+**The flow is character-agnostic and lives in `src/attackSheet/`.** The Gloom Stalker is migrated onto it; the Paladin is not yet (it still has its own copy under `src/pages/paladin/AttackSheet/`, described at the bottom of this section). Migrating the Paladin is the intended next step.
 
-The two pages' commands/state functions/types are separate (not shared through a common interface) since the underlying game rules genuinely differ — don't assume identical mechanics, just identical structure.
+- `AttackSheetTypes.tsx` defines `AttackStep`, `AttackSheetState<TCharacter>` (which owns **only** `attackStep` — everything else lives in the character slice), `IAttackSheetCommand<TCharacter>`, and `ICharacterAttackModel<TCharacter>`.
+- `ICharacterAttackModel` is the callback surface the shared flow calls into: `createInitialCharacterState`, `rollForAttack`, `setIsHit`, `rollForDamage`, `onStepReverted`. Its `steps: AttackStep[]` array is the single source of truth for step ordering — a character that omits a step (the Paladin has no `PostDamageRoll`) just leaves it out, and advancing/going back adapt automatically. Never hard-code a transition in a command; go through `GetNextStep`/`GetPreviousStep`/`GetFinalStep` in `AttackSheetStateFunctions.tsx`.
+- `AttackSheetStateReducer.tsx` exports `CreateAttackSheetReducer(model)`, binding the model once so Step components can dispatch bare commands: `command.apply(state, model)`.
+- `Commands/` holds the flow commands (`GoBack`, `Reset`, `AttackAgain`, `RollForAttack`, `ConfirmIsHit`/`Miss`, `RollForDamage`, `ConfirmDamage`, `Null`) plus `CharacterStateCommand`, the base for commands that only touch character state.
+
+Per-character code then lives under `src/pages/<character>/AttackSheet/`:
+
+- `<Character>Types.tsx` defines the character's own state slice (composed from `PreHitRollInfo` / `PostHitRollInfo` / `PreDamageRollInfo` / `PostDamageRollInfo`-style interfaces) and re-exports `AttackStep` from the shared module.
+- `<Character>AttackModel.tsx` implements `ICharacterAttackModel` — this is where that character's rules live (how many d20s advantage rolls, which damage pools exist, what a Back clears).
+- `Commands/` holds only the commands that encode actual game rules (`SetAdvantageCommand`, `ToggleFavoredEnemyCommand`, `RerollWorstDamageDieCommand`, …), each extending `CharacterStateCommand` and operating on the character slice alone. `Commands/AttackSheetCommands.tsx` is the barrel: it re-exports the shared flow commands bound to this character's state (via TypeScript instantiation expressions) alongside the local ones, so Step components import everything from one place.
+- `AttackSheetStateFunctions.tsx` holds that character's pure helpers (dice pool builders, derived-value selectors) — all typed against the character slice, not the sheet state.
+- `<Character>AttackSheet.tsx` memoizes a model from the character's info, builds a reducer from it, and renders one `Steps/*Step.tsx` per `AttackStep`.
+- When `AttackStep` reaches the final step, an effect in `<Character>AttackSheet.tsx` converts state into a `HistoryRecord` and calls `addToHistory`/`addToRollHistory`, which is what actually persists it (via the page's `useEffect` → `SaveLocal*Storage`).
+
+**`HistoryRecord` is deliberately flat**, not nested like the sheet state — `CreateHistoryRecordFromState` spreads the character slice and `attackStep` up to the top level. That's what lets records persisted before the refactor keep deserializing without a `storageVersion` bump. Don't "fix" the inconsistency without bumping the version and accepting the history loss.
+
+The Paladin's not-yet-migrated copy follows the original shape: a local `AttackSheetStateReducer.tsx` (`command.apply(state)`), one `IPalAttackSheetCommand` implementation per action in `Commands/`, and a flat `PaladinAttackSheetState`. The two characters' rules genuinely differ (2d20 vs 3d20 advantage, Divine Smite vs three typed damage pools, no reroll) — don't assume identical mechanics, just identical structure.
 
 ### Testing (`npm run test`)
 
 Vitest + jsdom, configured inline in `vite.config.ts` (`test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'] }`). Tests are co-located as `*.test.tsx` next to the source file, one per command/state-function/reducer module — see `AttackSheet/Commands/*.test.tsx` and `AttackSheet/AttackSheetStateFunctions.test.tsx` in either character page for the convention. Coverage is currently pure-logic only (commands, selectors, reducers); no React Testing Library render tests exist yet even though the dependency is installed.
 
-Each `AttackSheet/test/fixtures.ts` exports a fixed `*Info` fixture plus a `buildTestState(overrides)` helper built on top of the real default-state factory — use it instead of constructing state objects by hand. Nondeterminism (dice rolls, timestamps) is handled by constructor/parameter-injected `rng`/`now` functions defaulting to `Math.random`/`Date.now`, never by mocking globals — pass `() => 0` for the lowest die face, `() => 0.999` for the highest.
+Each `AttackSheet/test/fixtures.ts` exports a fixed `*Info` fixture plus `buildTestState(overrides)` / `buildTestCharacterState(overrides)` / `buildTestModel(info)` helpers built on top of the real default-state factory — use them instead of constructing state objects by hand. `buildTestState` takes *flat* overrides and splits them into the two slices for you. Nondeterminism (dice rolls, timestamps) is handled by constructor/parameter-injected `rng`/`now` functions defaulting to `Math.random`/`Date.now`, never by mocking globals — pass `() => 0` for the lowest die face, `() => 0.999` for the highest.
+
+`src/attackSheet/test/fixtures.tsx` provides a synthetic character model for testing the shared flow in isolation — including `stepsWithoutPostDamageRoll`, which pre-tests the Paladin's step shape. Keep Gloom Stalker specifics out of the shared tests.
+
+Unit tests cover commands, selectors and the model; `src/pages/gloomstalker/AttackSheet/AttackSheetIntegration.test.tsx` covers the seam between them by driving whole flows through the real reducer, model and command barrel. Add to it when changing how the shared flow and a character model interact.
 
 ### UI components
 
