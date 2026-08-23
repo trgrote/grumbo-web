@@ -84,9 +84,7 @@ export function GetCritStatus(state: GloomStalkerAttackSheetState): CritStatus {
 }
 
 export function GetHitStatusText(state: GloomStalkerAttackSheetState): string {
-	const highestRoll = GetHighestHitRoll(state);
-
-	const isCriticalHitOrMiss = highestRoll === 20 || highestRoll === 1;
+	const isCriticalHitOrMiss = GetCritStatus(state) !== CritStatus.Normal;
 	return (isCriticalHitOrMiss ? 'Critical ' : '') + (state.isHit ? "Hit" : "Miss");
 }
 
