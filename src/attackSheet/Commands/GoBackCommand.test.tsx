@@ -5,12 +5,12 @@ import GoBackCommand from './GoBackCommand';
 
 describe('GoBackCommand', () => {
 	it('steps back one step and tells the model which transition happened', () => {
-		const state = buildTestState({ attackStep: AttackStep.PostHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PostAttackRoll });
 		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel());
 
-		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
-		expect(result.characterState.revertedFrom).toBe(AttackStep.PostHitRoll);
-		expect(result.characterState.revertedTo).toBe(AttackStep.PreHitRoll);
+		expect(result.attackStep).toBe(AttackStep.PreAttackRoll);
+		expect(result.characterState.revertedFrom).toBe(AttackStep.PostAttackRoll);
+		expect(result.characterState.revertedTo).toBe(AttackStep.PreAttackRoll);
 	});
 
 	it('skips steps the model omits', () => {
@@ -38,7 +38,7 @@ describe('GoBackCommand', () => {
 	});
 
 	it('is a no-op on the first step', () => {
-		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PreAttackRoll });
 		const result = new GoBackCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result).toBe(state);

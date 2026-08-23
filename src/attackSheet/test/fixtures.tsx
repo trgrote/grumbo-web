@@ -19,8 +19,8 @@ export const testCharacterStateDefault: TestCharacterState = {
 };
 
 export const allSteps: AttackStep[] = [
-	AttackStep.PreHitRoll,
-	AttackStep.PostHitRoll,
+	AttackStep.PreAttackRoll,
+	AttackStep.PostAttackRoll,
 	AttackStep.PreDamageRoll,
 	AttackStep.PostDamageRoll,
 	AttackStep.Results
@@ -28,8 +28,8 @@ export const allSteps: AttackStep[] = [
 
 // Mirrors a character (like the Paladin) whose flow has no PostDamageRoll step.
 export const stepsWithoutPostDamageRoll: AttackStep[] = [
-	AttackStep.PreHitRoll,
-	AttackStep.PostHitRoll,
+	AttackStep.PreAttackRoll,
+	AttackStep.PostAttackRoll,
 	AttackStep.PreDamageRoll,
 	AttackStep.Results
 ];
@@ -50,7 +50,7 @@ export function buildTestModel(steps: AttackStep[] = allSteps): ICharacterAttack
 export function buildTestState(
 	overrides: Partial<TestCharacterState> & { attackStep?: AttackStep; } = {}
 ): AttackSheetState<TestCharacterState> {
-	const { attackStep = AttackStep.PreHitRoll, ...characterOverrides } = overrides;
+	const { attackStep = AttackStep.PreAttackRoll, ...characterOverrides } = overrides;
 
 	return {
 		attackStep,

@@ -6,15 +6,15 @@ import {
 	GetForceDamageDicePool,
 	GetPiercingDamageDicePool,
 	GloomStalkerAttackStateDefault,
-	RollHitDice
+	RollAttackDice
 } from "./AttackSheetStateFunctions";
 
 // The Gloom Stalker's half of the attack sheet: everything the shared flow has to call
 // back into because it depends on this character's rules.
 export default class GloomStalkerAttackModel implements ICharacterAttackModel<GloomStalkerAttackState> {
 	readonly steps: AttackStep[] = [
-		AttackStep.PreHitRoll,
-		AttackStep.PostHitRoll,
+		AttackStep.PreAttackRoll,
+		AttackStep.PostAttackRoll,
 		AttackStep.PreDamageRoll,
 		AttackStep.PostDamageRoll,
 		AttackStep.Results
@@ -29,7 +29,7 @@ export default class GloomStalkerAttackModel implements ICharacterAttackModel<Gl
 	rollForAttack(characterState: GloomStalkerAttackState, rng: () => number): GloomStalkerAttackState {
 		return {
 			...characterState,
-			attackRolls: RollHitDice(characterState.hasAdvantage, rng)
+			attackRolls: RollAttackDice(characterState.hasAdvantage, rng)
 		};
 	}
 
@@ -63,7 +63,7 @@ export default class GloomStalkerAttackModel implements ICharacterAttackModel<Gl
 	// step this flow can reach by skipping others).
 	onStepReverted(characterState: GloomStalkerAttackState, from: AttackStep): GloomStalkerAttackState {
 		switch (from) {
-			case AttackStep.PostHitRoll:
+			case AttackStep.PostAttackRoll:
 				return {
 					...characterState,
 					attackRolls: [],

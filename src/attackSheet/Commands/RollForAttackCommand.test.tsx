@@ -5,15 +5,15 @@ import RollForAttackCommand from './RollForAttackCommand';
 
 describe('RollForAttackCommand', () => {
 	it('asks the model to roll and advances a step', () => {
-		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PreAttackRoll });
 		const result = new RollForAttackCommand<TestCharacterState>(() => 0.5).apply(state, buildTestModel());
 
 		expect(result.characterState.attackRolls).toEqual([0.5]);
-		expect(result.attackStep).toBe(AttackStep.PostHitRoll);
+		expect(result.attackStep).toBe(AttackStep.PostAttackRoll);
 	});
 
 	it('defaults the rng so callers can omit it', () => {
-		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PreAttackRoll });
 		const result = new RollForAttackCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.characterState.attackRolls).toHaveLength(1);

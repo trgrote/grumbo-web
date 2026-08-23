@@ -13,11 +13,11 @@ class SetIsHitTestCommand extends CharacterStateCommand<TestCharacterState> {
 
 describe('CharacterStateCommand', () => {
 	it('applies the subclass transform to the character slice only', () => {
-		const state = buildTestState({ attackStep: AttackStep.PreHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PreAttackRoll });
 		const result = new SetIsHitTestCommand(true).apply(state);
 
 		expect(result.characterState.isHit).toBe(true);
-		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
+		expect(result.attackStep).toBe(AttackStep.PreAttackRoll);
 	});
 
 	it('does not mutate the previous state', () => {

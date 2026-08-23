@@ -5,8 +5,8 @@
 // which damage pools exist) genuinely differ per character.
 
 export enum AttackStep {
-	PreHitRoll,
-	PostHitRoll,
+	PreAttackRoll,
+	PostAttackRoll,
 	PreDamageRoll,
 	PostDamageRoll,
 	Results

@@ -8,7 +8,7 @@ describe('ResetCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.Results, isHit: true, damageRolls: [4] });
 		const result = new ResetCommand<TestCharacterState>().apply(state, buildTestModel());
 
-		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
+		expect(result.attackStep).toBe(AttackStep.PreAttackRoll);
 		expect(result.characterState).toEqual(testCharacterStateDefault);
 	});
 });

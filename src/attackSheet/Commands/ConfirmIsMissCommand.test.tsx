@@ -5,7 +5,7 @@ import ConfirmIsMissCommand from './ConfirmIsMissCommand';
 
 describe('ConfirmIsMissCommand', () => {
 	it('marks the attack as a miss and short-circuits to the final step', () => {
-		const state = buildTestState({ attackStep: AttackStep.PostHitRoll, isHit: true });
+		const state = buildTestState({ attackStep: AttackStep.PostAttackRoll, isHit: true });
 		const result = new ConfirmIsMissCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.characterState.isHit).toBe(false);
@@ -13,15 +13,15 @@ describe('ConfirmIsMissCommand', () => {
 	});
 
 	it("short-circuits to the model's own final step rather than assuming Results", () => {
-		const steps = [AttackStep.PreHitRoll, AttackStep.PostHitRoll, AttackStep.PreDamageRoll];
-		const state = buildTestState({ attackStep: AttackStep.PostHitRoll });
+		const steps = [AttackStep.PreAttackRoll, AttackStep.PostAttackRoll, AttackStep.PreDamageRoll];
+		const state = buildTestState({ attackStep: AttackStep.PostAttackRoll });
 		const result = new ConfirmIsMissCommand<TestCharacterState>().apply(state, buildTestModel(steps));
 
 		expect(result.attackStep).toBe(AttackStep.PreDamageRoll);
 	});
 
 	it('lands on the final step of a flow that omits steps', () => {
-		const state = buildTestState({ attackStep: AttackStep.PostHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PostAttackRoll });
 		const result = new ConfirmIsMissCommand<TestCharacterState>().apply(state, buildTestModel(stepsWithoutPostDamageRoll));
 
 		expect(result.attackStep).toBe(AttackStep.Results);

@@ -67,13 +67,13 @@ export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState
 	};
 }
 
-export function GetHighestHitRoll(state: GloomStalkerAttackState): number {
+export function GetHighestAttackRoll(state: GloomStalkerAttackState): number {
 	// TODO If we add disadvantage, we need to select the lowest instead of the highest
 	return Math.max(...state.attackRolls);
 }
 
 export function GetCritStatus(state: GloomStalkerAttackState): CritStatus {
-	const highestRoll = GetHighestHitRoll(state);
+	const highestRoll = GetHighestAttackRoll(state);
 
 	if (highestRoll === 20) {
 		return CritStatus.CriticalHit;
@@ -90,7 +90,7 @@ export function GetHitStatusText(state: GloomStalkerAttackState): string {
 }
 
 export function GetHitStatusColorClass(state: GloomStalkerAttackState): string {
-	const highestRoll = GetHighestHitRoll(state);
+	const highestRoll = GetHighestAttackRoll(state);
 
 	if (highestRoll === 20) {
 		return 'text-blue-500';
@@ -104,7 +104,7 @@ export function GetHitStatusColorClass(state: GloomStalkerAttackState): string {
 }
 
 export function GetHitPreConfirmStatusColorClass(state: GloomStalkerAttackState): string {
-	const highestRoll = GetHighestHitRoll(state);
+	const highestRoll = GetHighestAttackRoll(state);
 
 	if (highestRoll === 20) {
 		return 'text-blue-500';
@@ -121,20 +121,20 @@ export function GetFavoredEnemyBonus(state: GloomStalkerAttackState): number {
 	return state.selectedFavoredEnemies.length * 2;
 }
 
-export function FormatHitValueBreakdown(state: GloomStalkerAttackState): string {
-	const highestHitRoll = GetHighestHitRoll(state);
-	const totalHitValue = GetHighestHitValue(state);
+export function FormatAttackValueBreakdown(state: GloomStalkerAttackState): string {
+	const highestAttackRoll = GetHighestAttackRoll(state);
+	const totalAttackValue = GetHighestAttackValue(state);
 	const favoredEnemyBonus = GetFavoredEnemyBonus(state);
 	const { attackModifier } = state.gloomStalkerInfo;
 
-	return `${totalHitValue} (${highestHitRoll} + ${attackModifier}`
+	return `${totalAttackValue} (${highestAttackRoll} + ${attackModifier}`
 		+ (state.applySharpShooterPenalty ? ' - 5' : '')
 		+ (favoredEnemyBonus > 0 ? ` + ${favoredEnemyBonus}` : '')
 		+ ')';
 }
 
-export function GetHighestHitValue(state: GloomStalkerAttackState): number {
-	const highestRoll = GetHighestHitRoll(state);
+export function GetHighestAttackValue(state: GloomStalkerAttackState): number {
+	const highestRoll = GetHighestAttackRoll(state);
 	const modifier = state.gloomStalkerInfo.attackModifier + (state.applySharpShooterPenalty ? -5 : 0) + GetFavoredEnemyBonus(state);
 	return highestRoll + modifier;
 }
@@ -158,7 +158,7 @@ export function GetTotalDamage(state: GloomStalkerAttackState): number {
 	return GetTotalPiercingDamage(state) + GetTotalFireDamage(state) + GetTotalForceDamage(state);
 }
 
-export function RollHitDice(hasAdvantage: boolean, rng: () => number = Math.random): number[] {
+export function RollAttackDice(hasAdvantage: boolean, rng: () => number = Math.random): number[] {
 	// elven accuracy allows you to roll an additional die when you have advantage, and pick the highest.
 	// effectively giving you one extra die to roll when you have advantage.
 	const numberOfDice = hasAdvantage ? 3 : 1;

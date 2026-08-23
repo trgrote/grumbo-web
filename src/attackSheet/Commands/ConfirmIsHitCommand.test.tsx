@@ -5,7 +5,7 @@ import ConfirmIsHitCommand from './ConfirmIsHitCommand';
 
 describe('ConfirmIsHitCommand', () => {
 	it('marks the attack as a hit and advances a step', () => {
-		const state = buildTestState({ attackStep: AttackStep.PostHitRoll });
+		const state = buildTestState({ attackStep: AttackStep.PostAttackRoll });
 		const result = new ConfirmIsHitCommand<TestCharacterState>().apply(state, buildTestModel());
 
 		expect(result.characterState.isHit).toBe(true);

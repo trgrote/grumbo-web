@@ -54,7 +54,7 @@ This is the most involved part of the codebase. The attack flow (roll to hit →
 
 Per-character code then lives under `src/pages/<character>/AttackSheet/`:
 
-- `<Character>Types.tsx` defines the character's own state slice (composed from `PreHitRollInfo` / `PostHitRollInfo` / `PreDamageRollInfo` / `PostDamageRollInfo`-style interfaces) and re-exports `AttackStep` from the shared module.
+- `<Character>Types.tsx` defines the character's own state slice (composed from `PreAttackRollInfo` / `PostAttackRollInfo` / `PreDamageRollInfo` / `PostDamageRollInfo`-style interfaces) and re-exports `AttackStep` from the shared module.
 - `<Character>AttackModel.tsx` implements `ICharacterAttackModel` — this is where that character's rules live (how many d20s advantage rolls, which damage pools exist, what a Back clears).
 - `Commands/` holds only the commands that encode actual game rules (`SetAdvantageCommand`, `ToggleFavoredEnemyCommand`, `RerollWorstDamageDieCommand`, …), each extending `CharacterStateCommand` and operating on `characterState` alone. `Commands/AttackSheetCommands.tsx` is the barrel: it re-exports the shared flow commands bound to this character's state (via TypeScript instantiation expressions) alongside the local ones, so Step components import everything from one place.
 - `AttackSheetStateFunctions.tsx` holds that character's pure helpers (dice pool builders, derived-value selectors) — all typed against the character state, not the sheet state.

@@ -5,8 +5,8 @@ import { AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes
 import { CreateAttackSheetReducer } from "@/attackSheet/AttackSheetStateReducer";
 import { CreateInitialState, GetFinalStep } from "@/attackSheet/AttackSheetStateFunctions";
 import GloomStalkerAttackModel from "./AttackSheet/GloomStalkerAttackModel";
-import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
-import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
+import PreAttackRollStep from "./AttackSheet/Steps/PreAttackRollStep.tsx";
+import PostAttackRollStep from "./AttackSheet/Steps/PostAttackRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
 import { CreateHistoryRecordFromState } from "./AttackSheet/AttackSheetStateFunctions";
@@ -48,11 +48,11 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 	const renderSheetContent = (): JSX.Element => {
 		return (
 			<>
-				{state.attackStep === AttackStep.PreHitRoll && <PreHitRollStep
+				{state.attackStep === AttackStep.PreAttackRoll && <PreAttackRollStep
 					state={state}
 					dispatch={dispatch}
 				/>}
-				{state.attackStep === AttackStep.PostHitRoll && <PostHitRollStep
+				{state.attackStep === AttackStep.PostAttackRoll && <PostAttackRollStep
 					state={state}
 					dispatch={dispatch}
 				/>}

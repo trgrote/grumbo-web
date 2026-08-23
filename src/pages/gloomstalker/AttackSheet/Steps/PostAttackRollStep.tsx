@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { GloomStalkerAttackSheetState, CritStatus } from "../../GloomStalkerTypes";
-import { GetCritStatus, GetFavoredEnemyBonus, GetHighestHitValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
+import { GetCritStatus, GetFavoredEnemyBonus, GetHighestAttackValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
 import { FormatSignedModifier } from "@/utils/Formatting";
 import {
 	IGSAttackSheetCommand,
@@ -12,12 +12,12 @@ import {
 	ConfirmIsHitCommand
 } from "../Commands/AttackSheetCommands";
 
-interface PostHitRollStepProps {
+interface PostAttackRollStepProps {
 	state: GloomStalkerAttackSheetState;
 	dispatch: React.Dispatch<IGSAttackSheetCommand>;
 }
 
-export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProps) {
+export default function PostAttackRollStep({ state, dispatch }: PostAttackRollStepProps) {
 	const characterState = state.characterState;
 	const attackRolls = characterState.attackRolls;
 	const attackModifier = characterState.gloomStalkerInfo.attackModifier;
@@ -27,12 +27,12 @@ export default function PostHitRollStep({ state, dispatch }: PostHitRollStepProp
 
 	const hitStatus = GetCritStatus(characterState);
 	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(characterState);
-	const highestHitValue = GetHighestHitValue(characterState);
+	const highestHitValue = GetHighestAttackValue(characterState);
 
 	return (
 		<>
 			<SheetHeader>
-				<SheetTitle>Post Hit Roll</SheetTitle>
+				<SheetTitle>Post Attack Roll</SheetTitle>
 				<SheetDescription>
 					Did Attack Hit?
 				</SheetDescription>

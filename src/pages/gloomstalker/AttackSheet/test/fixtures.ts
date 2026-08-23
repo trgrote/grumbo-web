@@ -25,7 +25,7 @@ export function buildTestCharacterState(overrides: Partial<GloomStalkerAttackSta
 export function buildTestState(
 	overrides: Partial<GloomStalkerAttackState> & { attackStep?: AttackStep; } = {}
 ): GloomStalkerAttackSheetState {
-	const { attackStep = AttackStep.PreHitRoll, ...characterOverrides } = overrides;
+	const { attackStep = AttackStep.PreAttackRoll, ...characterOverrides } = overrides;
 
 	return {
 		attackStep,

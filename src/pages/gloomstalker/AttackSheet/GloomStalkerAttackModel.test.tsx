@@ -6,8 +6,8 @@ describe('GloomStalkerAttackModel', () => {
 	describe('steps', () => {
 		it('walks all five steps of the Gloom Stalker flow', () => {
 			expect(buildTestModel().steps).toEqual([
-				AttackStep.PreHitRoll,
-				AttackStep.PostHitRoll,
+				AttackStep.PreAttackRoll,
+				AttackStep.PostAttackRoll,
 				AttackStep.PreDamageRoll,
 				AttackStep.PostDamageRoll,
 				AttackStep.Results,
@@ -82,9 +82,9 @@ describe('GloomStalkerAttackModel', () => {
 	});
 
 	describe('onStepReverted', () => {
-		it('clears the attack roll and hit flag when leaving PostHitRoll', () => {
+		it('clears the attack roll and hit flag when leaving PostAttackRoll', () => {
 			const characterState = buildTestCharacterState({ attackRolls: [15], isHit: true });
-			const result = buildTestModel().onStepReverted(characterState, AttackStep.PostHitRoll);
+			const result = buildTestModel().onStepReverted(characterState, AttackStep.PostAttackRoll);
 
 			expect(result.attackRolls).toEqual([]);
 			expect(result.isHit).toBe(false);

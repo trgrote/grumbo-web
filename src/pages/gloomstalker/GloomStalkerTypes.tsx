@@ -10,13 +10,13 @@ export interface GloomStalkerInfo {
 	favoredEnemies: string[];
 }
 
-export interface PreHitRollInfo {
+export interface PreAttackRollInfo {
 	hasAdvantage: boolean;
 	applySharpShooterPenalty: boolean;   // apply -5 to hit to get +10 damage?
 	selectedFavoredEnemies: string[];   // which of gloomStalkerInfo.favoredEnemies apply to this attack's target (+2 to hit/damage each, stacking)
 }
 
-export interface PostHitRollInfo {
+export interface PostAttackRollInfo {
 	attackRolls: number[];    // pre-modifier attack roll values
 	isHit: boolean;
 }
@@ -37,7 +37,7 @@ export interface PostDamageRollInfo {
 
 // Everything the Gloom Stalker's own rules care about. The shared attack sheet flow owns
 // the attack step and knows nothing about any of this.
-export interface GloomStalkerAttackState extends PreHitRollInfo, PostHitRollInfo, PreDamageRollInfo, PostDamageRollInfo {
+export interface GloomStalkerAttackState extends PreAttackRollInfo, PostAttackRollInfo, PreDamageRollInfo, PostDamageRollInfo {
 	gloomStalkerInfo: GloomStalkerInfo;
 	hasUsedReroll: boolean;
 }

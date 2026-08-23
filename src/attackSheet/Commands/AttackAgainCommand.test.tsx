@@ -8,7 +8,7 @@ describe('AttackAgainCommand', () => {
 		const state = buildTestState({ attackStep: AttackStep.Results, isHit: true, attackRolls: [20] });
 		const result = new AttackAgainCommand<TestCharacterState>().apply(state, buildTestModel());
 
-		expect(result.attackStep).toBe(AttackStep.PreHitRoll);
+		expect(result.attackStep).toBe(AttackStep.PreAttackRoll);
 		expect(result.characterState).toEqual(testCharacterStateDefault);
 	});
 });

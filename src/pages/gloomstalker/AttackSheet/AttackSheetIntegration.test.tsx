@@ -28,15 +28,15 @@ describe('Gloom Stalker attack sheet flow', () => {
 		return commands.reduce(reducer, from);
 	}
 
-	it('starts at PreHitRoll with a fresh character state', () => {
+	it('starts at PreAttackRoll with a fresh character state', () => {
 		const state = CreateInitialState(model);
 
-		expect(state.attackStep).toBe(AttackStep.PreHitRoll);
+		expect(state.attackStep).toBe(AttackStep.PreAttackRoll);
 		expect(state.characterState.attackRolls).toEqual([]);
 		expect(state.characterState.hasAdvantage).toBe(false);
 	});
 
-	it('walks the full hit path from PreHitRoll to Results', () => {
+	it('walks the full hit path from PreAttackRoll to Results', () => {
 		const state = run([
 			new SetAdvantageCommand(true),
 			new RollForAttackCommand(() => 0),
@@ -71,7 +71,7 @@ describe('Gloom Stalker attack sheet flow', () => {
 			new GoBackCommand(),
 		]);
 
-		expect(state.attackStep).toBe(AttackStep.PreHitRoll);
+		expect(state.attackStep).toBe(AttackStep.PreAttackRoll);
 		expect(state.characterState.attackRolls).toEqual([]);
 		expect(state.characterState.isHit).toBe(false);
 		expect(state.characterState.hasAdvantage).toBe(true);
@@ -151,7 +151,7 @@ describe('Gloom Stalker attack sheet flow', () => {
 
 		const state = run([new AttackAgainCommand()], results);
 
-		expect(state.attackStep).toBe(AttackStep.PreHitRoll);
+		expect(state.attackStep).toBe(AttackStep.PreAttackRoll);
 		expect(state.characterState.hasAdvantage).toBe(false);
 		expect(state.characterState.applyHuntersMark).toBe(false);
 		expect(state.characterState.attackRolls).toEqual([]);

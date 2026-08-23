@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
 	CreateHistoryRecordFromState,
 	FormatDieRolls,
-	FormatHitValueBreakdown,
+	FormatAttackValueBreakdown,
 	GetBestRerollOption,
 	GetCritStatus,
 	GetFireDamageDicePool,
 	GetForceDamageDicePool,
-	GetHighestHitRoll,
+	GetHighestAttackRoll,
 	GetFavoredEnemyBonus,
-	GetHighestHitValue,
+	GetHighestAttackValue,
 	GetHitPreConfirmStatusColorClass,
 	GetHitStatusColorClass,
 	GetHitStatusText,
@@ -20,7 +20,7 @@ import {
 	GetTotalFireDamage,
 	GetTotalForceDamage,
 	GetTotalPiercingDamage,
-	RollHitDice,
+	RollAttackDice,
 } from './AttackSheetStateFunctions';
 import { AttackStep, CritStatus, DamageType } from '../GloomStalkerTypes';
 import { buildTestCharacterState, buildTestState, testGloomStalkerInfo } from './test/fixtures';
@@ -106,10 +106,10 @@ describe('GetIsAlreadyBestRolls / GetRerollButtonText', () => {
 	});
 });
 
-describe('GetHighestHitRoll / GetCritStatus', () => {
+describe('GetHighestAttackRoll / GetCritStatus', () => {
 	it('treats a 20 as a critical hit', () => {
 		const state = buildTestCharacterState({ attackRolls: [5, 20, 12] });
-		expect(GetHighestHitRoll(state)).toBe(20);
+		expect(GetHighestAttackRoll(state)).toBe(20);
 		expect(GetCritStatus(state)).toBe(CritStatus.CriticalHit);
 	});
 
@@ -155,20 +155,20 @@ describe('GetHitPreConfirmStatusColorClass', () => {
 	});
 });
 
-describe('GetHighestHitValue', () => {
+describe('GetHighestAttackValue', () => {
 	it('adds the attack modifier to the highest roll', () => {
 		const state = buildTestCharacterState({ attackRolls: [12] });
-		expect(GetHighestHitValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier);
+		expect(GetHighestAttackValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier);
 	});
 
 	it('applies the sharpshooter -5 penalty when set', () => {
 		const state = buildTestCharacterState({ attackRolls: [12], applySharpShooterPenalty: true });
-		expect(GetHighestHitValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier - 5);
+		expect(GetHighestAttackValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier - 5);
 	});
 
 	it('adds +2 per selected favored enemy', () => {
 		const state = buildTestCharacterState({ attackRolls: [12], selectedFavoredEnemies: ['Giant', 'Goblin'] });
-		expect(GetHighestHitValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier + 4);
+		expect(GetHighestAttackValue(state)).toBe(12 + testGloomStalkerInfo.attackModifier + 4);
 	});
 });
 
@@ -184,23 +184,23 @@ describe('GetFavoredEnemyBonus', () => {
 	});
 });
 
-describe('FormatHitValueBreakdown', () => {
+describe('FormatAttackValueBreakdown', () => {
 	it('formats a plain hit with no penalty or bonus', () => {
 		const state = buildTestCharacterState({ attackRolls: [12] });
 		// 12 + attackModifier(5) = 17
-		expect(FormatHitValueBreakdown(state)).toBe('17 (12 + 5)');
+		expect(FormatAttackValueBreakdown(state)).toBe('17 (12 + 5)');
 	});
 
 	it('includes the sharpshooter penalty', () => {
 		const state = buildTestCharacterState({ attackRolls: [12], applySharpShooterPenalty: true });
 		// 12 + attackModifier(5) - 5 = 12
-		expect(FormatHitValueBreakdown(state)).toBe('12 (12 + 5 - 5)');
+		expect(FormatAttackValueBreakdown(state)).toBe('12 (12 + 5 - 5)');
 	});
 
 	it('includes the favored enemy bonus', () => {
 		const state = buildTestCharacterState({ attackRolls: [12], selectedFavoredEnemies: ['Giant'] });
 		// 12 + attackModifier(5) + favoredEnemyBonus(2) = 19
-		expect(FormatHitValueBreakdown(state)).toBe('19 (12 + 5 + 2)');
+		expect(FormatAttackValueBreakdown(state)).toBe('19 (12 + 5 + 2)');
 	});
 
 	it('combines the penalty and bonus together', () => {
@@ -210,7 +210,7 @@ describe('FormatHitValueBreakdown', () => {
 			selectedFavoredEnemies: ['Giant'],
 		});
 		// 12 + attackModifier(5) - 5 + favoredEnemyBonus(2) = 14
-		expect(FormatHitValueBreakdown(state)).toBe('14 (12 + 5 - 5 + 2)');
+		expect(FormatAttackValueBreakdown(state)).toBe('14 (12 + 5 - 5 + 2)');
 	});
 });
 
@@ -292,13 +292,13 @@ describe('GetTotalDamage', () => {
 	});
 });
 
-describe('RollHitDice', () => {
+describe('RollAttackDice', () => {
 	it('rolls a single die without advantage', () => {
-		expect(RollHitDice(false, () => 0)).toEqual([1]);
+		expect(RollAttackDice(false, () => 0)).toEqual([1]);
 	});
 
 	it('rolls three dice with advantage (elven accuracy)', () => {
-		expect(RollHitDice(true, () => 0)).toEqual([1, 1, 1]);
+		expect(RollAttackDice(true, () => 0)).toEqual([1, 1, 1]);
 	});
 });
 

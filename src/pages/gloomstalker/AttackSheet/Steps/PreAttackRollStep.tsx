@@ -11,12 +11,12 @@ import {
 	ToggleFavoredEnemyCommand
 } from "../Commands/AttackSheetCommands";
 
-interface PreHitRollStepProps {
+interface PreAttackRollStepProps {
 	state: GloomStalkerAttackSheetState;
 	dispatch: React.Dispatch<IGSAttackSheetCommand>;
 }
 
-export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps) {
+export default function PreAttackRollStep({ state, dispatch }: PreAttackRollStepProps) {
 	const characterState = state.characterState;
 	const hasAdvantage = characterState.hasAdvantage;
 	const setHasAdvantage = (value: boolean) => dispatch(new SetAdvantageCommand(value));
@@ -32,7 +32,7 @@ export default function PreHitRollStep({ state, dispatch }: PreHitRollStepProps)
 			<SheetHeader>
 				<SheetTitle>Roll for Attack</SheetTitle>
 				<SheetDescription>
-					Provide pre-hit-roll information and roll for attack
+					Provide pre-attack-roll information and roll for attack
 				</SheetDescription>
 			</SheetHeader>
 			<div className="grid flex-1 auto-rows-min gap-6 px-4">
