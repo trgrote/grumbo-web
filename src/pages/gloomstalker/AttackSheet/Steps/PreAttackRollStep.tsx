@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { AttackSheetStep } from "@/attackSheet/Steps/AttackSheetSteps";
 import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import {
 	IGSAttackSheetCommand,
@@ -28,43 +28,36 @@ export default function PreAttackRollStep({ state, dispatch }: PreAttackRollStep
 	const onRollForAttack = () => dispatch(new RollForAttackCommand());
 
 	return (
-		<>
-			<SheetHeader>
-				<SheetTitle>Roll for Attack</SheetTitle>
-				<SheetDescription>
-					Provide pre-attack-roll information and roll for attack
-				</SheetDescription>
-			</SheetHeader>
-			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<div className="grid gap-3">
-					<Label htmlFor="hasAdvantage">
-						<Checkbox id="hasAdvantage" checked={hasAdvantage}
-							onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
-						Has Advantage? (Roll 3d20 due to Elven Accuracy)
-					</Label>
-				</div>
-				<div className="grid gap-3">
-					<Label htmlFor="applySharpShooterPenalty">
-						<Checkbox id="applySharpShooterPenalty" checked={applySharpShooterPenalty}
-							onCheckedChange={() => setApplySharpShooterPenalty(!applySharpShooterPenalty)} />
-						Apply Sharp Shooter Penalty? (-5 to hit for +10 damage)
-					</Label>
-				</div>
-				{favoredEnemies.length > 0 && (
-					<div className="grid gap-3">
-						{favoredEnemies.map(name => (
-							<Label key={name} htmlFor={`favoredEnemy-${name}`}>
-								<Checkbox id={`favoredEnemy-${name}`} checked={selectedFavoredEnemies.includes(name)}
-									onCheckedChange={() => toggleFavoredEnemy(name)} />
-								Favored Enemy: {name}? (+2 to hit, +2 damage)
-							</Label>
-						))}
-					</div>
-				)}
+		<AttackSheetStep
+			title="Roll for Attack"
+			description="Provide pre-attack-roll information and roll for attack"
+			actions={<Button onClick={onRollForAttack} type="submit">Roll for Attack</Button>}
+		>
+			<div className="grid gap-3">
+				<Label htmlFor="hasAdvantage">
+					<Checkbox id="hasAdvantage" checked={hasAdvantage}
+						onCheckedChange={() => setHasAdvantage(!hasAdvantage)} />
+					Has Advantage? (Roll 3d20 due to Elven Accuracy)
+				</Label>
 			</div>
-			<SheetFooter>
-				<Button onClick={onRollForAttack} type="submit">Roll for Attack</Button>
-			</SheetFooter>
-		</>
+			<div className="grid gap-3">
+				<Label htmlFor="applySharpShooterPenalty">
+					<Checkbox id="applySharpShooterPenalty" checked={applySharpShooterPenalty}
+						onCheckedChange={() => setApplySharpShooterPenalty(!applySharpShooterPenalty)} />
+					Apply Sharp Shooter Penalty? (-5 to hit for +10 damage)
+				</Label>
+			</div>
+			{favoredEnemies.length > 0 && (
+				<div className="grid gap-3">
+					{favoredEnemies.map(name => (
+						<Label key={name} htmlFor={`favoredEnemy-${name}`}>
+							<Checkbox id={`favoredEnemy-${name}`} checked={selectedFavoredEnemies.includes(name)}
+								onCheckedChange={() => toggleFavoredEnemy(name)} />
+							Favored Enemy: {name}? (+2 to hit, +2 damage)
+						</Label>
+					))}
+				</div>
+			)}
+		</AttackSheetStep>
 	);
 };

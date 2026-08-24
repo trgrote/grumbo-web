@@ -1,12 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
+import { AttackAgainButton, AttackSheetStep } from "@/attackSheet/Steps/AttackSheetSteps";
 import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
 import { CreateHistoryRecordFromState } from "../AttackSheetStateFunctions";
 import AttackHistoryDetails from "../../AttackHistoryDetails";
-import {
-	IGSAttackSheetCommand,
-	AttackAgainCommand
-} from "../Commands/AttackSheetCommands";
+import { IGSAttackSheetCommand } from "../Commands/AttackSheetCommands";
 
 interface ResultsStepProps {
 	state: GloomStalkerAttackSheetState;
@@ -14,25 +10,17 @@ interface ResultsStepProps {
 }
 
 export default function ResultsStep({ state, dispatch }: ResultsStepProps) {
-	const rollAgain = () => dispatch(new AttackAgainCommand());
 	const history = CreateHistoryRecordFromState(state);
 
 	return (
-		<>
-			<SheetHeader>
-				<SheetTitle>Results</SheetTitle>
-				<SheetDescription>
-					Attack and Damage Results
-				</SheetDescription>
-			</SheetHeader>
-			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<AttackHistoryDetails
-					historyRecord={history}
-				/>
-			</div>
-			<SheetFooter>
-				<Button onClick={rollAgain} type="submit">Attack Again</Button>
-			</SheetFooter>
-		</>
+		<AttackSheetStep
+			title="Results"
+			description="Attack and Damage Results"
+			actions={<AttackAgainButton dispatch={dispatch} />}
+		>
+			<AttackHistoryDetails
+				historyRecord={history}
+			/>
+		</AttackSheetStep>
 	);
 }

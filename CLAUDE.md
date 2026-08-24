@@ -51,6 +51,7 @@ This is the most involved part of the codebase. The attack flow (roll to hit →
 - `ICharacterAttackModel` is the callback surface the shared flow calls into: `createInitialCharacterState`, `rollForAttack`, `setIsHit`, `rollForDamage`, `onStepReverted`. Its `steps: AttackStep[]` array is the single source of truth for step ordering — a character that omits a step (the Paladin has no `PostDamageRoll`) just leaves it out, and advancing/going back adapt automatically. Never hard-code a transition in a command; go through `GetNextStep`/`GetPreviousStep`/`GetFinalStep` in `AttackSheetStateFunctions.tsx`.
 - `AttackSheetStateReducer.tsx` exports `CreateAttackSheetReducer(model)`, binding the model once so Step components can dispatch bare commands: `command.apply(state, model)`.
 - `Commands/` holds the flow commands (`GoBack`, `Reset`, `AttackAgain`, `RollForAttack`, `ConfirmIsHit`/`Miss`, `RollForDamage`, `ConfirmDamage`, `Null`) plus `CharacterStateCommand`, the base for commands that only touch character state.
+- `Steps/` holds the step **shell**: `AttackSheetStep` renders the header (title + description), the body grid and the footer, taking `title`/`description`/`actions`/`children`. A character's step supplies only its body and its footer buttons — never its own `SheetHeader`/`SheetFooter` markup. `GoBackButton` and `AttackAgainButton` live here too and dispatch `GoBackCommand`/`AttackAgainCommand` themselves, since stepping back and starting over are flow actions rather than character rules.
 
 Per-character code then lives under `src/pages/<character>/AttackSheet/`:
 
@@ -58,6 +59,7 @@ Per-character code then lives under `src/pages/<character>/AttackSheet/`:
 - `<Character>AttackModel.tsx` implements `ICharacterAttackModel` — this is where that character's rules live (how many d20s advantage rolls, which damage pools exist, what a Back clears).
 - `Commands/` holds only the commands that encode actual game rules (`SetAdvantageCommand`, `ToggleFavoredEnemyCommand`, `RerollWorstDamageDieCommand`, …), each extending `CharacterStateCommand` and operating on `characterState` alone. `Commands/AttackSheetCommands.tsx` is the barrel: it re-exports the shared flow commands bound to this character's state (via TypeScript instantiation expressions) alongside the local ones, so Step components import everything from one place.
 - `AttackSheetStateFunctions.tsx` holds that character's pure helpers (dice pool builders, derived-value selectors) — all typed against the character state, not the sheet state.
+- `Steps/*Step.tsx` renders one step, wrapping its body in the shared `AttackSheetStep` and passing its footer buttons via `actions`.
 - `<Character>AttackSheet.tsx` memoizes a model from the character's info, builds a reducer from it, and renders one `Steps/*Step.tsx` per `AttackStep`.
 - When `AttackStep` reaches the final step, an effect in `<Character>AttackSheet.tsx` converts state into a `HistoryRecord` and calls `addToHistory`/`addToRollHistory`, which is what actually persists it (via the page's `useEffect` → `SaveLocal*Storage`).
 
@@ -67,7 +69,9 @@ The Paladin's not-yet-migrated copy follows the original shape: a local `AttackS
 
 ### Testing (`npm run test`)
 
-Vitest + jsdom, configured inline in `vite.config.ts` (`test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'] }`). Tests are co-located as `*.test.tsx` next to the source file, one per command/state-function/reducer module — see `AttackSheet/Commands/*.test.tsx` and `AttackSheet/AttackSheetStateFunctions.test.tsx` in either character page for the convention. Coverage is currently pure-logic only (commands, selectors, reducers); no React Testing Library render tests exist yet even though the dependency is installed.
+Vitest + jsdom, configured inline in `vite.config.ts` (`test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'] }`). Tests are co-located as `*.test.tsx` next to the source file, one per command/state-function/reducer module — see `AttackSheet/Commands/*.test.tsx` and `AttackSheet/AttackSheetStateFunctions.test.tsx` in either character page for the convention.
+
+Coverage is mostly pure logic (commands, selectors, reducers, character models). The one set of render tests is `src/attackSheet/Steps/AttackSheetStep.test.tsx`, covering the shared step shell and its two flow buttons. Vitest globals are **off** here, so Testing Library can't auto-register its cleanup — `src/test/setup.ts` calls `afterEach(cleanup)` for it. Without that, rendered trees pile up in `document.body` and queries start matching elements from earlier tests. `@testing-library/user-event` isn't a dependency; use `fireEvent`.
 
 Each `AttackSheet/test/fixtures.ts` exports a fixed `*Info` fixture plus `buildTestState(overrides)` / `buildTestCharacterState(overrides)` / `buildTestModel(info)` helpers built on top of the real default-state factory — use them instead of constructing state objects by hand. `buildTestState` takes *flat* overrides and splits them into the two slices for you. Nondeterminism (dice rolls, timestamps) is handled by constructor/parameter-injected `rng`/`now` functions defaulting to `Math.random`/`Date.now`, never by mocking globals — pass `() => 0` for the lowest die face, `() => 0.999` for the highest.
 

@@ -24,15 +24,19 @@ export default defineConfig({
 			// global threshold would either fail permanently or have to be set uselessly low.
 			include: [
 				'src/utils/**',
+				'src/attackSheet/**',
 				'src/pages/*/AttackSheet/AttackSheetStateFunctions.tsx',
 				'src/pages/*/AttackSheet/AttackSheetStateReducer.tsx',
 				'src/pages/*/AttackSheet/Commands/**',
+				'src/pages/*/AttackSheet/*AttackModel.tsx',
 				'src/pages/gloomstalker/FavoredEnemiesFormFunctions.tsx',
 			],
 			exclude: [
 				'**/*.test.tsx',
 				'**/AttackSheetCommands.tsx',
+				'**/AttackSheetSteps.tsx',
 				'**/I*AttackSheetCommand.tsx',
+				'**/test/fixtures.*',
 			],
 			thresholds: {
 				lines: 95,
