@@ -16,79 +16,79 @@ import {
 	RollAttackDice,
 	SpellSlotToString,
 } from './AttackSheetStateFunctions';
-import { buildTestState, testPaladinInfo } from './test/fixtures';
+import { buildTestCharacterState, buildTestState, testPaladinInfo } from './test/fixtures';
 import { CritStatus } from '../PaladinTypes';
 
 describe('GetHighestAttackRoll / GetIsCritical', () => {
 	it('treats a 20 as a critical hit', () => {
-		const state = buildTestState({ attackRolls: [5, 20, 12] });
+		const state = buildTestCharacterState({ attackRolls: [5, 20, 12] });
 		expect(GetHighestAttackRoll(state)).toBe(20);
 		expect(GetIsCritical(state)).toBe(true);
 	});
 
 	it('treats anything else as not critical, including a lone 1', () => {
-		expect(GetIsCritical(buildTestState({ attackRolls: [1] }))).toBe(false);
-		expect(GetIsCritical(buildTestState({ attackRolls: [10] }))).toBe(false);
+		expect(GetIsCritical(buildTestCharacterState({ attackRolls: [1] }))).toBe(false);
+		expect(GetIsCritical(buildTestCharacterState({ attackRolls: [10] }))).toBe(false);
 	});
 });
 
 describe('GetCritStatus', () => {
 	it('reports a critical hit on a natural 20', () => {
-		expect(GetCritStatus(buildTestState({ attackRolls: [5, 20] }))).toBe(CritStatus.CriticalHit);
+		expect(GetCritStatus(buildTestCharacterState({ attackRolls: [5, 20] }))).toBe(CritStatus.CriticalHit);
 	});
 
 	it('reports a critical miss on a natural 1', () => {
-		expect(GetCritStatus(buildTestState({ attackRolls: [1] }))).toBe(CritStatus.CriticalMiss);
+		expect(GetCritStatus(buildTestCharacterState({ attackRolls: [1] }))).toBe(CritStatus.CriticalMiss);
 	});
 
 	it('reports Normal for anything in between', () => {
-		expect(GetCritStatus(buildTestState({ attackRolls: [10] }))).toBe(CritStatus.Normal);
+		expect(GetCritStatus(buildTestCharacterState({ attackRolls: [10] }))).toBe(CritStatus.Normal);
 	});
 
 	it('only considers the highest roll, so advantage can rescue a 1', () => {
-		expect(GetCritStatus(buildTestState({ attackRolls: [1, 10] }))).toBe(CritStatus.Normal);
+		expect(GetCritStatus(buildTestCharacterState({ attackRolls: [1, 10] }))).toBe(CritStatus.Normal);
 	});
 });
 
 describe('GetHighestAttackValue', () => {
 	it('adds the attack modifier to the highest roll', () => {
-		const state = buildTestState({ attackRolls: [12] });
+		const state = buildTestCharacterState({ attackRolls: [12] });
 		expect(GetHighestAttackValue(state)).toBe(12 + testPaladinInfo.attackModifier);
 	});
 });
 
 describe('GetHitStatusText', () => {
 	it('prefixes Critical on a natural 20 and a natural 1', () => {
-		expect(GetHitStatusText(buildTestState({ attackRolls: [20], isHit: true }))).toBe('Critical Hit');
-		expect(GetHitStatusText(buildTestState({ attackRolls: [1], isHit: false }))).toBe('Critical Miss');
+		expect(GetHitStatusText(buildTestCharacterState({ attackRolls: [20], isHit: true }))).toBe('Critical Hit');
+		expect(GetHitStatusText(buildTestCharacterState({ attackRolls: [1], isHit: false }))).toBe('Critical Miss');
 	});
 
 	it('reports plain Hit/Miss otherwise', () => {
-		expect(GetHitStatusText(buildTestState({ attackRolls: [10], isHit: true }))).toBe('Hit');
-		expect(GetHitStatusText(buildTestState({ attackRolls: [10], isHit: false }))).toBe('Miss');
+		expect(GetHitStatusText(buildTestCharacterState({ attackRolls: [10], isHit: true }))).toBe('Hit');
+		expect(GetHitStatusText(buildTestCharacterState({ attackRolls: [10], isHit: false }))).toBe('Miss');
 	});
 });
 
 describe('GetHitStatusColorClass', () => {
 	it('is blue on a natural 20 regardless of hit status', () => {
-		expect(GetHitStatusColorClass(buildTestState({ attackRolls: [20], isHit: false }))).toBe('text-blue-500');
+		expect(GetHitStatusColorClass(buildTestCharacterState({ attackRolls: [20], isHit: false }))).toBe('text-blue-500');
 	});
 
 	it('is green on a hit and red on a miss otherwise', () => {
-		expect(GetHitStatusColorClass(buildTestState({ attackRolls: [10], isHit: true }))).toBe('text-green-500');
-		expect(GetHitStatusColorClass(buildTestState({ attackRolls: [10], isHit: false }))).toBe('text-red-500');
+		expect(GetHitStatusColorClass(buildTestCharacterState({ attackRolls: [10], isHit: true }))).toBe('text-green-500');
+		expect(GetHitStatusColorClass(buildTestCharacterState({ attackRolls: [10], isHit: false }))).toBe('text-red-500');
 	});
 });
 
 describe('GetHitPreConfirmStatusColorClass', () => {
 	it('is blue on 20, red on a critical miss, green otherwise', () => {
-		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [20] }))).toBe('text-blue-500');
-		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [1] }))).toBe('text-red-500');
-		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [10] }))).toBe('text-green-500');
+		expect(GetHitPreConfirmStatusColorClass(buildTestCharacterState({ attackRolls: [20] }))).toBe('text-blue-500');
+		expect(GetHitPreConfirmStatusColorClass(buildTestCharacterState({ attackRolls: [1] }))).toBe('text-red-500');
+		expect(GetHitPreConfirmStatusColorClass(buildTestCharacterState({ attackRolls: [10] }))).toBe('text-green-500');
 	});
 
 	it('ignores a 1 that advantage has already beaten', () => {
-		expect(GetHitPreConfirmStatusColorClass(buildTestState({ attackRolls: [1, 10] }))).toBe('text-green-500');
+		expect(GetHitPreConfirmStatusColorClass(buildTestCharacterState({ attackRolls: [1, 10] }))).toBe('text-green-500');
 	});
 });
 
@@ -104,24 +104,24 @@ describe('RollAttackDice', () => {
 
 describe('GetWeaponDamageDicePool', () => {
 	it('is a single weapon die on a non-crit', () => {
-		const state = buildTestState({ attackRolls: [10] });
+		const state = buildTestCharacterState({ attackRolls: [10] });
 		expect(GetWeaponDamageDicePool(state)).toEqual([8]);
 	});
 
 	it('doubles on a critical hit', () => {
-		const state = buildTestState({ attackRolls: [20] });
+		const state = buildTestCharacterState({ attackRolls: [20] });
 		expect(GetWeaponDamageDicePool(state)).toEqual([8, 8]);
 	});
 });
 
 describe('GetDivineSmiteDamageDicePool', () => {
 	it('is empty with no bonuses and no spell slot used', () => {
-		const state = buildTestState({ attackRolls: [10] });
+		const state = buildTestCharacterState({ attackRolls: [10] });
 		expect(GetDivineSmiteDamageDicePool(state)).toEqual([]);
 	});
 
 	it('adds a d8 for improved divine smite', () => {
-		const state = buildTestState({
+		const state = buildTestCharacterState({
 			attackRolls: [10],
 			paladinInfo: { ...testPaladinInfo, hasImprovedDS: true },
 		});
@@ -129,17 +129,17 @@ describe('GetDivineSmiteDamageDicePool', () => {
 	});
 
 	it('adds a d8 for a fiend/undead target', () => {
-		const state = buildTestState({ attackRolls: [10], isTargetFiendOrUndead: true });
+		const state = buildTestCharacterState({ attackRolls: [10], isTargetFiendOrUndead: true });
 		expect(GetDivineSmiteDamageDicePool(state)).toEqual([8]);
 	});
 
 	it('adds spellSlotUsed + 1 d8s when a spell slot is used', () => {
-		const state = buildTestState({ attackRolls: [10], spellSlotUsed: 2 });
+		const state = buildTestCharacterState({ attackRolls: [10], spellSlotUsed: 2 });
 		expect(GetDivineSmiteDamageDicePool(state)).toEqual([8, 8, 8]);
 	});
 
 	it('combines all bonuses and doubles the pool on a critical hit', () => {
-		const state = buildTestState({
+		const state = buildTestCharacterState({
 			attackRolls: [20],
 			isTargetFiendOrUndead: true,
 			spellSlotUsed: 2,
@@ -152,17 +152,17 @@ describe('GetDivineSmiteDamageDicePool', () => {
 
 describe('GetTotalWeaponDamage / GetTotalDivineSmiteDamage / GetTotalDamage', () => {
 	it('sums weapon rolls plus the damage modifier', () => {
-		const state = buildTestState({ weaponDamageRolls: [4, 5] });
+		const state = buildTestCharacterState({ weaponDamageRolls: [4, 5] });
 		expect(GetTotalWeaponDamage(state)).toBe(4 + 5 + testPaladinInfo.damageModifier);
 	});
 
 	it('sums divine smite rolls with no modifier', () => {
-		const state = buildTestState({ divineSmiteDamageRolls: [6, 7] });
+		const state = buildTestCharacterState({ divineSmiteDamageRolls: [6, 7] });
 		expect(GetTotalDivineSmiteDamage(state)).toBe(13);
 	});
 
 	it('adds weapon and divine smite totals together', () => {
-		const state = buildTestState({ weaponDamageRolls: [4], divineSmiteDamageRolls: [6] });
+		const state = buildTestCharacterState({ weaponDamageRolls: [4], divineSmiteDamageRolls: [6] });
 		expect(GetTotalDamage(state)).toBe(4 + testPaladinInfo.damageModifier + 6);
 	});
 });
@@ -197,6 +197,6 @@ describe('CreateHistoryRecordFromState', () => {
 
 		record.paladinInfo.attackModifier = 999;
 
-		expect(state.paladinInfo.attackModifier).toBe(testPaladinInfo.attackModifier);
+		expect(state.characterState.paladinInfo.attackModifier).toBe(testPaladinInfo.attackModifier);
 	});
 });
