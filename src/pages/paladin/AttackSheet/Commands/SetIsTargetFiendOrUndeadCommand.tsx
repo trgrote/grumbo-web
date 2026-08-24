@@ -1,12 +1,12 @@
-import { PaladinAttackSheetState } from "../../PaladinTypes";
-import IPalAttackSheetCommand from "./IPalAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { PaladinAttackState } from "../../PaladinTypes";
 
-export default class SetIsTargetFiendOrUndeadCommand implements IPalAttackSheetCommand {
-	constructor(private isTargetFiendOrUndead: boolean) { }
+export default class SetIsTargetFiendOrUndeadCommand extends CharacterStateCommand<PaladinAttackState> {
+	constructor(private isTargetFiendOrUndead: boolean) { super(); }
 
-	apply(prevState: PaladinAttackSheetState): PaladinAttackSheetState {
+	protected applyToCharacterState(characterState: PaladinAttackState): PaladinAttackState {
 		return {
-			...prevState,
+			...characterState,
 			isTargetFiendOrUndead: this.isTargetFiendOrUndead
 		};
 	}

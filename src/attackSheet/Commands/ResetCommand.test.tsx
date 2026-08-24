@@ -11,4 +11,15 @@ describe('ResetCommand', () => {
 		expect(result.attackStep).toBe(AttackStep.PreAttackRoll);
 		expect(result.characterState).toEqual(testCharacterStateDefault);
 	});
+
+	// The fresh state comes from the model, which owns the character's info - not from
+	// whatever info the previous state happened to be carrying. The two are identical in
+	// the running app, so only a deliberately divergent prevState can tell them apart.
+	it("takes the model's character state even when prevState disagrees", () => {
+		const state = buildTestState({ attackRolls: [99], isHit: true });
+		const result = new ResetCommand<TestCharacterState>().apply(state, buildTestModel());
+
+		expect(result.characterState.attackRolls).toEqual([]);
+		expect(result.characterState).not.toBe(state.characterState);
+	});
 });

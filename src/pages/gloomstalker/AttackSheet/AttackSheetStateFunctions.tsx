@@ -62,7 +62,6 @@ export function CreateHistoryRecordFromState(state: GloomStalkerAttackSheetState
 	return {
 		...state.characterState,
 		gloomStalkerInfo: { ...state.characterState.gloomStalkerInfo },   // force a shallow copy of the gloomStalkerInfo to prevent mutation issues
-		attackStep: state.attackStep,
 		timestamp: now()
 	};
 }

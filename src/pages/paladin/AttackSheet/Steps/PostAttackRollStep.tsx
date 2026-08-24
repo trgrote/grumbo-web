@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
+import { AttackSheetStep, GoBackButton } from "@/attackSheet/Steps/AttackSheetSteps";
 import { PaladinAttackSheetState, CritStatus } from "../../PaladinTypes";
 import { GetCritStatus, GetHighestAttackValue, GetHitPreConfirmStatusColorClass } from "../AttackSheetStateFunctions";
 import {
 	IPalAttackSheetCommand,
-	GoBackCommand,
 	ConfirmIsMissCommand,
 	ConfirmIsHitCommand
 } from "../Commands/AttackSheetCommands";
@@ -17,42 +16,37 @@ interface PostAttackRollStepProps {
 }
 
 export default function PostAttackRollStep({ state, dispatch }: PostAttackRollStepProps) {
+	const characterState = state.characterState;
 	const confirmIsHit = () => dispatch(new ConfirmIsHitCommand());
 	const confirmIsMiss = () => dispatch(new ConfirmIsMissCommand());
-	const goBack = () => dispatch(new GoBackCommand());
 
-	const critStatus = GetCritStatus(state);
+	const critStatus = GetCritStatus(characterState);
 	const isCritical = critStatus === CritStatus.CriticalHit;
-	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(state);
-	const highestAttackValue = GetHighestAttackValue(state);
+	const hitValueTextColorClass = GetHitPreConfirmStatusColorClass(characterState);
+	const highestAttackValue = GetHighestAttackValue(characterState);
 
 	return (
-		<>
-			<SheetHeader>
-				<SheetTitle>Post Attack Roll</SheetTitle>
-				<SheetDescription>
-					Did Attack Hit?
-				</SheetDescription>
-			</SheetHeader>
-			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				{isCritical && (
-					<Label>Critical Hit</Label>
-				)}
-				{critStatus === CritStatus.CriticalMiss && (
-					<Label>Critical Miss</Label>
-				)}
-				<Card>
-					<h2 className={`text-center ${hitValueTextColorClass}`}>
-						{isCritical && <strong>{highestAttackValue}</strong>}
-						{!isCritical && highestAttackValue}
-					</h2>
-				</Card>
-			</div>
-			<SheetFooter>
+		<AttackSheetStep
+			title="Post Attack Roll"
+			description="Did Attack Hit?"
+			actions={<>
 				<Button onClick={confirmIsHit} disabled={critStatus === CritStatus.CriticalMiss}>Hit</Button>
 				<Button variant="secondary" onClick={confirmIsMiss} disabled={isCritical}>Missed</Button>
-				<Button variant="outline" onClick={goBack}>Back</Button>
-			</SheetFooter>
-		</>
+				<GoBackButton dispatch={dispatch} />
+			</>}
+		>
+			{isCritical && (
+				<Label>Critical Hit</Label>
+			)}
+			{critStatus === CritStatus.CriticalMiss && (
+				<Label>Critical Miss</Label>
+			)}
+			<Card>
+				<h2 className={`text-center ${hitValueTextColorClass}`}>
+					{isCritical && <strong>{highestAttackValue}</strong>}
+					{!isCritical && highestAttackValue}
+				</h2>
+			</Card>
+		</AttackSheetStep>
 	);
 }

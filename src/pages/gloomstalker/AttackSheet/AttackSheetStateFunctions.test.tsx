@@ -368,11 +368,11 @@ describe('CreateHistoryRecordFromState', () => {
 		expect(record.timestamp).toBe(12345);
 	});
 
-	it('flattens the character slice and the attack step into one record', () => {
+	it('flattens the character slice into one record, without the attack step', () => {
 		const state = buildTestState({ attackStep: AttackStep.Results, attackRolls: [20], isHit: true });
 		const record = CreateHistoryRecordFromState(state, () => 0);
 
-		expect(record.attackStep).toBe(AttackStep.Results);
+		expect(record).not.toHaveProperty('attackStep');
 		expect(record.attackRolls).toEqual([20]);
 		expect(record.isHit).toBe(true);
 	});

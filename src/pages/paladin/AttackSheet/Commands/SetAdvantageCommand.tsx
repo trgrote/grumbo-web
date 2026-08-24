@@ -1,12 +1,12 @@
-import { PaladinAttackSheetState } from "../../PaladinTypes";
-import IPalAttackSheetCommand from "./IPalAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { PaladinAttackState } from "../../PaladinTypes";
 
-export default class SetAdvantageCommand implements IPalAttackSheetCommand {
-	constructor(private hasAdvantage: boolean) { }
+export default class SetAdvantageCommand extends CharacterStateCommand<PaladinAttackState> {
+	constructor(private hasAdvantage: boolean) { super(); }
 
-	apply(prevState: PaladinAttackSheetState): PaladinAttackSheetState {
+	protected applyToCharacterState(characterState: PaladinAttackState): PaladinAttackState {
 		return {
-			...prevState,
+			...characterState,
 			hasAdvantage: this.hasAdvantage
 		};
 	}
