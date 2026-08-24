@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { AttackSheetStep, GoBackButton } from "@/attackSheet/Steps/AttackSheetSteps";
 import { PaladinAttackSheetState } from "../../PaladinTypes";
 import { SpellSlotToString } from "../AttackSheetStateFunctions";
 import {
 	IPalAttackSheetCommand,
-	GoBackCommand,
 	RollForDamageCommand,
 	SetIsTargetFiendOrUndeadCommand,
 	SetSpellSlotUsedCommand
@@ -21,50 +20,45 @@ interface PreDamageRollStepProps {
 const spellSlots = [0, 1, 2, 3, 4];
 
 export default function PreDamageRollStep({ state, dispatch }: PreDamageRollStepProps) {
-	const isTargetFiendOrUndead = state.isTargetFiendOrUndead;
+	const characterState = state.characterState;
+	const isTargetFiendOrUndead = characterState.isTargetFiendOrUndead;
 	const setIsTargetFiendOrUndead = (value: boolean) => dispatch(new SetIsTargetFiendOrUndeadCommand(value));
-	const spellSlotUsed = state.spellSlotUsed;
+	const spellSlotUsed = characterState.spellSlotUsed;
 	const setSpellSlotUsed = (value: number) => dispatch(new SetSpellSlotUsedCommand(value));
 	const rollForDamage = () => dispatch(new RollForDamageCommand());
-	const goBack = () => dispatch(new GoBackCommand());
 
 	return (
-		<>
-			<SheetHeader>
-				<SheetTitle>Pre Damage Roll</SheetTitle>
-				<SheetDescription>
-					Provide Additional Damage Information before rolling for damage
-				</SheetDescription>
-			</SheetHeader>
-			<div className="grid flex-1 auto-rows-min gap-6 px-4">
-				<div className="grid gap-3" title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
-					<Label htmlFor="isTargetFiendOrUndead" className="flex items-center space-x-2">
-						<Checkbox id="isTargetFiendOrUndead" className="flex items-center space-x-2" checked={isTargetFiendOrUndead}
-							onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
-						Is Target Fiend or Undead?
-					</Label>
-				</div>
-				<div className="grid gap-3">
-					<Label>
-						Spell Slot Used?
-					</Label>
-					<ToggleGroup type="single" className="w-full"
-						value={spellSlotUsed.toString()}
-						onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
-						{
-							spellSlots.map((spellSlot, i) =>
-								<ToggleGroupItem key={i} value={spellSlot.toString()}>
-									{SpellSlotToString(spellSlot)}
-								</ToggleGroupItem>
-							)
-						}
-					</ToggleGroup>
-				</div>
-			</div>
-			<SheetFooter>
+		<AttackSheetStep
+			title="Pre Damage Roll"
+			description="Provide Additional Damage Information before rolling for damage"
+			actions={<>
 				<Button onClick={rollForDamage}>Roll For Damage</Button>
-				<Button variant="outline" onClick={goBack}>Back</Button>
-			</SheetFooter>
-		</>
+				<GoBackButton dispatch={dispatch} />
+			</>}
+		>
+			<div className="grid gap-3" title="Adds 1d8 Radiant Damage on any attack against undead or fiends">
+				<Label htmlFor="isTargetFiendOrUndead" className="flex items-center space-x-2">
+					<Checkbox id="isTargetFiendOrUndead" className="flex items-center space-x-2" checked={isTargetFiendOrUndead}
+						onCheckedChange={() => setIsTargetFiendOrUndead(!isTargetFiendOrUndead)} />
+					Is Target Fiend or Undead?
+				</Label>
+			</div>
+			<div className="grid gap-3">
+				<Label>
+					Spell Slot Used?
+				</Label>
+				<ToggleGroup type="single" className="w-full"
+					value={spellSlotUsed.toString()}
+					onValueChange={newValue => setSpellSlotUsed(parseInt(newValue))}>
+					{
+						spellSlots.map((spellSlot, i) =>
+							<ToggleGroupItem key={i} value={spellSlot.toString()}>
+								{SpellSlotToString(spellSlot)}
+							</ToggleGroupItem>
+						)
+					}
+				</ToggleGroup>
+			</div>
+		</AttackSheetStep>
 	);
 }

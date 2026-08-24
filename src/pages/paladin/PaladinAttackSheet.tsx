@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { JSX, useEffect, useReducer } from "react";
+import { JSX, useEffect, useMemo, useReducer } from "react";
 import { AttackStep, HistoryRecord, PaladinInfo } from "./PaladinTypes";
-import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer";
+import { CreateAttackSheetReducer } from "@/attackSheet/AttackSheetStateReducer";
+import { CreateInitialState, GetFinalStep } from "@/attackSheet/AttackSheetStateFunctions";
+import PaladinAttackModel from "./AttackSheet/PaladinAttackModel";
 import PreAttackRollStep from "./AttackSheet/Steps/PreAttackRollStep";
 import PostAttackRollStep from "./AttackSheet/Steps/PostAttackRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import ResultsStep from "./AttackSheet/Steps/ResultsStep";
-import { CreateHistoryRecordFromState, GetIsCritical, PaladinAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
+import { CreateHistoryRecordFromState, GetIsCritical } from "./AttackSheet/AttackSheetStateFunctions";
 import { ResetCommand } from "./AttackSheet/Commands/AttackSheetCommands";
 import { usePaladinSound } from "./hooks/usePaladinSound";
 
@@ -17,10 +19,13 @@ export interface PaladinAttackSheetProps {
 }
 
 export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: PaladinAttackSheetProps) {
+	const model = useMemo(() => new PaladinAttackModel(paladinInfo), [paladinInfo]);
+	const reducer = useMemo(() => CreateAttackSheetReducer(model), [model]);
+
 	const [state, dispatch] = useReducer(
-		AttackSheetStateReducer,
-		paladinInfo,
-		PaladinAttackSheetStateDefault
+		reducer,
+		model,
+		CreateInitialState
 	);
 
 	const playRandomPaladinSound = usePaladinSound();
@@ -29,7 +34,7 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 	// I only want to trigger this effect when the attack step changes to results,
 	// not on every state change.
 	useEffect(() => {
-		if (state.attackStep === AttackStep.Results) {
+		if (state.attackStep === GetFinalStep(model)) {
 			const historyRecord = CreateHistoryRecordFromState(state);
 			addToRollHistory(historyRecord);
 		}
@@ -38,17 +43,17 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 
 	// Same reasoning as above: only fire once, exactly when we land on PostAttackRoll with a crit.
 	useEffect(() => {
-		if (state.attackStep === AttackStep.PostAttackRoll && GetIsCritical(state)) {
+		if (state.attackStep === AttackStep.PostAttackRoll && GetIsCritical(state.characterState)) {
 			playRandomPaladinSound();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.attackStep]);
 
 	const resetSheet = (): void => {
-		dispatch(new ResetCommand(paladinInfo));
+		dispatch(new ResetCommand());
 	};
 
-	useEffect(resetSheet, [paladinInfo]);
+	useEffect(resetSheet, [model]);
 
 	const renderSheetContent = (): JSX.Element => {
 		return (
