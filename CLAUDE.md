@@ -45,7 +45,7 @@ Each character page follows the same shape: a top-level `*Page.tsx` renders a `T
 
 This is the most involved part of the codebase. The attack flow (roll to hit → confirm hit/miss → roll damage → results) is modeled as an explicit state machine driven by a command pattern, not ad hoc `useState` calls.
 
-**The flow is character-agnostic and lives in `src/attackSheet/`.** The Gloom Stalker is migrated onto it; the Paladin is not yet (it still has its own copy under `src/pages/paladin/AttackSheet/`, described at the bottom of this section). Migrating the Paladin is the intended next step.
+**The flow is character-agnostic and lives in `src/attackSheet/`.** Both the Gloom Stalker and the Paladin are built on it.
 
 - `AttackSheetTypes.tsx` defines `AttackStep`, `AttackSheetState<TCharacterState>` (which owns **only** `attackStep`; everything else lives under `characterState`, the in-progress state of the attack under that character's rules), `IAttackSheetCommand<TCharacterState>`, and `ICharacterAttackModel<TCharacterState>`.
 - `ICharacterAttackModel` is the callback surface the shared flow calls into: `createInitialCharacterState`, `rollForAttack`, `setIsHit`, `rollForDamage`, `onStepReverted`. Its `steps: AttackStep[]` array is the single source of truth for step ordering — a character that omits a step (the Paladin has no `PostDamageRoll`) just leaves it out, and advancing/going back adapt automatically. Never hard-code a transition in a command; go through `GetNextStep`/`GetPreviousStep`/`GetFinalStep` in `AttackSheetStateFunctions.tsx`.
@@ -65,7 +65,7 @@ Per-character code then lives under `src/pages/<character>/AttackSheet/`:
 
 **`HistoryRecord` is deliberately flat**, not nested like the sheet state — `CreateHistoryRecordFromState` spreads `characterState` and `attackStep` up to the top level. That's what lets records persisted before the refactor keep deserializing without a `storageVersion` bump. Don't "fix" the inconsistency without bumping the version and accepting the history loss.
 
-The Paladin's not-yet-migrated copy follows the original shape: a local `AttackSheetStateReducer.tsx` (`command.apply(state)`), one `IPalAttackSheetCommand` implementation per action in `Commands/`, and a flat `PaladinAttackSheetState`. The two characters' rules genuinely differ (2d20 vs 3d20 advantage, Divine Smite vs three typed damage pools, no reroll) — don't assume identical mechanics, just identical structure.
+The two characters' rules genuinely differ (2d20 vs 3d20 advantage, Divine Smite vs three typed damage pools, no reroll) — don't assume identical mechanics, just identical structure. The Paladin's flow also has no `PostDamageRoll` step: `PaladinAttackModel.steps` simply omits it, so rolling damage advances straight to `Results` and there's no `ConfirmDamageCommand` in its command barrel.
 
 ### Testing (`npm run test`)
 
@@ -77,7 +77,7 @@ Each `AttackSheet/test/fixtures.ts` exports a fixed `*Info` fixture plus `buildT
 
 `src/attackSheet/test/fixtures.tsx` provides a synthetic character model for testing the shared flow in isolation — including `stepsWithoutPostDamageRoll`, which pre-tests the Paladin's step shape. Keep Gloom Stalker specifics out of the shared tests.
 
-Unit tests cover commands, selectors and the model; `src/pages/gloomstalker/AttackSheet/AttackSheetIntegration.test.tsx` covers the seam between them by driving whole flows through the real reducer, model and command barrel. Add to it when changing how the shared flow and a character model interact.
+Unit tests cover commands, selectors and the model; each character's `AttackSheet/AttackSheetIntegration.test.tsx` covers the seam between them by driving whole flows through the real reducer, model and command barrel. Add to the relevant one when changing how the shared flow and a character model interact.
 
 ### UI components
 
