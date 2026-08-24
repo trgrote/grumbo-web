@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
-	FormatHitValueBreakdown,
+	FormatAttackValueBreakdown,
 	GetCritStatus,
 	GetFavoredEnemyBonus,
-	GetHighestHitRoll,
+	GetHighestAttackRoll,
 	GetHitStatusText,
 	GetTotalDamage,
 	GetTotalFireDamage,
@@ -24,7 +24,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const totalFireDamage = GetTotalFireDamage(historyRecord);
 	const totalForceDamage = GetTotalForceDamage(historyRecord);
 	const totalDamage = GetTotalDamage(historyRecord);
-	const highestHitRoll = GetHighestHitRoll(historyRecord);
+	const highestAttackRoll = GetHighestAttackRoll(historyRecord);
 
 	const damageSummary = (
 		<Fragment key="damageSummary">
@@ -59,7 +59,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 	const toHitSummary = (
 		<Fragment key="toHitSummary">
 			<li>
-				<Label>Total Hit Value: {FormatHitValueBreakdown(historyRecord)}</Label>
+				<Label>Total Hit Value: {FormatAttackValueBreakdown(historyRecord)}</Label>
 			</li>
 			{historyRecord.hasAdvantage && (
 				<li>
@@ -70,7 +70,7 @@ export default function AttackHistoryDetails({ historyRecord }: { historyRecord:
 				<Label>Hit Rolls: {RollArrayToString(historyRecord.attackRolls)}</Label>
 			</li>
 			<li>
-				<Label>Highest Hit Roll: {highestHitRoll}</Label>
+				<Label>Highest Hit Roll: {highestAttackRoll}</Label>
 			</li>
 			<li>
 				<Label>Hit Modifier: +{gloomStalkerInfo.attackModifier}</Label>

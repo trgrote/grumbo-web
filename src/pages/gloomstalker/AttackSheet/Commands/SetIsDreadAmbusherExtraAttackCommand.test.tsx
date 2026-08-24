@@ -6,7 +6,7 @@ describe('SetIsDreadAmbusherExtraAttackCommand', () => {
 	it('sets isDreadAmbusherExtraAttack to the constructor value', () => {
 		const state = buildTestState({ isDreadAmbusherExtraAttack: false });
 
-		expect(new SetIsDreadAmbusherExtraAttackCommand(true).apply(state).isDreadAmbusherExtraAttack).toBe(true);
-		expect(new SetIsDreadAmbusherExtraAttackCommand(false).apply(buildTestState({ isDreadAmbusherExtraAttack: true })).isDreadAmbusherExtraAttack).toBe(false);
+		expect(new SetIsDreadAmbusherExtraAttackCommand(true).apply(state).characterState.isDreadAmbusherExtraAttack).toBe(true);
+		expect(new SetIsDreadAmbusherExtraAttackCommand(false).apply(buildTestState({ isDreadAmbusherExtraAttack: true })).characterState.isDreadAmbusherExtraAttack).toBe(false);
 	});
 });

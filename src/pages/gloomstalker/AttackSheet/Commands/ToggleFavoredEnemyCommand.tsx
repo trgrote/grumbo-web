@@ -1,15 +1,16 @@
-import { GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { GloomStalkerAttackState } from "../../GloomStalkerTypes";
 
-export default class ToggleFavoredEnemyCommand implements IGSAttackSheetCommand {
-	constructor(private name: string) { }
-	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
-		const isSelected = prevState.selectedFavoredEnemies.includes(this.name);
+export default class ToggleFavoredEnemyCommand extends CharacterStateCommand<GloomStalkerAttackState> {
+	constructor(private name: string) { super(); }
+
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
+		const isSelected = characterState.selectedFavoredEnemies.includes(this.name);
 		return {
-			...prevState,
+			...characterState,
 			selectedFavoredEnemies: isSelected
-				? prevState.selectedFavoredEnemies.filter(name => name !== this.name)
-				: [...prevState.selectedFavoredEnemies, this.name]
+				? characterState.selectedFavoredEnemies.filter(name => name !== this.name)
+				: [...characterState.selectedFavoredEnemies, this.name]
 		};
 	}
 }

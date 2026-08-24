@@ -1,5 +1,6 @@
-import { GloomStalkerAttackSheetState, GloomStalkerInfo } from "../../GloomStalkerTypes";
-import { GloomStalkerAttackSheetStateDefault } from "../AttackSheetStateFunctions";
+import { AttackStep, GloomStalkerAttackSheetState, GloomStalkerAttackState, GloomStalkerInfo } from "../../GloomStalkerTypes";
+import { GloomStalkerAttackStateDefault } from "../AttackSheetStateFunctions";
+import GloomStalkerAttackModel from "../GloomStalkerAttackModel";
 
 export const testGloomStalkerInfo: GloomStalkerInfo = {
 	attackModifier: 5,
@@ -8,9 +9,26 @@ export const testGloomStalkerInfo: GloomStalkerInfo = {
 	favoredEnemies: [],
 };
 
-export function buildTestState(overrides: Partial<GloomStalkerAttackSheetState> = {}): GloomStalkerAttackSheetState {
+export function buildTestModel(gloomStalkerInfo: GloomStalkerInfo = testGloomStalkerInfo): GloomStalkerAttackModel {
+	return new GloomStalkerAttackModel(gloomStalkerInfo);
+}
+
+export function buildTestCharacterState(overrides: Partial<GloomStalkerAttackState> = {}): GloomStalkerAttackState {
 	return {
-		...GloomStalkerAttackSheetStateDefault(testGloomStalkerInfo),
+		...GloomStalkerAttackStateDefault(testGloomStalkerInfo),
 		...overrides,
+	};
+}
+
+// Takes flat overrides (with `attackStep` alongside the character-state fields) and splits them
+// into the two slices, so callers don't have to spell out the nesting.
+export function buildTestState(
+	overrides: Partial<GloomStalkerAttackState> & { attackStep?: AttackStep; } = {}
+): GloomStalkerAttackSheetState {
+	const { attackStep = AttackStep.PreAttackRoll, ...characterOverrides } = overrides;
+
+	return {
+		attackStep,
+		characterState: buildTestCharacterState(characterOverrides),
 	};
 }

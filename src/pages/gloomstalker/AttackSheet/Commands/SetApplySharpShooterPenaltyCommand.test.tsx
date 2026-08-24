@@ -6,7 +6,7 @@ describe('SetApplySharpShooterPenaltyCommand', () => {
 	it('sets applySharpShooterPenalty to the constructor value', () => {
 		const state = buildTestState({ applySharpShooterPenalty: false });
 
-		expect(new SetApplySharpShooterPenaltyCommand(true).apply(state).applySharpShooterPenalty).toBe(true);
-		expect(new SetApplySharpShooterPenaltyCommand(false).apply(buildTestState({ applySharpShooterPenalty: true })).applySharpShooterPenalty).toBe(false);
+		expect(new SetApplySharpShooterPenaltyCommand(true).apply(state).characterState.applySharpShooterPenalty).toBe(true);
+		expect(new SetApplySharpShooterPenaltyCommand(false).apply(buildTestState({ applySharpShooterPenalty: true })).characterState.applySharpShooterPenalty).toBe(false);
 	});
 });

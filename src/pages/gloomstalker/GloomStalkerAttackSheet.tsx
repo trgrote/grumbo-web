@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { JSX, useEffect, useReducer } from "react";
+import { JSX, useEffect, useMemo, useReducer } from "react";
 import { AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
-import { AttackSheetStateReducer } from "./AttackSheet/AttackSheetStateReducer.tsx";
-import PreHitRollStep from "./AttackSheet/Steps/PreHitRollStep.tsx";
-import PostHitRollStep from "./AttackSheet/Steps/PostHitRollStep";
+import { CreateAttackSheetReducer } from "@/attackSheet/AttackSheetStateReducer";
+import { CreateInitialState, GetFinalStep } from "@/attackSheet/AttackSheetStateFunctions";
+import GloomStalkerAttackModel from "./AttackSheet/GloomStalkerAttackModel";
+import PreAttackRollStep from "./AttackSheet/Steps/PreAttackRollStep.tsx";
+import PostAttackRollStep from "./AttackSheet/Steps/PostAttackRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
-import { CreateHistoryRecordFromState, GloomStalkerAttackSheetStateDefault } from "./AttackSheet/AttackSheetStateFunctions";
+import { CreateHistoryRecordFromState } from "./AttackSheet/AttackSheetStateFunctions";
 import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
 import { ResetCommand } from "./AttackSheet/Commands/AttackSheetCommands";
 
@@ -17,17 +19,20 @@ export interface GloomStalkerAttackSheetProps {
 }
 
 export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory }: GloomStalkerAttackSheetProps) {
+	const model = useMemo(() => new GloomStalkerAttackModel(gloomStalkerInfo), [gloomStalkerInfo]);
+	const reducer = useMemo(() => CreateAttackSheetReducer(model), [model]);
+
 	const [state, dispatch] = useReducer(
-		AttackSheetStateReducer,
-		gloomStalkerInfo,
-		GloomStalkerAttackSheetStateDefault
+		reducer,
+		model,
+		CreateInitialState
 	);
 
-	// I have to disable the exhaustive-deps rule here because 
-	// I only want to trigger this effect when the attack step changes to results, 
+	// I have to disable the exhaustive-deps rule here because
+	// I only want to trigger this effect when the attack step changes to results,
 	// not on every state change.
 	useEffect(() => {
-		if (state.attackStep === AttackStep.Results) {
+		if (state.attackStep === GetFinalStep(model)) {
 			const historyRecord = CreateHistoryRecordFromState(state);
 			addToHistory(historyRecord);
 		}
@@ -35,19 +40,19 @@ export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory
 	}, [state.attackStep]);
 
 	const resetSheet = (): void => {
-		dispatch(new ResetCommand(gloomStalkerInfo));
+		dispatch(new ResetCommand());
 	};
 
-	useEffect(resetSheet, [gloomStalkerInfo]);
+	useEffect(resetSheet, [model]);
 
 	const renderSheetContent = (): JSX.Element => {
 		return (
 			<>
-				{state.attackStep === AttackStep.PreHitRoll && <PreHitRollStep
+				{state.attackStep === AttackStep.PreAttackRoll && <PreAttackRollStep
 					state={state}
 					dispatch={dispatch}
 				/>}
-				{state.attackStep === AttackStep.PostHitRoll && <PostHitRollStep
+				{state.attackStep === AttackStep.PostAttackRoll && <PostAttackRollStep
 					state={state}
 					dispatch={dispatch}
 				/>}

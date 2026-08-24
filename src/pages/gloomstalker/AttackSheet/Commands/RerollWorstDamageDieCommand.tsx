@@ -1,39 +1,39 @@
-import { DamageType, GloomStalkerAttackSheetState } from "../../GloomStalkerTypes";
-import { GetBestRerollOption } from "../AttackSheetStateFunctions";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
 import { RollDie } from "@/utils/Dice";
-import IGSAttackSheetCommand from "./IGSAttackSheetCommand";
+import { DamageType, GloomStalkerAttackState } from "../../GloomStalkerTypes";
+import { GetBestRerollOption } from "../AttackSheetStateFunctions";
 
-export default class RerollWorstDamageDieCommand implements IGSAttackSheetCommand {
-	constructor(private rng: () => number = Math.random) { }
+export default class RerollWorstDamageDieCommand extends CharacterStateCommand<GloomStalkerAttackState> {
+	constructor(private rng: () => number = Math.random) { super(); }
 
-	apply(prevState: GloomStalkerAttackSheetState): GloomStalkerAttackSheetState {
-		const bestRerollOption = GetBestRerollOption(prevState);
+	protected applyToCharacterState(characterState: GloomStalkerAttackState): GloomStalkerAttackState {
+		const bestRerollOption = GetBestRerollOption(characterState);
 
 		if (!bestRerollOption) {
-			return { ...prevState };
+			return { ...characterState };
 		}
 
 		if (bestRerollOption.type === DamageType.Piercing) {
-			const newPiercingDamageRolls = [...prevState.piercingDamageRolls];
+			const newPiercingDamageRolls = [...characterState.piercingDamageRolls];
 			newPiercingDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
-				...prevState,
+				...characterState,
 				piercingDamageRolls: newPiercingDamageRolls,
 				hasUsedReroll: true,
 			};
 		} else if (bestRerollOption.type === DamageType.Fire) {
-			const newFireDamageRolls = [...prevState.fireDamageRolls];
+			const newFireDamageRolls = [...characterState.fireDamageRolls];
 			newFireDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
-				...prevState,
+				...characterState,
 				fireDamageRolls: newFireDamageRolls,
 				hasUsedReroll: true,
 			};
 		} else if (bestRerollOption.type === DamageType.Force) {
-			const newForceDamageRolls = [...prevState.forceDamageRolls];
+			const newForceDamageRolls = [...characterState.forceDamageRolls];
 			newForceDamageRolls[bestRerollOption.dicePoolIndex] = RollDie(bestRerollOption.dieSize, this.rng);
 			return {
-				...prevState,
+				...characterState,
 				forceDamageRolls: newForceDamageRolls,
 				hasUsedReroll: true,
 			};
@@ -41,7 +41,7 @@ export default class RerollWorstDamageDieCommand implements IGSAttackSheetComman
 
 		// If for some reason there are no valid reroll options, return the state unchanged
 		return {
-			...prevState
+			...characterState
 		};
 	}
 }
