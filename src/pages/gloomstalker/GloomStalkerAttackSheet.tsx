@@ -1,17 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { JSX, useEffect, useMemo, useReducer } from "react";
-import { AttackStep, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
-import { CreateAttackSheetReducer } from "@/attackSheet/AttackSheetStateReducer";
-import { CreateInitialState, GetFinalStep } from "@/attackSheet/AttackSheetStateFunctions";
+import AttackSheet, { AttackStepComponents } from "@/attackSheet/AttackSheet";
+import { AttackStep, GloomStalkerAttackState, GloomStalkerInfo, HistoryRecord } from "./GloomStalkerTypes";
 import GloomStalkerAttackModel from "./AttackSheet/GloomStalkerAttackModel";
-import PreAttackRollStep from "./AttackSheet/Steps/PreAttackRollStep.tsx";
+import PreAttackRollStep from "./AttackSheet/Steps/PreAttackRollStep";
 import PostAttackRollStep from "./AttackSheet/Steps/PostAttackRollStep";
 import PreDamageRollStep from "./AttackSheet/Steps/PreDamageRollStep";
 import PostDamageRollStep from "./AttackSheet/Steps/PostDamageRollStep";
+import ResultsStep from "./AttackSheet/Steps/ResultsStep";
 import { CreateHistoryRecordFromState } from "./AttackSheet/AttackSheetStateFunctions";
-import ResultsStep from "./AttackSheet/Steps/ResultsStep.tsx";
-import { ResetCommand } from "./AttackSheet/Commands/AttackSheetCommands";
+
+// Mirrors GloomStalkerAttackModel.steps.
+const gloomStalkerSteps: AttackStepComponents<GloomStalkerAttackState> = {
+	[AttackStep.PreAttackRoll]: PreAttackRollStep,
+	[AttackStep.PostAttackRoll]: PostAttackRollStep,
+	[AttackStep.PreDamageRoll]: PreDamageRollStep,
+	[AttackStep.PostDamageRoll]: PostDamageRollStep,
+	[AttackStep.Results]: ResultsStep
+};
 
 export interface GloomStalkerAttackSheetProps {
 	gloomStalkerInfo: GloomStalkerInfo;
@@ -19,70 +23,12 @@ export interface GloomStalkerAttackSheetProps {
 }
 
 export default function GloomStalkerAttackSheet({ gloomStalkerInfo, addToHistory }: GloomStalkerAttackSheetProps) {
-	const model = useMemo(() => new GloomStalkerAttackModel(gloomStalkerInfo), [gloomStalkerInfo]);
-	const reducer = useMemo(() => CreateAttackSheetReducer(model), [model]);
-
-	const [state, dispatch] = useReducer(
-		reducer,
-		model,
-		CreateInitialState
-	);
-
-	// I have to disable the exhaustive-deps rule here because
-	// I only want to trigger this effect when the attack step changes to results,
-	// not on every state change.
-	useEffect(() => {
-		if (state.attackStep === GetFinalStep(model)) {
-			const historyRecord = CreateHistoryRecordFromState(state);
-			addToHistory(historyRecord);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [state.attackStep]);
-
-	const resetSheet = (): void => {
-		dispatch(new ResetCommand());
-	};
-
-	// Keyed on the info, not the memoized model: React doesn't guarantee useMemo keeps its
-	// cache, and a dropped one would hand us a fresh model identity on an unrelated re-render
-	// and silently reset an attack already in progress.
-	useEffect(resetSheet, [gloomStalkerInfo]);
-
-	const renderSheetContent = (): JSX.Element => {
-		return (
-			<>
-				{state.attackStep === AttackStep.PreAttackRoll && <PreAttackRollStep
-					state={state}
-					dispatch={dispatch}
-				/>}
-				{state.attackStep === AttackStep.PostAttackRoll && <PostAttackRollStep
-					state={state}
-					dispatch={dispatch}
-				/>}
-				{state.attackStep === AttackStep.PreDamageRoll && <PreDamageRollStep
-					state={state}
-					dispatch={dispatch}
-				/>}
-				{state.attackStep === AttackStep.PostDamageRoll && <PostDamageRollStep
-					state={state}
-					dispatch={dispatch}
-				/>}
-				{state.attackStep === AttackStep.Results && <ResultsStep
-					state={state}
-					dispatch={dispatch}
-				/>}
-			</>
-		);
-	};
-
 	return (
-		<Sheet onOpenChange={(open) => { if (!open) resetSheet(); }}>
-			<SheetTrigger asChild>
-				<Button>Roll for Attack</Button>
-			</SheetTrigger>
-			<SheetContent className="dark bg-background text-neutral-300">
-				{renderSheetContent()}
-			</SheetContent>
-		</Sheet>
+		<AttackSheet
+			info={gloomStalkerInfo}
+			createModel={(info) => new GloomStalkerAttackModel(info)}
+			steps={gloomStalkerSteps}
+			onAttackComplete={(state) => addToHistory(CreateHistoryRecordFromState(state))}
+		/>
 	);
 }
