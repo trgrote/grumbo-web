@@ -46,8 +46,11 @@ export type GloomStalkerAttackSheetState = AttackSheetState<GloomStalkerAttackSt
 
 // Deliberately flat (rather than mirroring the nested sheet state) so records persisted by
 // earlier versions keep deserializing - see GloomStalkerLocalStorage's storageVersion.
+//
+// Deliberately does NOT carry `attackStep`: a finished attack is always on the final step, so
+// it was write-only data, and an enum ordinal is not a safe thing to persist - changing a
+// character's flow renumbers it under every record already on disk.
 export interface HistoryRecord extends GloomStalkerAttackState {
-	attackStep: AttackStep;
 	timestamp: number;
 }
 

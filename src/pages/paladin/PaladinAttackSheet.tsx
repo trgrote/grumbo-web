@@ -53,7 +53,10 @@ export default function PaladinAttackSheet({ paladinInfo, addToRollHistory }: Pa
 		dispatch(new ResetCommand());
 	};
 
-	useEffect(resetSheet, [model]);
+	// Keyed on the info, not the memoized model: React doesn't guarantee useMemo keeps its
+	// cache, and a dropped one would hand us a fresh model identity on an unrelated re-render
+	// and silently reset an attack already in progress.
+	useEffect(resetSheet, [paladinInfo]);
 
 	const renderSheetContent = (): JSX.Element => {
 		return (

@@ -19,7 +19,6 @@ export function CreateHistoryRecordFromState(state: PaladinAttackSheetState, now
 	return {
 		...state.characterState,
 		paladinInfo: { ...state.characterState.paladinInfo },   // force a shallow copy of the paladinInfo to prevent mutation issues
-		attackStep: state.attackStep,
 		timestamp: now()
 	};
 }

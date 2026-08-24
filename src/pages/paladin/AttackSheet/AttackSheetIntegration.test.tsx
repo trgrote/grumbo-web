@@ -147,11 +147,12 @@ describe('Paladin attack sheet flow', () => {
 		const record = CreateHistoryRecordFromState(state, () => 12345);
 
 		// Every key sits at the top level, exactly as pre-refactor records were stored.
-		expect(record.attackStep).toBe(AttackStep.Results);
 		expect(record.timestamp).toBe(12345);
 		expect(record.isHit).toBe(true);
 		expect(record.attackRolls).toEqual(state.characterState.attackRolls);
 		expect(record.paladinInfo).toEqual(state.characterState.paladinInfo);
 		expect(record).not.toHaveProperty('characterState');
+		// An enum ordinal is not safe to persist - changing a flow renumbers it under stored records.
+		expect(record).not.toHaveProperty('attackStep');
 	});
 });

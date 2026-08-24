@@ -63,13 +63,15 @@ Per-character code then lives under `src/pages/<character>/AttackSheet/`:
 - `<Character>AttackSheet.tsx` memoizes a model from the character's info, builds a reducer from it, and renders one `Steps/*Step.tsx` per `AttackStep`.
 - When `AttackStep` reaches the final step, an effect in `<Character>AttackSheet.tsx` converts state into a `HistoryRecord` and calls `addToHistory`/`addToRollHistory`, which is what actually persists it (via the page's `useEffect` → `SaveLocal*Storage`).
 
-**`HistoryRecord` is deliberately flat**, not nested like the sheet state — `CreateHistoryRecordFromState` spreads `characterState` and `attackStep` up to the top level. That's what lets records persisted before the refactor keep deserializing without a `storageVersion` bump. Don't "fix" the inconsistency without bumping the version and accepting the history loss.
+**`HistoryRecord` is deliberately flat**, not nested like the sheet state — `CreateHistoryRecordFromState` spreads `characterState` up to the top level. That's what lets records persisted before the refactor keep deserializing without a `storageVersion` bump. Don't "fix" the inconsistency without bumping the version and accepting the history loss.
+
+**It deliberately does not carry `attackStep`**, and nothing persisted should. A finished attack is always on the final step, so the field was write-only — and an enum ordinal is an unsafe thing to store: adding `PostDamageRoll` to the shared enum reassigned `3` from `Results` to `PostDamageRoll` under every Paladin record already on disk. If you change a character's flow, nothing on disk should have to be renumbered. Both integration tests assert the record has no `attackStep`.
 
 The two characters' rules genuinely differ (2d20 vs 3d20 advantage, Divine Smite vs three typed damage pools, no reroll) — don't assume identical mechanics, just identical structure. The Paladin's flow also has no `PostDamageRoll` step: `PaladinAttackModel.steps` simply omits it, so rolling damage advances straight to `Results` and there's no `ConfirmDamageCommand` in its command barrel.
 
 ### Testing (`npm run test`)
 
-Vitest + jsdom, configured inline in `vite.config.ts` (`test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'] }`). Tests are co-located as `*.test.tsx` next to the source file, one per command/state-function/reducer module — see `AttackSheet/Commands/*.test.tsx` and `AttackSheet/AttackSheetStateFunctions.test.tsx` in either character page for the convention.
+Vitest + jsdom, configured inline in `vite.config.ts` (`test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'] }`). Tests are co-located as `*.test.tsx` next to the source file, one per command / state-function / model module — see `AttackSheet/Commands/*.test.tsx`, `AttackSheet/AttackSheetStateFunctions.test.tsx` and `AttackSheet/*AttackModel.test.tsx` in either character page for the convention. The reducer lives in the shared module and is tested there.
 
 Coverage is mostly pure logic (commands, selectors, reducers, character models). The one set of render tests is `src/attackSheet/Steps/AttackSheetStep.test.tsx`, covering the shared step shell and its two flow buttons. Vitest globals are **off** here, so Testing Library can't auto-register its cleanup — `src/test/setup.ts` calls `afterEach(cleanup)` for it. Without that, rendered trees pile up in `document.body` and queries start matching elements from earlier tests. `@testing-library/user-event` isn't a dependency; use `fireEvent`.
 

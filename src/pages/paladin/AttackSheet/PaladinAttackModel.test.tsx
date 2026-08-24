@@ -72,10 +72,10 @@ describe('PaladinAttackModel', () => {
 				spellSlotUsed: 2,
 				paladinInfo: { ...testPaladinInfo, hasImprovedDS: true },
 			});
-			const result = buildTestModel().rollForDamage(characterState, () => 0);
+			const result = buildTestModel().rollForDamage(characterState, () => 0.999);
 
-			// (1 improved DS + 1 fiend/undead + 3 for spell slot 2) * 2 for crit = 10
-			expect(result.divineSmiteDamageRolls).toHaveLength(10);
+			// (1 improved DS + 1 fiend/undead + 3 for spell slot 2) * 2 for crit = 10, all d8s
+			expect(result.divineSmiteDamageRolls).toEqual(new Array(10).fill(8));
 		});
 	});
 
