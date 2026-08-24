@@ -17,6 +17,10 @@ export default defineConfig({
 	test: {
 		environment: 'jsdom',
 		setupFiles: ['./src/test/setup.ts'],
+		// Spies restore themselves between tests. Without this a test that throws before its
+		// own mockRestore() leaves the spy installed for the rest of the file — a silenced
+		// console.error turns one red test into a run with every later warning invisible.
+		restoreMocks: true,
 		coverage: {
 			// Scoped to the pure-logic modules the project actually unit-tests (state functions,
 			// reducers, commands, shared utils) — UI-facing files (Steps, pages, LocalStorage,
