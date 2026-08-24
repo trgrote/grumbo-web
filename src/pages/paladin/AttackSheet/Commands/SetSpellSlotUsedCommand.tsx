@@ -1,12 +1,12 @@
-import { PaladinAttackSheetState } from "../../PaladinTypes";
-import IPalAttackSheetCommand from "./IPalAttackSheetCommand";
+import CharacterStateCommand from "@/attackSheet/Commands/CharacterStateCommand";
+import { PaladinAttackState } from "../../PaladinTypes";
 
-export default class SetSpellSlotUsedCommand implements IPalAttackSheetCommand {
-	constructor(private spellSlotUsed: number) { }
+export default class SetSpellSlotUsedCommand extends CharacterStateCommand<PaladinAttackState> {
+	constructor(private spellSlotUsed: number) { super(); }
 
-	apply(prevState: PaladinAttackSheetState): PaladinAttackSheetState {
+	protected applyToCharacterState(characterState: PaladinAttackState): PaladinAttackState {
 		return {
-			...prevState,
+			...characterState,
 			spellSlotUsed: this.spellSlotUsed
 		};
 	}
